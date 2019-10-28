@@ -13,4 +13,4 @@ def index():
     r = requests.get('http://www.aixpact.ml/api/httptrigger?name=frank')
     # print(r.content, r.status_code)
 
-    return jsonify({'name':r.content})
+    return r.content #jsonify({'name':r.content})
