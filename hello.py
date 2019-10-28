@@ -5,7 +5,7 @@ from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
                    send_file, send_from_directory)
 from werkzeug.utils import secure_filename
 
-# import code
+import algo
 
 app = Flask(__name__)
 
