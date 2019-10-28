@@ -9,5 +9,5 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     """"""
-    api_ = requests.get'http://www.aixpact.ml/api/httptrigger?name=frank')
+    api_ = requests.get('http://www.aixpact.ml/api/httptrigger?name=frank')
     return f"<h1>Hello {api_}!</h1>"
