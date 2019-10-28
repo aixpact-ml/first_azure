@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# https://medium.com/@nikovrdoljak/deploy-your-flask-app-on-azure-in-3-easy-steps-b2fe388a589e
+
 # # If application.py
 # gunicorn --bind=0.0.0.0 --timeout 600 application:app
 # # If app.py
