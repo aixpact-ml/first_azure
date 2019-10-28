@@ -9,5 +9,6 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     """"""
-    api_ = requests.get('http://www.aixpact.ml/api/httptrigger?name=frank')
-    return f"<h1>Hello {api_}!</h1>"
+    r = requests.get('http://www.aixpact.ml/api/httptrigger?name=frank')
+    text = json.loads(r.text)
+    return jsonify(r) #f"<h1>Hello {api_}!</h1>"
