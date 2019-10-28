@@ -4,7 +4,7 @@ FROM jupyter/tensorflow-notebook
 RUN apt-get install -yq --no-install-recommends \
     curl \
     zsh \
-    git-core \
+    git-core
 
 USER root
 
