@@ -1,5 +1,11 @@
 FROM jupyter/tensorflow-notebook
 
+# RUN apt-get update && apt-get install -y curl
+RUN apt-get install -yq --no-install-recommends \
+    curl \
+    zsh \
+    git-core \
+
 USER root
 
 # Install Tensorflow
@@ -13,6 +19,7 @@ RUN conda install --quiet --yes \
 
 USER $NB_USER
 
+RUN pip install --upgrade setuptools
 RUN pip install --upgrade pip
 RUN pip install --proxy=${http_proxy} \
     psycopg2-binary \
@@ -22,7 +29,7 @@ RUN pip install --proxy=${http_proxy} \
     pydotplus \
     ipympl
 COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install -r --no-cache-dir requirements.txt
 
 RUN jupyter nbextension enable --py --sys-prefix ipympl
 
