@@ -1,12 +1,10 @@
 FROM jupyter/tensorflow-notebook
 
-# RUN apt-get update && apt-get install -y curl
-RUN apt-get install -yq --no-install-recommends \
-    curl \
-    zsh \
-    git-core
-
 USER root
+
+RUN apt-get update && apt-get install -y curl
+# RUN apt-get install -yq --no-install-recommends \
+#     curl
 
 # Install Tensorflow
 RUN conda install --quiet --yes \
