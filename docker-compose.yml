@@ -21,7 +21,7 @@ services:
   # Tensorboard available outside container @ localhost:5001
   #######################################
   jupyter:
-    container_name: "jupyter_tf"
+    container_name: "jupyter_azure"
     restart: "always"
     build: .
     environment:
@@ -35,7 +35,6 @@ services:
       - '../_ML:/home/jovyan/aixpact/_ML'
       - '../_NLP:/home/jovyan/aixpact/_NLP'
       - '../_networks:/home/jovyan/aixpact/_networks'
-      - '../CS224N-Stanford-Winter-2019:/home/jovyan/aixpact/CS224N-Stanford-Winter-2019'
       - './project:/home/jovyan/aixpact/project'
       - 'jupyter:/home/jovyan/aixpact/docker_volume'
     ports:

@@ -21,6 +21,8 @@ RUN pip install --proxy=${http_proxy} \
     graphviz \
     pydotplus \
     ipympl
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
 
 RUN jupyter nbextension enable --py --sys-prefix ipympl
 
