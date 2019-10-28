@@ -11,5 +11,6 @@ app = Flask(__name__)
 def index():
     """"""
     r = requests.get('http://www.aixpact.ml/api/httptrigger?name=frank')
-    text = json.loads(r.text)
-    return jsonify(r) #f"<h1>Hello {api_}!</h1>"
+    # print(r.content, r.status_code)
+
+    return jsonify({'name':r.content})
