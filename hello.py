@@ -12,7 +12,9 @@ app = Flask(__name__)
 HTTP_BAD_REQUEST = 400
 ALLOWED_EXTENSIONS = set(['txt', 'csv'])
 SHARED = 'https://helloaixpact.file.core.windows.net/'
+LOCAL_PATH = '/home/jovyan/aixpact/project/'
 app.config['SHARED'] = SHARED
+app.config['LOCAL_PATH'] = LOCAL_PATH
 
 
 def allowed_file(filename):
@@ -28,8 +30,21 @@ def index():
     return r.text
 
 
+@app.route('/filename', methods=['GET', 'POST'])
+def filename():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        try:
+            return jsonify(status='completed', response=request.files['file'].filename)
+        except:
+            return jsonify(status='uncompleted', response='something went wrong')
+    else:
+        return jsonify(status='uncompleted', response='no file uploaded')
+
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
+
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -42,14 +57,16 @@ def upload():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
+
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file_in = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            # file_in = os.path.join(app.config['SHARED'], f'in_{filename}')
+            file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
             file.save(file_in)
+            # return jsonify(status='completed', response=file_in)
             try:
                 # Create forcast object
-                file_out = os.path.join(
-                    app.config['SHARED'], 'forecast.csv')
+                file_out = os.path.join(app.config['LOCAL_PATH'], 'forecast.csv')
                 model = algo.Model(filename=file_in, sep=',', header=0, filename_out=file_out)
                 # Model
                 response = model.predict(window=0, horizon=12, slen=6)
@@ -58,12 +75,14 @@ def upload():
                 message = ('Failed to score the model. Exception: {}'.format(err))
                 response = jsonify(status='error', error_message=message)
                 response.status_code = HTTP_BAD_REQUEST
-            # FTUP(file_out)
-            return send_from_directory(app.config['SHARED'],
+    #         # FTUP(file_out)
+            return send_from_directory(app.config['LOCAL_PATH'],
                                        'forecast.csv', as_attachment=True)
             # return jsonify(status='completed', response=response)
+    else:
+        return jsonify(status='uncompleted', response='no response')
 
+
+# Run and debug locally
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=8241)
-    # curl = !curl 'http://0.0.0.0:8241/'
-    # print(curl)
