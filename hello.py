@@ -141,12 +141,13 @@ def upload():
                 #     to_blob(file)
                 # except:
                 #     pass
-                file_service.create_file_from_text(
+                file_service.create_file_from_bytes(
                                 'myshare',
                                 directory_name, #None,  # root directory: directory_name=None
                                 'myfile2',
                                 file.content,
-                                # content_settings=ContentSettings(content_type='text/csv')
+                                count=-1,
+                                content_settings=ContentSettings(content_type='text/csv')
                                 )
                 file_in = 'https://helloaixpact.file.core.windows.net/myshare/myfile2'
                 # file_in = file_service.get_file_to_text(share_name, directory_name, filename)
