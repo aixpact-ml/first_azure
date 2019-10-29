@@ -25,7 +25,8 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # https://docs.microsoft.com/en-us/azure/storage/files/storage-python-how-to-use-file-storage
-from azure.storage.file import FileService, ContentSettings, BlockBlobService
+from azure.storage.file import FileService, ContentSettings
+from azure.storage.blob import BlockBlobService
 
 storageAccount = 'helloaixpact'
 accountKey = '/K/UXeclbEGQ6qxVEEXLrD47hwrxHGJGJnpGPVNZXu2dEEhJWSJ9G4+iDsvWDx4IfDYpIBW9OM+EX/4iNFbR1g=='
