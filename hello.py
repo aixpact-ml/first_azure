@@ -52,7 +52,7 @@ block_blob_service.set_container_acl(
 
 def to_blob(payload):
     """"""
-    filename = secure_filename(file.filename)
+    filename = secure_filename(payload.filename)
     local_file_name = 'myblob'
 
     # Upload the file
@@ -128,7 +128,7 @@ def upload():
                 # print(file.content)
 
                 # Save file
-                to_blob(filename)
+                to_blob(file)
                 # file_service.create_file_from_text(
                 #                 'myshare',
                 #                 directory_name, #None,  # root directory: directory_name=None
