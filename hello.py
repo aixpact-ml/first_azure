@@ -26,7 +26,7 @@ def allowed_file(filename):
 
 # https://docs.microsoft.com/en-us/azure/storage/files/storage-python-how-to-use-file-storage
 from azure.storage.file import FileService, ContentSettings
-from azure.storage.blob import BlockBlobService
+# from azure.storage.blob import BlockBlobService
 
 storageAccount = 'helloaixpact'
 accountKey = '/K/UXeclbEGQ6qxVEEXLrD47hwrxHGJGJnpGPVNZXu2dEEhJWSJ9G4+iDsvWDx4IfDYpIBW9OM+EX/4iNFbR1g=='
@@ -37,14 +37,14 @@ file_service.create_share('myshare')
 file_service.create_directory('myshare', 'sampledir')
 
 
-# Create the BlockBlockService that the system uses to call the Blob service for the storage account.
-# https://docs.microsoft.com/nl-nl/azure/storage/blobs/storage-quickstart-blobs-python
-block_blob_service = BlockBlobService(
-    account_name=storageAccount, account_key=accountKey)
+# # Create the BlockBlockService that the system uses to call the Blob service for the storage account.
+# # https://docs.microsoft.com/nl-nl/azure/storage/blobs/storage-quickstart-blobs-python
+# block_blob_service = BlockBlobService(
+#     account_name=storageAccount, account_key=accountKey)
 
-# Create a container called 'quickstartblobs'.
-container_name = 'quickstartblobs'
-block_blob_service.create_container(container_name)
+# # Create a container called 'quickstartblobs'.
+# container_name = 'quickstartblobs'
+# block_blob_service.create_container(container_name)
 
 # Set the permission so the blobs are public.
 # block_blob_service.set_container_acl(
@@ -57,8 +57,9 @@ def to_blob(payload):
     local_file_name = 'myblob'
 
     # Upload the file
-    block_blob_service.create_blob_from_path(
-        'quickstartblobs', 'myblob', filename)
+    block_blob_service.create_blob_from_text('quickstartblobs', 'blob1', payload.content)
+    # block_blob_service.create_blob_from_path(
+    #     'quickstartblobs', 'myblob', filename)
 
 
 
@@ -91,6 +92,8 @@ def files():
 def filename():
     if request.method == 'POST':
         # check if the post request has the file part
+        for x in request.files['file']:
+            print(x)
         try:
             return jsonify(status='completed', response=request.files['file'].filename)
         except:
@@ -119,17 +122,23 @@ def upload():
             filename = secure_filename(file.filename)
             # file_in = os.path.join(app.config['SHARED'], f'in_{filename}')
             file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
+
             if app.config['DEV']:
                 logging.info('Local upload ....')
                 file.save(file_in)
+                # return request.files
             else:
-                logging.info('API upload ....')
+                # return request.files
+                # logging.info('API upload ....')
                 # Load file
                 # file = file_service.get_file_to_text(share_name, directory_name, filename)
                 # print(file.content)
 
                 # Save file
-                to_blob(file)
+                try:
+                    to_blob(file)
+                except:
+                    pass
                 # file_service.create_file_from_text(
                 #                 'myshare',
                 #                 directory_name, #None,  # root directory: directory_name=None
