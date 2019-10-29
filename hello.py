@@ -145,7 +145,7 @@ def upload():
                                 'myshare',
                                 directory_name, #None,  # root directory: directory_name=None
                                 'myfile2',
-                                file.content,
+                                file,
                                 count=-1,
                                 content_settings=ContentSettings(content_type='text/csv')
                                 )
