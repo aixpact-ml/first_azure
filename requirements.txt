@@ -7,3 +7,4 @@ pandas
 scipy
 sklearn
 azure-storage-file
+azure-storage-blob

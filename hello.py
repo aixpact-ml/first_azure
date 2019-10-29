@@ -25,7 +25,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # https://docs.microsoft.com/en-us/azure/storage/files/storage-python-how-to-use-file-storage
-from azure.storage.file import FileService, ContentSettings
+from azure.storage.file import FileService, ContentSettings, BlockBlobService
 
 storageAccount = 'helloaixpact'
 accountKey = '/K/UXeclbEGQ6qxVEEXLrD47hwrxHGJGJnpGPVNZXu2dEEhJWSJ9G4+iDsvWDx4IfDYpIBW9OM+EX/4iNFbR1g=='
@@ -34,6 +34,30 @@ directory_name = 'sampledir'
 file_service = FileService(account_name=storageAccount, account_key=accountKey)
 file_service.create_share('myshare')
 file_service.create_directory('myshare', 'sampledir')
+
+
+# Create the BlockBlockService that the system uses to call the Blob service for the storage account.
+# https://docs.microsoft.com/nl-nl/azure/storage/blobs/storage-quickstart-blobs-python
+block_blob_service = BlockBlobService(
+    account_name=storageAccount, account_key=accountKey)
+
+# Create a container called 'quickstartblobs'.
+container_name = 'quickstartblobs'
+block_blob_service.create_container(container_name)
+
+# Set the permission so the blobs are public.
+block_blob_service.set_container_acl(
+    container_name, public_access=PublicAccess.Container)
+
+
+def to_blob(payload):
+    # Create a file in Documents to test the upload and download.
+    filename = secure_filename(file.filename)
+    local_file_name = 'myblob'
+
+    # Upload the created file, use local_file_name for the blob name.
+    block_blob_service.create_blob_from_path(
+        'quickstartblobs', 'myblob', filename)
 
 
 
