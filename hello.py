@@ -47,8 +47,8 @@ container_name = 'quickstartblobs'
 block_blob_service.create_container(container_name)
 
 # Set the permission so the blobs are public.
-block_blob_service.set_container_acl(
-    container_name, public_access=PublicAccess.Container)
+# block_blob_service.set_container_acl(
+#     container_name, public_access=PublicAccess.Container)
 
 
 def to_blob(payload):
