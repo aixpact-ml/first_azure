@@ -106,7 +106,8 @@ def upload():
                                 directory_name, #None,  # root directory: directory_name=None
                                 'myfile',
                                 file.content,
-                                content_settings=ContentSettings(content_type='text/csv'))
+                                # content_settings=ContentSettings(content_type='text/csv')
+                                )
                 # file_service.create_file_from_path(
                 #                 'myshare',
                 #                 directory_name, #None,  # root directory: directory_name=None
