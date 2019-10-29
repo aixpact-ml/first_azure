@@ -16,7 +16,7 @@ SHARED = 'https://helloaixpact.file.core.windows.net/'
 LOCAL_PATH = '/home/jovyan/aixpact/project/'
 app.config['SHARED'] = SHARED
 app.config['LOCAL_PATH'] = LOCAL_PATH
-app.config['DEV'] = True
+app.config['DEV'] = False
 
 
 def allowed_file(filename):
