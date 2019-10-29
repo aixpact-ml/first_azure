@@ -95,8 +95,10 @@ def upload():
             # file_in = os.path.join(app.config['SHARED'], f'in_{filename}')
             file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
             if app.config['DEV']:
+                logging.info('Local upload ....')
                 file.save(file_in)
             else:
+                logging.info('API upload ....')
                 # file = file_service.get_file_to_text(share_name, directory_name, filename)
                 # print(file.content)
                 file_service.create_file_from_stream(
