@@ -27,10 +27,10 @@ RUN pip install --proxy=${http_proxy} \
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-# EXPOSE 8080
-# CMD [ "gunicorn", "--bind", "0.0.0.0:8080", "hello:app", "--timeout", "1200", "--threads", "8" ]
+EXPOSE 8080
+CMD [ "gunicorn", "--bind", "0.0.0.0:8080", "wsgi:app", "--timeout", "1200", "--threads", "8" ]
 
-RUN jupyter nbextension enable --py --sys-prefix ipympl
+# RUN jupyter nbextension enable --py --sys-prefix ipympl
 
 # USER $NB_USER
 

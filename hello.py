@@ -50,7 +50,7 @@ def upload():
                 # Create forcast object
                 file_out = os.path.join(
                     app.config['SHARED'], 'forecast.csv')
-                model = code.Model(filename=file_in, sep=',', header=0, filename_out=file_out)
+                model = algo.Model(filename=file_in, sep=',', header=0, filename_out=file_out)
                 # Model
                 response = model.predict(window=0, horizon=12, slen=6)
             except Exception as err:
@@ -65,4 +65,5 @@ def upload():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=8241)
-
+    # curl = !curl 'http://0.0.0.0:8241/'
+    # print(curl)
