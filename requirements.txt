@@ -2,3 +2,7 @@ Flask
 Werkzeug
 requests
 gunicorn
+numpy
+pandas
+scipy
+sklearn
