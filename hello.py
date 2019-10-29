@@ -26,7 +26,7 @@ def allowed_file(filename):
 
 # https://docs.microsoft.com/en-us/azure/storage/files/storage-python-how-to-use-file-storage
 from azure.storage.file import FileService, ContentSettings
-# from azure.storage.blob import BlockBlobService
+from azure.storage.blob import BlockBlobService
 
 storageAccount = 'helloaixpact'
 accountKey = '/K/UXeclbEGQ6qxVEEXLrD47hwrxHGJGJnpGPVNZXu2dEEhJWSJ9G4+iDsvWDx4IfDYpIBW9OM+EX/4iNFbR1g=='
@@ -37,14 +37,14 @@ file_service.create_share('myshare')
 file_service.create_directory('myshare', 'sampledir')
 
 
-# # Create the BlockBlockService that the system uses to call the Blob service for the storage account.
-# # https://docs.microsoft.com/nl-nl/azure/storage/blobs/storage-quickstart-blobs-python
-# block_blob_service = BlockBlobService(
-#     account_name=storageAccount, account_key=accountKey)
+# Create the BlockBlockService that the system uses to call the Blob service for the storage account.
+# https://docs.microsoft.com/nl-nl/azure/storage/blobs/storage-quickstart-blobs-python
+block_blob_service = BlockBlobService(
+    account_name=storageAccount, account_key=accountKey)
 
-# # Create a container called 'quickstartblobs'.
-# container_name = 'quickstartblobs'
-# block_blob_service.create_container(container_name)
+# Create a container called 'quickstartblobs'.
+container_name = 'quickstartblobs'
+block_blob_service.create_container(container_name)
 
 # Set the permission so the blobs are public.
 # block_blob_service.set_container_acl(
