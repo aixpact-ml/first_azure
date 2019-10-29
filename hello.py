@@ -141,7 +141,7 @@ def upload():
                 #     to_blob(file)
                 # except:
                 #     pass
-                file_service.create_file_from_bytes(
+                file_service.create_file_from_stream(
                                 'myshare',
                                 directory_name, #None,  # root directory: directory_name=None
                                 'myfile2',
