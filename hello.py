@@ -101,12 +101,11 @@ def upload():
                 logging.info('API upload ....')
                 # file = file_service.get_file_to_text(share_name, directory_name, filename)
                 # print(file.content)
-                file_service.create_file_from_stream(
+                file_service.create_file_from_path(
                                 'myshare',
-                                None,  # root directory: directory_name=None
+                                directory_name, #None,  # root directory: directory_name=None
                                 'myfile',
-                                file,
-                                count=1024,
+                                filename,
                                 content_settings=ContentSettings(content_type='text/csv'))
 
             # return jsonify(status='completed', response=file_in)
