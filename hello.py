@@ -121,9 +121,10 @@ def upload():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             # file_in = os.path.join(app.config['SHARED'], f'in_{filename}')
-            file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
+
 
             if app.config['DEV']:
+                file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
                 logging.info('Local upload ....')
                 file.save(file_in)
                 # return request.files
@@ -135,17 +136,20 @@ def upload():
                 # print(file.content)
 
                 # Save file
-                try:
-                    to_blob(file)
-                except:
-                    pass
-                # file_service.create_file_from_text(
-                #                 'myshare',
-                #                 directory_name, #None,  # root directory: directory_name=None
-                #                 'myfile',
-                #                 file.content,
-                #                 # content_settings=ContentSettings(content_type='text/csv')
-                #                 )
+                # try:
+                #     file_in = None  # TODO
+                #     to_blob(file)
+                # except:
+                #     pass
+                file_service.create_file_from_text(
+                                'myshare',
+                                directory_name, #None,  # root directory: directory_name=None
+                                'myfile2',
+                                file.content,
+                                # content_settings=ContentSettings(content_type='text/csv')
+                                )
+                file_in = 'https://helloaixpact.file.core.windows.net/myshare/myfile2'
+                # file_in = file_service.get_file_to_text(share_name, directory_name, filename)
                 # file_service.create_file_from_path(
                 #                 'myshare',
                 #                 directory_name, #None,  # root directory: directory_name=None
@@ -166,9 +170,9 @@ def upload():
                 response = jsonify(status='error', error_message=message)
                 response.status_code = HTTP_BAD_REQUEST
     #         # FTUP(file_out)
-            return send_from_directory(app.config['LOCAL_PATH'],
-                                       'forecast.csv', as_attachment=True)
-            # return jsonify(status='completed', response=response)
+            # return send_from_directory(app.config['LOCAL_PATH'],
+            #                            'forecast.csv', as_attachment=True)
+            return jsonify(status='completed', response=response)
     else:
         return jsonify(status='uncompleted', response='no response')
 
