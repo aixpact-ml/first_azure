@@ -1,3 +1,4 @@
+import logging
 import requests
 import os
 from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
@@ -18,16 +19,46 @@ app.config['LOCAL_PATH'] = LOCAL_PATH
 
 
 def allowed_file(filename):
+    logging.info('some logging ....')
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# https://docs.microsoft.com/en-us/azure/storage/files/storage-python-how-to-use-file-storage
+from azure.storage.file import FileService, ContentSettings
+
+storageAccount = 'helloaixpact'
+accountKey = '/K/UXeclbEGQ6qxVEEXLrD47hwrxHGJGJnpGPVNZXu2dEEhJWSJ9G4+iDsvWDx4IfDYpIBW9OM+EX/4iNFbR1g=='
+directory_name = 'sampledir'
+
+file_service = FileService(account_name=storageAccount, account_key=accountKey)
+file_service.create_share('myshare')
+file_service.create_directory('myshare', 'sampledir')
+
 
 
 @app.route("/")
 def index():
     """"""
+    text = 'woh'
+    logging.info(f'some logging {text}')
     r = requests.get('http://www.aixpact.ml/api/httptrigger?name=frank')
     # print(r.content, r.status_code)
     return r.text
+
+
+@app.route("/files")
+def index():
+    """"""
+    # if the file in the root path of the share, please let the directory name as ''
+    # file = file_service.get_file_to_text(share_name, directory_name, file_name)
+    # print(file.content)
+    fs = []
+    generator = file_service.list_directories_and_files('myshare')
+    for file_or_dir in generator:
+        print(file_or_dir.name)
+        loging.info(file_or_dir.name)
+        fs.append(file_or_dir.name)
+    return jsonify(status='completed', response='files')
 
 
 @app.route('/filename', methods=['GET', 'POST'])
@@ -63,6 +94,10 @@ def upload():
             # file_in = os.path.join(app.config['SHARED'], f'in_{filename}')
             file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
             file.save(file_in)
+
+            file = file_service.get_file_to_text(share_name, directory_name, filename)
+            print(file.content)
+
             # return jsonify(status='completed', response=file_in)
             try:
                 # Create forcast object
