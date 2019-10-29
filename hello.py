@@ -51,11 +51,11 @@ block_blob_service.set_container_acl(
 
 
 def to_blob(payload):
-    # Create a file in Documents to test the upload and download.
+    """"""
     filename = secure_filename(file.filename)
     local_file_name = 'myblob'
 
-    # Upload the created file, use local_file_name for the blob name.
+    # Upload the file
     block_blob_service.create_blob_from_path(
         'quickstartblobs', 'myblob', filename)
 
@@ -128,13 +128,14 @@ def upload():
                 # print(file.content)
 
                 # Save file
-                file_service.create_file_from_text(
-                                'myshare',
-                                directory_name, #None,  # root directory: directory_name=None
-                                'myfile',
-                                file.content,
-                                # content_settings=ContentSettings(content_type='text/csv')
-                                )
+                to_blob(filename)
+                # file_service.create_file_from_text(
+                #                 'myshare',
+                #                 directory_name, #None,  # root directory: directory_name=None
+                #                 'myfile',
+                #                 file.content,
+                #                 # content_settings=ContentSettings(content_type='text/csv')
+                #                 )
                 # file_service.create_file_from_path(
                 #                 'myshare',
                 #                 directory_name, #None,  # root directory: directory_name=None
