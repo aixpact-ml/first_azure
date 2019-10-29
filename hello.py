@@ -99,8 +99,11 @@ def upload():
                 file.save(file_in)
             else:
                 logging.info('API upload ....')
+                # Load file
                 # file = file_service.get_file_to_text(share_name, directory_name, filename)
                 # print(file.content)
+
+                # Save file
                 file_service.create_file_from_text(
                                 'myshare',
                                 directory_name, #None,  # root directory: directory_name=None
