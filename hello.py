@@ -16,6 +16,7 @@ SHARED = 'https://helloaixpact.file.core.windows.net/'
 LOCAL_PATH = '/home/jovyan/aixpact/project/'
 app.config['SHARED'] = SHARED
 app.config['LOCAL_PATH'] = LOCAL_PATH
+app.config['DEV'] = True
 
 
 def allowed_file(filename):
@@ -47,7 +48,7 @@ def index():
 
 
 @app.route("/files")
-def index():
+def files():
     """"""
     # if the file in the root path of the share, please let the directory name as ''
     # file = file_service.get_file_to_text(share_name, directory_name, file_name)
@@ -56,9 +57,9 @@ def index():
     generator = file_service.list_directories_and_files('myshare')
     for file_or_dir in generator:
         print(file_or_dir.name)
-        loging.info(file_or_dir.name)
+        logging.info(file_or_dir.name)
         fs.append(file_or_dir.name)
-    return jsonify(status='completed', response='files')
+    return jsonify(status='completed', response=fs)
 
 
 @app.route('/filename', methods=['GET', 'POST'])
@@ -93,10 +94,18 @@ def upload():
             filename = secure_filename(file.filename)
             # file_in = os.path.join(app.config['SHARED'], f'in_{filename}')
             file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
-            file.save(file_in)
-
-            file = file_service.get_file_to_text(share_name, directory_name, filename)
-            print(file.content)
+            if app.config['DEV']:
+                file.save(file_in)
+            else:
+                # file = file_service.get_file_to_text(share_name, directory_name, filename)
+                # print(file.content)
+                file_service.create_file_from_stream(
+                                'myshare',
+                                None,  # root directory: directory_name=None
+                                'myfile',
+                                file,
+                                count=1024,
+                                content_settings=ContentSettings(content_type='text/csv'))
 
             # return jsonify(status='completed', response=file_in)
             try:
