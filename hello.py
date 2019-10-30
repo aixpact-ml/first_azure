@@ -18,6 +18,9 @@ app.config['SHARED'] = SHARED
 app.config['LOCAL_PATH'] = LOCAL_PATH
 app.config['DEV'] = False
 
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+# UPLOAD_FOLD = '/Users/blabla/Desktop/kenetelli/htmlfi'
+# UPLOAD_FOLDER = os.path.join(APP_ROOT, UPLOAD_FOLD)
 
 def get_size(f):
     # f is a file-like object.
@@ -25,7 +28,18 @@ def get_size(f):
     f.seek(0, os.SEEK_END)
     size = f.tell()
     f.seek(old_file_position, os.SEEK_SET)
-    return size
+    return size # 16 * 1024 * 1024  #size
+
+
+def get_size_(file_path):
+    """
+    this function will return the file size
+    """
+    if os.path.isfile(file_path):
+        file_info = os.stat(file_path)
+        return convert_bytes(file_info.st_size)
+    else:
+        return 0
 
 
 def allowed_file(filename):
@@ -33,31 +47,59 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# https://docs.microsoft.com/en-us/azure/storage/files/storage-python-how-to-use-file-storage
-from azure.storage.file import FileService, ContentSettings
-from azure.storage.blob import BlockBlobService
+try:
+    # https://docs.microsoft.com/en-us/azure/storage/files/storage-python-how-to-use-file-storage
+    from azure.storage.file import FileService, ContentSettings
+    from azure.storage.blob import BlockBlobService
 
-storageAccount = 'helloaixpact'
-accountKey = '/K/UXeclbEGQ6qxVEEXLrD47hwrxHGJGJnpGPVNZXu2dEEhJWSJ9G4+iDsvWDx4IfDYpIBW9OM+EX/4iNFbR1g=='
-directory_name = 'sampledir'
+    storageAccount = 'helloaixpact'
+    accountKey = '/K/UXeclbEGQ6qxVEEXLrD47hwrxHGJGJnpGPVNZXu2dEEhJWSJ9G4+iDsvWDx4IfDYpIBW9OM+EX/4iNFbR1g=='
+    directory_name = 'sampledir'
+    file_in = f'https://helloaixpact.file.core.windows.net/myshare/myfile2'
 
-file_service = FileService(account_name=storageAccount, account_key=accountKey)
-file_service.create_share('myshare')
-file_service.create_directory('myshare', 'sampledir')
+    file_service = FileService(account_name=storageAccount, account_key=accountKey)
+    file_service.create_share('myshare')
+    file_service.create_directory('myshare', 'sampledir')
+
+    # Create the BlockBlockService that the system uses to call the Blob service for the storage account.
+    # https://docs.microsoft.com/nl-nl/azure/storage/blobs/storage-quickstart-blobs-python
+    block_blob_service = BlockBlobService(
+        account_name=storageAccount, account_key=accountKey)
+
+    # Create a container called 'quickstartblobs'.
+    container_name = 'quickstartblobs'
+    block_blob_service.create_container(container_name)
+
+    # Set the permission so the blobs are public.
+    # block_blob_service.set_container_acl(
+    #     container_name, public_access=PublicAccess.Container)
+
+except:
+    print('local debug')
 
 
-# Create the BlockBlockService that the system uses to call the Blob service for the storage account.
-# https://docs.microsoft.com/nl-nl/azure/storage/blobs/storage-quickstart-blobs-python
-block_blob_service = BlockBlobService(
-    account_name=storageAccount, account_key=accountKey)
+def load_file(share_name='myshare', directory_name = 'sampledir', filename='myfile2'):
+    file = file_service.get_file_to_text(share_name, directory_name, filename)
+    return file.content
 
-# Create a container called 'quickstartblobs'.
-container_name = 'quickstartblobs'
-block_blob_service.create_container(container_name)
 
-# Set the permission so the blobs are public.
-# block_blob_service.set_container_acl(
-#     container_name, public_access=PublicAccess.Container)
+def save_file(file, share_name='myshare', directory_name = 'sampledir', filename='myfile2'):
+    file_service.create_file_from_stream(sharename,
+                directory_name,  # root directory: directory_name=None
+                filename,
+                file,
+                count=get_size(file),
+                content_settings=ContentSettings(content_type='text/csv')
+                )
+
+    file_in = 'https://helloaixpact.file.core.windows.net/myshare/myfile2'
+    # file_in = file_service.get_file_to_text(share_name, directory_name, filename)
+    # file_service.create_file_from_path(
+    #                 'myshare',
+    #                 directory_name, #None,  # root directory: directory_name=None
+    #                 'myfile',
+    #                 filename,
+    #                 content_settings=ContentSettings(content_type='text/csv'))
 
 
 def to_blob(payload):
@@ -130,60 +172,34 @@ def upload():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             # file_in = os.path.join(app.config['SHARED'], f'in_{filename}')
+        file.save(filename)
+        return jsonify(status='completed', response=os.path.getsize(filename))
+            # if app.config['DEV']:
+    #             file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
+    #             logging.info('Local upload ....')
+    #             file.save(file_in)
+    #             # return request.files
+    #         else:
+    #             # return request.files
+    #             # logging.info('API upload ....')
+    #             safe_file(file)
 
-
-            if app.config['DEV']:
-                file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
-                logging.info('Local upload ....')
-                file.save(file_in)
-                # return request.files
-            else:
-                # return request.files
-                # logging.info('API upload ....')
-                # Load file
-                # file = file_service.get_file_to_text(share_name, directory_name, filename)
-                # print(file.content)
-
-                # Save file
-                # try:
-                #     file_in = None  # TODO
-                #     to_blob(file)
-                # except:
-                #     pass
-                bytesize = get_size(file)
-                file_service.create_file_from_stream(
-                                'myshare',
-                                directory_name, #None,  # root directory: directory_name=None
-                                'myfile2',
-                                file,
-                                count=bytesize,
-                                content_settings=ContentSettings(content_type='text/csv')
-                                )
-                file_in = 'https://helloaixpact.file.core.windows.net/myshare/myfile2'
-                # file_in = file_service.get_file_to_text(share_name, directory_name, filename)
-                # file_service.create_file_from_path(
-                #                 'myshare',
-                #                 directory_name, #None,  # root directory: directory_name=None
-                #                 'myfile',
-                #                 filename,
-                #                 content_settings=ContentSettings(content_type='text/csv'))
-
-            # return jsonify(status='completed', response=file_in)
-            try:
-                # Create forcast object
-                file_out = os.path.join(app.config['LOCAL_PATH'], 'forecast.csv')
-                model = algo.Model(filename=file_in, sep=',', header=0, filename_out=file_out)
-                # Model
-                response = model.predict(window=0, horizon=12, slen=6)
-            except Exception as err:
-                print('ooops... something went wrong')
-                message = ('Failed to score the model. Exception: {}'.format(err))
-                response = jsonify(status='error', error_message=message)
-                response.status_code = HTTP_BAD_REQUEST
-    #         # FTUP(file_out)
-            # return send_from_directory(app.config['LOCAL_PATH'],
-            #                            'forecast.csv', as_attachment=True)
-            return jsonify(status='completed', response=response)
+    #         # return jsonify(status='completed', response=file_in)
+    #         try:
+    #             # Create forcast object
+    #             file_out = os.path.join(app.config['LOCAL_PATH'], 'forecast.csv')
+    #             model = algo.Model(filename=file_in, sep=',', header=0, filename_out=file_out)
+    #             # Model
+    #             response = model.predict(window=0, horizon=12, slen=6)
+    #         except Exception as err:
+    #             print('ooops... something went wrong')
+    #             message = ('Failed to score the model. Exception: {}'.format(err))
+    #             response = jsonify(status='error', error_message=message)
+    #             response.status_code = HTTP_BAD_REQUEST
+    # #         # FTUP(file_out)
+    #         # return send_from_directory(app.config['LOCAL_PATH'],
+    #         #                            'forecast.csv', as_attachment=True)
+    #         return jsonify(status='completed', response=response)
     else:
         return jsonify(status='uncompleted', response='no response')
 
@@ -191,4 +207,3 @@ def upload():
 # Run and debug locally
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=8241)
-#
