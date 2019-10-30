@@ -102,15 +102,15 @@ def save_file(file, share_name='myshare', directory_name = 'sampledir', filename
     #                 content_settings=ContentSettings(content_type='text/csv'))
 
 
-def to_blob(payload):
+def to_blob(filename):
     """"""
-    filename = secure_filename(payload.filename)
-    local_file_name = 'myblob2'
+    # filename = secure_filename(payload.filename)
+    # local_file_name = 'myblob2'
 
     # Upload the file
     # block_blob_service.create_blob_from_text('quickstartblobs', 'blob1', payload.content)
     block_blob_service.create_blob_from_path(
-        'quickstartblobs', 'myblob', filename)
+        'quickstartblobs', 'myblob2', filename)
 
 
 
