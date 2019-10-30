@@ -22,24 +22,8 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 # UPLOAD_FOLD = '/Users/blabla/Desktop/kenetelli/htmlfi'
 # UPLOAD_FOLDER = os.path.join(APP_ROOT, UPLOAD_FOLD)
 
-def get_size(f):
-    # f is a file-like object.
-    old_file_position = f.tell()
-    f.seek(0, os.SEEK_END)
-    size = f.tell()
-    f.seek(old_file_position, os.SEEK_SET)
-    return size # 16 * 1024 * 1024  #size
-
-
-def get_size_(file_path):
-    """
-    this function will return the file size
-    """
-    if os.path.isfile(file_path):
-        file_info = os.stat(file_path)
-        return convert_bytes(file_info.st_size)
-    else:
-        return 0
+def _log_msg(msg):
+    logging.info("{}: {}".format(datetime.now(),msg))
 
 
 def allowed_file(filename):
@@ -115,7 +99,6 @@ def to_blob(file, container_name='quickstartblobs', blob_name='myblob', app_name
     return http
 
 
-
 @app.route("/")
 def index():
     """"""
@@ -187,7 +170,7 @@ def upload():
             # return jsonify(status='completed', response=file_in)
             try:
                 # Create forecast object
-                app.config['ROOT'] = ''
+                app.config['ROOT'] = 'temp'
                 file_out = os.path.join(app.config['ROOT'], 'forecast.csv')
                 model = algo.Model(filename=file_in, sep=',', header=0, filename_out=file_out)
                 # Model
