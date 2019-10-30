@@ -319,7 +319,7 @@ def stockout_scaler(y, horizon):
 class Model():
     """Forecast on 2 models(HW + FFT) and average forecasts"""
 
-    def __init__(self, file, sep=',', header=0):
+    def __init__(self, file):
         # Load data
         data = Data()
         self.inbound = file

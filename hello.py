@@ -142,9 +142,7 @@ def upload():
             # return jsonify(status='completed', response=file_in)
             try:
                 # Create forecast object
-                app.config['ROOT'] = ''
-                file_out = os.path.join(app.config['ROOT'], 'forecast.csv')
-                model = algo.Model(filename=file_in, sep=',', header=0, filename_out=file_out)
+                model = algo.Model(filename=file)
                 # Model
                 response = model.predict(window=0, horizon=12, slen=6)
             except Exception as err:
