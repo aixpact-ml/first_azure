@@ -360,26 +360,20 @@ class Model():
             self.preds_df = pd.DataFrame(p.map(self._predict, self.groups),
                                          columns=['group_id', 'data', 'prediction', 'RMSE'])
 
-        # NOT - Parallel processing
-#         self.preds_df = pd.DataFrame(columns=['group_id', 'data', 'prediction','RMSE'])
-#         for i, group_id in enumerate(self.groups):
-#             self.preds_df.loc[i, 'group_id'] = self._predict(group_id)[0]
-#             self.preds_df.loc[i, 'data'] = self._predict(group_id)[1]
-#             self.preds_df.loc[i, 'prediction'] = self._predict(group_id)[2]
-#             self.preds_df.loc[i, 'RMSE'] = self._predict(group_id)[3]
+        #### TODO return csv
+        return self.preds_df.to_csv(index=False)
 
-        #
-        print(f' forecasts done.')
-
+        ####### TODO - reimplement??
         # Save model data and outbound interface
 #         self.save_df()
-        message = self.save_forecast()
-        print(f'forecasts saved.')
+        # message = self.save_forecast()
+        # print(f'forecasts saved.')
+
         # Upload to FTP server
         # FTP(self.outbound_file)
         # FTP(url_for('uploaded_file', filename=self.outbound_file))
         # message = FTUP(self.outbound_file, 'upload')
-        return message
+        # return message
 
     def _predict(self, group_id):
         """Predict models
