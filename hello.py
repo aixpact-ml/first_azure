@@ -19,6 +19,15 @@ app.config['LOCAL_PATH'] = LOCAL_PATH
 app.config['DEV'] = False
 
 
+def get_size(f):
+    # f is a file-like object.
+    old_file_position = f.tell()
+    f.seek(0, os.SEEK_END)
+    size = f.tell()
+    f.seek(old_file_position, os.SEEK_SET)
+    return size
+
+
 def allowed_file(filename):
     logging.info('some logging ....')
     return '.' in filename and \
@@ -141,7 +150,7 @@ def upload():
                 #     to_blob(file)
                 # except:
                 #     pass
-                bytesize = os.path.getsize(filename)
+                bytesize = get_size(file)
                 file_service.create_file_from_stream(
                                 'myshare',
                                 directory_name, #None,  # root directory: directory_name=None
