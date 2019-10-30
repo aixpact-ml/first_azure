@@ -18,9 +18,6 @@ app.config['SHARED'] = SHARED
 app.config['LOCAL_PATH'] = LOCAL_PATH
 app.config['DEV'] = False
 
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-# UPLOAD_FOLD = '/Users/blabla/Desktop/kenetelli/htmlfi'
-# UPLOAD_FOLDER = os.path.join(APP_ROOT, UPLOAD_FOLD)
 
 def _log_msg(msg):
     logging.info("{}: {}".format(datetime.now(),msg))
@@ -57,33 +54,8 @@ try:
     # Set the permission so the blobs are public.
     # block_blob_service.set_container_acl(
     #     container_name, public_access=PublicAccess.Container)
-
 except:
     print('local debug')
-
-
-def load_file(share_name='myshare', directory_name = 'sampledir', filename='myfile2'):
-    file = file_service.get_file_to_text(share_name, directory_name, filename)
-    return file.content
-
-
-def save_file(file, share_name='myshare', directory_name = 'sampledir', filename='myfile2'):
-    file_service.create_file_from_stream(sharename,
-                directory_name,  # root directory: directory_name=None
-                filename,
-                file,
-                count=get_size(file),
-                content_settings=ContentSettings(content_type='text/csv')
-                )
-
-    file_in = 'https://helloaixpact.file.core.windows.net/myshare/myfile2'
-    # file_in = file_service.get_file_to_text(share_name, directory_name, filename)
-    # file_service.create_file_from_path(
-    #                 'myshare',
-    #                 directory_name, #None,  # root directory: directory_name=None
-    #                 'myfile',
-    #                 filename,
-    #                 content_settings=ContentSettings(content_type='text/csv'))
 
 
 def to_blob(file, container_name='quickstartblobs', blob_name='myblob', app_name='helloaixpact'):

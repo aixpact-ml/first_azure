@@ -1,4 +1,3 @@
-#%%
 import numpy as np
 import pandas as pd
 import datetime
@@ -18,8 +17,10 @@ from sklearn.preprocessing import MinMaxScaler
 import warnings
 warnings.filterwarnings("ignore")
 
+
 def test_this():
     return 'test_succeed'
+
 
 # Helpers
 def save_dataset(dataset, filename):
@@ -40,8 +41,7 @@ class Data():
         """Just init"""
         pass
 
-
-    def read_csv(self, filename='./data/sales2.csv', sep=',', header=0 ):
+    def read_csv(self, filename='./data/sales2.csv', sep=',', header=0):
         """Load data and preprocess"""
         df = pd.read_csv(filename, sep=sep, header=header)
         self.set_ds_index(df)
@@ -49,15 +49,14 @@ class Data():
         self.outbound = self.outbound_interface(df.index[0], 36, 12)
         return self.df
 
-
     def set_ds_index(self, df):
         """Create date index"""
-        df.columns = ['style', 'color', 'size', 'division', 'category', 'subcat','subgroup','year','month','qty']
+        df.columns = ['style', 'color', 'size', 'division', 'category', 'subcat',
+            'subgroup', 'year', 'month', 'qty']
         dateparse = lambda dates: pd.datetime.strptime(dates, '%Y-%m-%d %H:%M:%S')
         date_index = [dateparse(f'{df.year[i]}-{df.month[i]}-1 00:00:00') for i in df.index]
         df.index = date_index
         self.df = df
-
 
     def get_groups(self,):
         """Create (sub)group lists"""
@@ -68,7 +67,6 @@ class Data():
         self.categories = style_map['category'].sort_values().unique().astype(int)
         self.subgroups = style_map['subgroup'].sort_values().unique().astype(int)
         self.styles = style_map['style'].sort_values().unique().astype(int)
-
 
     def outbound_interface(self, start_date, window=36, horizon=12, freq='M'):
         """Outbound interface for each time serie"""
@@ -107,7 +105,8 @@ class HoltWinters:
     # alpha, beta, gamma - Holt-Winters model coefficients
     # n_preds - predictions horizon
     # window - validation window
-    # scaling_factor - sets the width of the confidence interval by Brutlag (usually takes values from 2 to 3)"""
+    # scaling_factor - sets the width of the confidence interval by Brutlag (usually takes values from 2 to 3)
+    """
 
     def __init__(self, series, slen, alpha, beta, gamma, n_preds=12, window=12, scaling_factor=1.96):
         assert len(series) / slen >= 2, f'seasonal length must be max half size of time series'
@@ -117,13 +116,12 @@ class HoltWinters:
         if self.window > 0:
             self.series = self.clip(series[:-window]).astype(np.int32)
             self.valid = self.clip(series[-window:]).astype(np.int32)
-        self.slen = slen #
+        self.slen = slen  #
         self.alpha = alpha
         self.beta = beta
         self.gamma = gamma
         self.n_preds = n_preds
         self.scaling_factor = scaling_factor
-
 
     def clip(self, series):
         """Helper to clip values between 0 and infinity and set NaN to zero"""
@@ -131,16 +129,13 @@ class HoltWinters:
         series[series<0] = 0
         return series # TODO np.clip(series, 0, np.inf)
 
-
     def exp_relu(self, value, prev_value=0, param=1):
         """Helper to clip a value between 0 and infinity and set NaN to zero"""
         return max(0., param*value + (1-param)*prev_value)
 
-
     def initial_trend(self, sum_=0.):
         N = self.series.size//2
         return np.mean([float(self.series[i+N] - self.series[i]) / N for i in range(N)])
-
 
     def initial_seasonal_components(self):
         seasonals = {}
@@ -158,10 +153,10 @@ class HoltWinters:
             seasonals[i] = sum_of_vals_over_avg/n_seasons
         return seasonals
 
-
     def fit(self):
         """Triple Exponential Smoothing with
-        Guided Walk Forward prediction"""
+        Guided Walk Forward prediction
+        """
         self.result = []
         self.Smooth = []
         self.Trend = []
@@ -199,14 +194,12 @@ class HoltWinters:
             self.Trend.append(trend)
             self.Season.append(seasonals[i%self.slen])
 
-
     def mape(self, y_true, y_pred, eps=1.):
         """MAPE metric with divide by zero correction"""
         M = (y_true==0)
         y_true = y_true[:].astype(float)
         y_true[M] = eps
         return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
-
 
     def accuracy(self,):
         """Accuracy metrics"""
@@ -221,26 +214,27 @@ class HoltWinters:
 
 # HW CV
 def CVscore(params, values, slen, loss_function=mean_squared_error, window=0):
-    """Returns test error on Holt-Winters Cross Validation
-        params - vector of parameters for optimization
-        values - dataset with timeseries
-        slen - season length for Holt-Winters model
-        for CV window is 0"""
+    """Returns test error on Holt-Winters Cross Validation.
+
+    params - vector of parameters for optimization
+    values - dataset with timeseries
+    slen - season length for Holt-Winters model
+    for CV window is 0
+    """
 
     alpha, beta, gamma = params
     errors = []
     i = 0
 
     # One full season at start and other full seasons from end CV split
-    irange = lambda a,b: list(range(a,b))
+    irange = lambda a, b: list(range(a, b))
     timeseries_split = [(irange(i-slen*3, i-slen), irange(i-slen, i)) \
                         for n, i in enumerate(range(slen*3, len(values), slen))][:1] + \
                             [(irange(i-slen*3, i-slen), irange(i-slen, i)) \
                         for n, i in enumerate(range(len(values), slen*3, -slen))][::-1]
 
-
     # Iterate over folds, train model on each, forecast and calculate error
-    for train, test in timeseries_split: #(values, slen):
+    for train, test in timeseries_split:  #(values, slen):
         n_test = len(test)
         model = HoltWinters(series=values[train], slen=slen,
                             alpha=alpha, beta=beta, gamma=gamma, n_preds=n_test, window=window)
@@ -265,7 +259,7 @@ def fft_forecast(x, horizon=12, window=0, n_harmonics=60, beta=4, min_fc=0, max_
     # Remove linear average seasonal trend in x
     alpha = np.mean([float(x[i+horizon] - x[i]) / horizon for i in range(N-horizon)])
     t = np.arange(0, x.size)
-    x_dtrend = x #- alpha * t
+    x_dtrend = x  # - alpha * t
 
     # Transform to frequency domain using windowing
     x_freqdom = np.fft.fft(x_dtrend + np.kaiser(x_dtrend.size, beta))
@@ -288,8 +282,7 @@ def fft_forecast(x, horizon=12, window=0, n_harmonics=60, beta=4, min_fc=0, max_
         out = scaler.fit_transform(cwave[-N-horizon:].reshape(-1,1)).squeeze()
     else:
         out = cwave[-N-horizon:]
-    return np.clip(out, 0, np.inf).astype(int) #np.nan_to_num(out)
-
+    return np.clip(out, 0, np.inf).astype(int)  # np.nan_to_num(out)
 
 
 # Scaler
@@ -326,12 +319,11 @@ def stockout_scaler(y, horizon):
 class Model():
     """Forecast on 2 models(HW + FFT) and average forecasts"""
 
-    def __init__(self, filename='./data/sales2.csv', sep=',', header=0, filename_out='./data/sales2_pred.csv'):
+    def __init__(self, file, sep=',', header=0):
         # Load data
         data = Data()
-        self.inbound = data.read_csv(filename=filename, sep=sep, header=header)
+        self.inbound = file
         self.outbound = data.get_outbound()
-        self.outbound_file = filename_out
         self.group = 'style'
         self.groups = data.styles
         self.ts = self.inbound.pivot_table(values='qty',
@@ -339,17 +331,14 @@ class Model():
                                  index=self.group,
                                  columns=self.inbound.index).fillna(0)
 
-
     def timeseries(self, group_id):
         """TS"""
         ts = self.ts.loc[group_id].values
         ts_ma = copy.deepcopy(pd.Series(ts).ewm(com=.2).mean().values.astype(np.int32))
-        return ts, ts_ma[:-self.horizon] # TODO cut window
-
+        return ts, ts_ma[:-self.horizon]
 
     def predict(self, window=0, horizon=12, slen=6):
         """Mulitprocess prediction and save results as df and outbound interface"""
-
         self.window = window
         self.horizon = horizon
         self.slen = slen
@@ -364,25 +353,13 @@ class Model():
         # return self.preds_df.to_csv(index=False)
         return self.preds_df.to_json(orient='index')
 
-        ####### TODO - reimplement??
-        # Save model data and outbound interface
-#         self.save_df()
-        # message = self.save_forecast()
-        # print(f'forecasts saved.')
-
-        # Upload to FTP server
-        # FTP(self.outbound_file)
-        # FTP(url_for('uploaded_file', filename=self.outbound_file))
-        # message = FTUP(self.outbound_file, 'upload')
-        # return message
-
     def _predict(self, group_id):
-        """Predict models
+        """Predict models.
         Zero forecast of items with less than 2 periods sales in last 6 periods
         TODO: develop alternative to zero forecast: KNN?
         Validation: window = 12
-        Forecast:   window = 0"""
-
+        Forecast:   window = 0
+        """
         # Min n months of sales in last half year
         min_sales_threshold = 2
         last_period = 6
@@ -421,26 +398,3 @@ class Model():
         fc_scaled = stockout_scaler(np.r_[ts, fc_], self.horizon)
 
         return (group_id.astype(int), ts, fc_scaled[-self.horizon:], rmse)
-
-
-    def save_forecast(self,):
-        """Concat all styles into one outbound interface"""
-        ttl_outbound = pd.DataFrame()
-        for i in self.preds_df.index:
-            self.outbound['style'] = self.preds_df.loc[i, 'group_id']
-            # self.outbound['qty'] = np.r_[self.preds_df.loc[i, 'data'], self.preds_df.loc[i, 'prediction']].astype(int)
-            self.outbound['qty'] = np.concatenate((self.preds_df.loc[i, 'data'], self.preds_df.loc[i, 'prediction']), axis=None).astype(int)
-            ttl_outbound = pd.concat([ttl_outbound, self.outbound])
-        # Fix/clip invalid values
-        fix = lambda x: np.clip(np.nan_to_num(x), 0, 99e6).astype(int)
-        ttl_outbound['qty'] = fix(ttl_outbound['qty'])
-        ttl_outbound.to_csv(self.outbound_file) # f'outbound_interface_{self.window}_.csv'
-        return 'holymoly'
-
-
-    def save_df(self,):
-        """Save/pickle df"""
-        self.preds_df['RMSE'] = pd.to_numeric(self.preds_df['RMSE'])
-        self.preds_df['group_id'] = pd.to_numeric(self.preds_df['group_id']).astype(int)
-        save_dataset(self.preds_df, f'styles_predictions_preds_df_{self.window}_.pkl')
-
