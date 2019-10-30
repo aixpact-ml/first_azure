@@ -116,7 +116,7 @@ class HoltWinters:
         if self.window > 0:
             self.series = self.clip(series[:-window]).astype(np.int32)
             self.valid = self.clip(series[-window:]).astype(np.int32)
-        self.slen = slen  #
+        self.slen = slen #
         self.alpha = alpha
         self.beta = beta
         self.gamma = gamma
@@ -214,7 +214,7 @@ class HoltWinters:
 
 # HW CV
 def CVscore(params, values, slen, loss_function=mean_squared_error, window=0):
-    """Returns test error on Holt-Winters Cross Validation.
+    """Returns test error on Holt-Winters Cross Validation
 
     params - vector of parameters for optimization
     values - dataset with timeseries
@@ -227,7 +227,7 @@ def CVscore(params, values, slen, loss_function=mean_squared_error, window=0):
     i = 0
 
     # One full season at start and other full seasons from end CV split
-    irange = lambda a, b: list(range(a, b))
+    irange = lambda a,b: list(range(a,b))
     timeseries_split = [(irange(i-slen*3, i-slen), irange(i-slen, i)) \
                         for n, i in enumerate(range(slen*3, len(values), slen))][:1] + \
                             [(irange(i-slen*3, i-slen), irange(i-slen, i)) \
@@ -259,7 +259,7 @@ def fft_forecast(x, horizon=12, window=0, n_harmonics=60, beta=4, min_fc=0, max_
     # Remove linear average seasonal trend in x
     alpha = np.mean([float(x[i+horizon] - x[i]) / horizon for i in range(N-horizon)])
     t = np.arange(0, x.size)
-    x_dtrend = x  # - alpha * t
+    x_dtrend = x  #- alpha * t
 
     # Transform to frequency domain using windowing
     x_freqdom = np.fft.fft(x_dtrend + np.kaiser(x_dtrend.size, beta))
@@ -282,7 +282,8 @@ def fft_forecast(x, horizon=12, window=0, n_harmonics=60, beta=4, min_fc=0, max_
         out = scaler.fit_transform(cwave[-N-horizon:].reshape(-1,1)).squeeze()
     else:
         out = cwave[-N-horizon:]
-    return np.clip(out, 0, np.inf).astype(int)  # np.nan_to_num(out)
+    return np.clip(out, 0, np.inf).astype(int)  #np.nan_to_num(out)
+
 
 
 # Scaler
@@ -319,10 +320,10 @@ def stockout_scaler(y, horizon):
 class Model():
     """Forecast on 2 models(HW + FFT) and average forecasts"""
 
-    def __init__(self, file):
+    def __init__(self, filename, sep=',', header=0):
         # Load data
         data = Data()
-        self.inbound = file
+        self.inbound = data.read_csv(filename=filename, sep=sep, header=header)
         self.outbound = data.get_outbound()
         self.group = 'style'
         self.groups = data.styles
