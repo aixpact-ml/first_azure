@@ -102,15 +102,16 @@ def save_file(file, share_name='myshare', directory_name = 'sampledir', filename
     #                 content_settings=ContentSettings(content_type='text/csv'))
 
 
-def to_blob(filename):
+def to_blob(file_name, container_name='quickstartblobs', blob_name='myblob', app_name='helloaixpact'):
     """"""
-    # filename = secure_filename(payload.filename)
-    # local_file_name = 'myblob2'
+    # Save file to root dir in Azure - create path
+    file.save(file_name)
 
-    # Upload the file
-    # block_blob_service.create_blob_from_text('quickstartblobs', 'blob1', payload.content)
-    block_blob_service.create_blob_from_path(
-        'quickstartblobs', 'myblob2', filename)
+    # Upload the file from path
+    block_blob_service.create_blob_from_path(container_name, blob_name, file_name)
+    http = f'https://{app_name}.blob.core.windows.net/{container_name}/{blob_name}'
+    logging.info(f'Blob upload finished @ {http}')
+    return http
 
 
 
@@ -172,18 +173,15 @@ def upload():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             # file_in = os.path.join(app.config['SHARED'], f'in_{filename}')
-        file.save(filename)
-        to_blob(filename)
-        return jsonify(status='completed', response=os.path.getsize(filename))
-            # if app.config['DEV']:
-    #             file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
-    #             logging.info('Local upload ....')
-    #             file.save(file_in)
-    #             # return request.files
-    #         else:
-    #             # return request.files
-    #             # logging.info('API upload ....')
-    #             safe_file(file)
+
+        #
+        # return jsonify(status='completed', response=os.path.getsize(filename))
+            if app.config['DEV']:
+                file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
+                logging.info('Local upload ....')
+                file.save(file_in)
+            else:
+                file_in = to_blob(filename)
 
     #         # return jsonify(status='completed', response=file_in)
     #         try:
@@ -200,7 +198,7 @@ def upload():
     # #         # FTUP(file_out)
     #         # return send_from_directory(app.config['LOCAL_PATH'],
     #         #                            'forecast.csv', as_attachment=True)
-    #         return jsonify(status='completed', response=response)
+            return jsonify(status='completed', response=file_in)
     else:
         return jsonify(status='uncompleted', response='no response')
 
