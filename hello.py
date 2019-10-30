@@ -184,7 +184,7 @@ def upload():
             # return send_from_directory(app.config['ROOT'], 'forecast.csv', as_attachment=True)
             # return send_from_directory(app.config['LOCAL_PATH'],
             #                            'forecast.csv', as_attachment=True)
-            return jsonify(status='completed', response=response, filename=file_in)
+            return response  # jsonify(status='completed', response=response, filename=file_in)
     else:
         return jsonify(status='uncompleted', response='no response')
 

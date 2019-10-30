@@ -360,8 +360,9 @@ class Model():
             self.preds_df = pd.DataFrame(p.map(self._predict, self.groups),
                                          columns=['group_id', 'data', 'prediction', 'RMSE'])
 
-        #### TODO return csv
-        return self.preds_df.to_csv(index=False)
+        #### TODO return csv or json
+        # return self.preds_df.to_csv(index=False)
+        return self.preds_df.to_json(orient='index')
 
         ####### TODO - reimplement??
         # Save model data and outbound interface
@@ -419,11 +420,6 @@ class Model():
         # TODO
         fc_scaled = stockout_scaler(np.r_[ts, fc_], self.horizon)
 
-
-        # Print progress - BrokenPipeError
-#         print('', end='\r', flush=True)
-#         print(f'{group_id}', end='', flush=True)
-
         return (group_id.astype(int), ts, fc_scaled[-self.horizon:], rmse)
 
 
@@ -447,16 +443,4 @@ class Model():
         self.preds_df['RMSE'] = pd.to_numeric(self.preds_df['RMSE'])
         self.preds_df['group_id'] = pd.to_numeric(self.preds_df['group_id']).astype(int)
         save_dataset(self.preds_df, f'styles_predictions_preds_df_{self.window}_.pkl')
-
-
-# def main():
-#     # Create forcast object
-#     model = Model(filename='~/aixpact/_cases/Darwin/data/sales2.csv',
-#                   sep=',', header=0,
-#                   filename_out='~/aixpact/_cases/Darwin/data/sales2_pred.csv')
-#     # Model
-#     response = model.predict(window=0, horizon=12, slen=6)
-
-# if __name__ == "__main__":
-#     main()
 
