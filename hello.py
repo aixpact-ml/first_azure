@@ -105,12 +105,12 @@ def save_file(file, share_name='myshare', directory_name = 'sampledir', filename
 def to_blob(payload):
     """"""
     filename = secure_filename(payload.filename)
-    local_file_name = 'myblob'
+    local_file_name = 'myblob2'
 
     # Upload the file
-    block_blob_service.create_blob_from_text('quickstartblobs', 'blob1', payload.content)
-    # block_blob_service.create_blob_from_path(
-    #     'quickstartblobs', 'myblob', filename)
+    # block_blob_service.create_blob_from_text('quickstartblobs', 'blob1', payload.content)
+    block_blob_service.create_blob_from_path(
+        'quickstartblobs', 'myblob', filename)
 
 
 
@@ -173,6 +173,7 @@ def upload():
             filename = secure_filename(file.filename)
             # file_in = os.path.join(app.config['SHARED'], f'in_{filename}')
         file.save(filename)
+        to_blob(filename)
         return jsonify(status='completed', response=os.path.getsize(filename))
             # if app.config['DEV']:
     #             file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
