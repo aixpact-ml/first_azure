@@ -25,7 +25,7 @@ RUN pip install --proxy=${http_proxy} \
     pydotplus \
     ipympl
 COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # EXPOSE 8080
 # CMD [ "gunicorn", "--bind", "0.0.0.0:8080", "hello:app", "--timeout", "1200", "--threads", "8" ]

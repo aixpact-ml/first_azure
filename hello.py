@@ -102,9 +102,10 @@ def save_file(file, share_name='myshare', directory_name = 'sampledir', filename
     #                 content_settings=ContentSettings(content_type='text/csv'))
 
 
-def to_blob(file_name, container_name='quickstartblobs', blob_name='myblob', app_name='helloaixpact'):
+def to_blob(file, container_name='quickstartblobs', blob_name='myblob', app_name='helloaixpact'):
     """"""
     # Save file to root dir in Azure - create path
+    file_name = file.filename
     file.save(file_name)
 
     # Upload the file from path
@@ -181,7 +182,7 @@ def upload():
                 logging.info('Local upload ....')
                 file.save(file_in)
             else:
-                file_in = to_blob(filename)
+                file_in = to_blob(file)
 
     #         # return jsonify(status='completed', response=file_in)
     #         try:
