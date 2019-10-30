@@ -184,22 +184,23 @@ def upload():
             else:
                 file_in = to_blob(file)
 
-    #         # return jsonify(status='completed', response=file_in)
-    #         try:
-    #             # Create forcast object
-    #             file_out = os.path.join(app.config['LOCAL_PATH'], 'forecast.csv')
-    #             model = algo.Model(filename=file_in, sep=',', header=0, filename_out=file_out)
-    #             # Model
-    #             response = model.predict(window=0, horizon=12, slen=6)
-    #         except Exception as err:
-    #             print('ooops... something went wrong')
-    #             message = ('Failed to score the model. Exception: {}'.format(err))
-    #             response = jsonify(status='error', error_message=message)
-    #             response.status_code = HTTP_BAD_REQUEST
+            # return jsonify(status='completed', response=file_in)
+            try:
+                # Create forecast object
+                file_out = 'forecast.csv'  # os.path.join(app.config['LOCAL_PATH'], 'forecast.csv')
+                model = algo.Model(filename=file_in, sep=',', header=0, filename_out=file_out)
+                # Model
+                response = model.predict(window=0, horizon=12, slen=6)
+            except Exception as err:
+                print('ooops... something went wrong')
+                message = ('Failed to score the model. Exception: {}'.format(err))
+                response = jsonify(status='error', error_message=message)
+                response.status_code = HTTP_BAD_REQUEST
     # #         # FTUP(file_out)
-    #         # return send_from_directory(app.config['LOCAL_PATH'],
-    #         #                            'forecast.csv', as_attachment=True)
-            return jsonify(status='completed', response=file_in)
+            return send_from_directory('forecast.csv', as_attachment=True)
+            # return send_from_directory(app.config['LOCAL_PATH'],
+            #                            'forecast.csv', as_attachment=True)
+            # return jsonify(status='completed', response=file_in)
     else:
         return jsonify(status='uncompleted', response='no response')
 
