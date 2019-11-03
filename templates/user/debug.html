@@ -1,0 +1,24 @@
+{% extends 'base_site.html' %}
+
+{% block title %}Debug{% endblock %}
+
+{% block content %}
+    <div class="jumbotron">
+    </div>
+
+    <div class="jumbotron">
+        <p>Data</p>
+            {{ data }}
+
+        <p>Data2</p>
+            {{ data2 }}
+
+    </div>
+        <p>Data3</p>
+            {% for d in data3 %}
+            {{ d.username, d.email, d.role}}
+            {% endfor %}
+    </div>
+
+
+{% endblock %}

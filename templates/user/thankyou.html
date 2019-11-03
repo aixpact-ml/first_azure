@@ -1,0 +1,21 @@
+{% extends 'base_site.html' %}
+{% import 'macros/form.html' as f with context %}
+
+{% block title %}Thanks for signing up{% endblock %}
+
+{% block content %}
+  <div class="jumbotron">
+  </div>
+  <div class="row">
+    <div class="col-md-5 col-md-push-1 col-md-offset-1 well">
+      <p>Thank you {{ user.username}} for your registration!</p>
+    </div>
+  </div>
+
+<div class="row">
+    <div>
+        <a href="{{ url_for('user_blueprint.login') }}"
+           class="btn btn-default">Login</a>
+    </div>
+</div>
+{% endblock %}

@@ -5,10 +5,17 @@ from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
                    render_template, session, current_app, make_response,
                    send_file, send_from_directory)
 from werkzeug.utils import secure_filename
+from forms import LoginForm, FileForm
 
 import algo
 
+from config import Config
+
 app = Flask(__name__)
+app.config.from_object(Config)
+
+from flask_wtf.csrf import CsrfProtect
+CsrfProtect(app)
 
 HTTP_BAD_REQUEST = 400
 ALLOWED_EXTENSIONS = set(['txt', 'csv'])
@@ -24,7 +31,7 @@ def _log_msg(msg):
 
 
 def allowed_file(filename):
-    logging.info('some logging ....')
+    _log_msg('checking allowed file ...')
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -71,9 +78,28 @@ def to_blob(file, container_name='quickstartblobs', blob_name='myblob', app_name
     return http
 
 
+@app.route("/hello", methods=['GET', 'POST'])
+def hello():
+    """Test"""
+    try:
+        name = request.args.get('name')
+    except:
+        name = 'stranger'
+    return jsonify(status='succes', response=f'hello {name}')
+
+
+@app.route("/hello/<name>")
+def hello2(name):
+    """Test"""
+    # try:
+    #     name = request.args.get('name')
+    # except:
+    #     name = 'stranger'
+    return jsonify(status='succes', response=f'hello {name}')
+
 @app.route("/")
 def index():
-    """"""
+    """Takes some time....."""
     text = 'woh'
     logging.info(f'some logging {text}')
     r = requests.get('http://www.aixpact.ml/api/httptrigger?name=frank')
@@ -88,7 +114,8 @@ def files():
     # file = file_service.get_file_to_text(share_name, directory_name, file_name)
     # print(file.content)
     fs = []
-    generator = file_service.list_directories_and_files('myshare')
+    generator = file_service.list_directories_and_files('myshare')  # only azure
+    # generator = file_service.list_directories_and_files('myshare')
     for file_or_dir in generator:
         print(file_or_dir.name)
         logging.info(file_or_dir.name)
@@ -128,13 +155,10 @@ def upload():
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            # file_in = os.path.join(app.config['SHARED'], f'in_{filename}')
 
-        #
         # return jsonify(status='completed', response=os.path.getsize(filename))
             if app.config['DEV']:
                 file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
-                logging.info('Local upload ....')
                 file.save(file_in)
             else:
                 file_in = to_blob(file)
@@ -150,13 +174,42 @@ def upload():
                 message = ('Failed to score the model. Exception: {}'.format(err))
                 response = jsonify(status='error', error_message=message)
                 response.status_code = HTTP_BAD_REQUEST
-    # #         # FTUP(file_out)
-            # return send_from_directory(app.config['ROOT'], 'forecast.csv', as_attachment=True)
-            # return send_from_directory(app.config['LOCAL_PATH'],
-            #                            'forecast.csv', as_attachment=True)
-            return response  # jsonify(status='completed', response=response, filename=file_in)
+            return response
     else:
         return jsonify(status='uncompleted', response='no response')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for user {}, remember_me={}'.format(
+            form.username.data, form.remember_me.data))
+        return redirect('/index')
+    return render_template('login.html', title='Sign In', form=form)
+
+
+@app.route('/upload_form', methods=['GET', 'POST'])
+def upload_form():
+    form = FileForm()
+    if form.validate_on_submit():
+        f = form.file.data
+        filename = secure_filename(f.filename)
+        f.save(os.path.join(app.instance_path, 'project', filename))
+        return redirect(url_for('index'))
+
+    return render_template('upload.html', form=form)
+
+
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+
+#     form = LoginForm()
+
+#     if form.validate_on_submit():
+#         return jsonify(status='success', response='form is validated')
+
+#     return render_template('user/login.html', form=form)
 
 
 # Run and debug locally

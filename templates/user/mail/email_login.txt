@@ -1,0 +1,11 @@
+Hi {{ user.email }},
+
+You or someone else tried to login from {{ user.current_sign_in_ip }} while you are still logged in!
+
+Pls click below link within the next 5 minutes to login again:
+
+{{ url_for('user_blueprint.login_again', reset_token=reset_token, _external=True) }}
+
+
+Thanks,
+Aixpact

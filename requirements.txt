@@ -8,3 +8,7 @@ scipy
 sklearn
 azure-storage-file
 azure-storage-blob
+flask-wtf
+wtforms
+wtforms-components
+wtforms-alchemy

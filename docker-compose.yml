@@ -16,9 +16,22 @@ version: '3'
 services:
 
   #######################################
+  # Web service
+  #######################################
+
+  # web:
+  #   container_name: 'azure_web'
+  #   build: .
+  #   restart: always
+  #   command: gunicorn -w 2 -b :29000 --reload "hello:app"
+  #   ports:
+  #     - '29001:29000'
+
+
+  #######################################
   # Jupyter
-  # Jupyter available outside container @ localhost:18888
-  # Tensorboard available outside container @ localhost:5001
+  # Jupyter available outside container @ localhost:28888
+  # Tensorboard available outside container @ localhost:15001
   #######################################
   jupyter:
     container_name: "jupyter_azure"
@@ -38,8 +51,8 @@ services:
       - './project:/home/jovyan/aixpact/project'
       - 'jupyter:/home/jovyan/aixpact/docker_volume'
     ports:
-      - 18888:8888
-      - 5001:6006
+      - 28888:8888
+      - 15001:6006
     entrypoint: sh -c 'start-notebook.sh --NotebookApp.token=$$JUPYTER_PASSWORD'
 
 
