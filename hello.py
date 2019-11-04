@@ -1,4 +1,5 @@
 import logging
+import datetime
 import requests
 import os
 from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
@@ -27,7 +28,7 @@ app.config['DEV'] = False
 
 
 def _log_msg(msg):
-    logging.info("{}: {}".format(datetime.now(),msg))
+    logging.info("{}: {}".format(datetime.now(), msg))
 
 
 def allowed_file(filename):
