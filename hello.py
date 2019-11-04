@@ -250,6 +250,6 @@ def login():
     return render_template('login.html', title='Sign In', form=form)
 
 
-# Run and debug locally
+# Run and debug locally in Jupyter
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=8241)
