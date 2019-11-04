@@ -7,6 +7,7 @@ class Config(object):
     def __init__(self, **entries):
         self.__dict__.update(entries)
 
+config = Config(creds)
 
 # class Config(object):
 #     def __init__(self, pickl='creds.pkl'):
