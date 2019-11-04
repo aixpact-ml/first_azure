@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 from flask_wtf.csrf import CsrfProtect
-app.config['SECRET_KEY'] = Config['SECRET_KEY']  # extra
+app.config['SECRET_KEY'] = Config.SECRET_KEY  # extra
 CsrfProtect(app)
 
 
