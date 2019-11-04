@@ -9,11 +9,13 @@ from werkzeug.utils import secure_filename
 from forms import LoginForm, FileForm
 
 import algo
-from flask_wtf.csrf import CsrfProtect
-from config import Config
 
+from config import Config
 app = Flask(__name__)
 app.config.from_object(Config)
+
+from flask_wtf.csrf import CsrfProtect
+app.config['SECRET_KEY'] = Config['SECRET_KEY']  # extra
 CsrfProtect(app)
 
 
