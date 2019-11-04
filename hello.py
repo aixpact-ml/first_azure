@@ -75,13 +75,15 @@ def to_blob(file, container_name='quickstartblobs', blob_name='api_upload', app_
     try:
         from azure.storage.blob import BlockBlobService
 
+        # TODO hide creds in file
         storageAccount = 'helloaixpact'
         accountKey = '/K/UXeclbEGQ6qxVEEXLrD47hwrxHGJGJnpGPVNZXu2dEEhJWSJ9G4+iDsvWDx4IfDYpIBW9OM+EX/4iNFbR1g=='
 
         block_blob_service = BlockBlobService(account_name=storageAccount, account_key=accountKey)
         block_blob_service.create_container(container_name)
     except Exception as err:
-        return jsonify(status='failed', response=f'Failed to create blob: {err}')
+        logging.info(f'Failed to create blob: {err}')
+        return f'Failed to create blob: {err}'
 
     # Upload the file from path
     block_blob_service.create_blob_from_path(container_name, blob_name, file_name)

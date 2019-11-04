@@ -1,7 +1,7 @@
 {% extends "base_empty.html" %}
 
 {% block content %}
-<div class="jumbotron">
+<div class="jumbotron-fluid">
     <h1>One free API a day</h1>
     <span>This API forecasts your timeseries.</span><br>
 
@@ -15,7 +15,10 @@
             <span>We will send the API result to your email.</span><br>
             {{ form.email.label }}: {{ form.email(size=32) }}
         </p>
-        <p>{{ form.submit() }}</p>
+        <button type="button" class="btn btn-outline-primary">
+        {{ form.submit() }}
+        </button>
+        <p></p>
     </form>
 </div>
 {% endblock %}
