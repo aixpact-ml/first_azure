@@ -65,7 +65,7 @@ except:
     print('local debug')
 
 
-def to_blob(file, container_name='quickstartblobs', blob_name='myblob', app_name='helloaixpact'):
+def to_blob(file, container_name='quickstartblobs', blob_name='api_upload', app_name='helloaixpact'):
     """"""
     # Save file to root dir in Azure - create path
     file_name = file.filename
@@ -208,8 +208,13 @@ def upload_form():
                 # Azure
                 file_in = to_blob(file)
         flash(f'File: {filename} is saved @ {file_in}')
-        return redirect(url_for('index'))
+        return redirect(url_for('thankyou'), message=file_in)
     return render_template('upload.html', form=form)
+
+
+@app.route("/thankyou")
+def thankyou():
+    return jsonify(status='succes', response=request.args.get('message'))
 
 
 @app.route('/login', methods=['GET', 'POST'])

@@ -10,7 +10,7 @@ class FileForm(FlaskForm):
     email = EmailField('Email address', validators=[
         InputRequired("Please enter your email address."),
         Email("Please enter your email address.")])
-    submit = SubmitField('Subimt')
+    submit = SubmitField('Submit')
 
 
 class LoginForm(FlaskForm):
