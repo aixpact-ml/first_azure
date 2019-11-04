@@ -105,7 +105,7 @@ async def to_blob(file, container_name='hapidays', blob_name='api_upload'):
     with open(file_name, "rb") as data:
         await blob.upload_blob(data)
 
-    http = f'https://{Config['STORAGE_ACCOUNT']}.blob.core.windows.net/{container_name}/{blob_name}'
+    http = f"https://{Config['STORAGE_ACCOUNT']}.blob.core.windows.net/{container_name}/{blob_name}"
     logging.info(f'Blob upload finished @ {http}')
     return http
 
