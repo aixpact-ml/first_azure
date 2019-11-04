@@ -37,7 +37,7 @@ try:
     from azure.storage.blob import BlockBlobService
 
     directory_name = 'sampledir'
-    file_in = f'https://{Config['STORAGE_ACCOUNT']}.file.core.windows.net/myshare/myfile2'
+    file_in = f"https://{Config['STORAGE_ACCOUNT']}.file.core.windows.net/myshare/myfile2"
 
     file_service = FileService(
         account_name=Config['STORAGE_ACCOUNT'],
@@ -78,12 +78,12 @@ def to_blob_(file, container_name='hAPIdays', blob_name='api_upload'):
 
         block_blob_service.create_container(container_name)
     except Exception as err:
-        logging.info(f'Failed to create blob: {err}')
-        return f'Failed to create blob: {err}'
+        logging.info(f'Failed to create container: {err}')
+        return f'Failed to create container: {err}'
 
     # Upload the file from path
     block_blob_service.create_blob_from_path(container_name, blob_name, file_name)
-    http = f'https://{Config['STORAGE_ACCOUNT']}.blob.core.windows.net/{container_name}/{blob_name}'
+    http = f"https://{Config['STORAGE_ACCOUNT']}.blob.core.windows.net/{container_name}/{blob_name}"
     logging.info(f'Blob upload finished @ {http}')
     return http
 
@@ -132,12 +132,15 @@ def hello2(name):
 
 @app.route("/")
 def index():
+    return jsonify(status='succes', response='api is online')
+
+
+@app.route("/run_function")
+def run_function():
     """Takes some time....."""
-    text = 'woh'
-    logging.info(f'some logging {text}')
-    # r = requests.get('http://www.aixpact.ml/api/httptrigger?name=frank')
-    # print(r.content, r.status_code)
-    return jsonify(status='succes', response='api is online') #r.text
+    r = requests.get('http://www.aixpact.ml/api/httptrigger?name=frank')
+    print(r.content, r.status_code)
+    return r.text
 
 
 @app.route("/files")
