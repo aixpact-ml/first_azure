@@ -52,8 +52,7 @@ try:
 
     # Create the BlockBlockService that the system uses to call the Blob service for the storage account.
     # https://docs.microsoft.com/nl-nl/azure/storage/blobs/storage-quickstart-blobs-python
-    block_blob_service = BlockBlobService(
-        account_name=storageAccount, account_key=accountKey)
+    block_blob_service = BlockBlobService(account_name=storageAccount, account_key=accountKey)
 
     # Create a container called 'quickstartblobs'.
     container_name = 'quickstartblobs'
@@ -71,6 +70,18 @@ def to_blob(file, container_name='quickstartblobs', blob_name='myblob', app_name
     # Save file to root dir in Azure - create path
     file_name = file.filename
     file.save(file_name)
+
+    # Create blob service and container
+    try:
+        from azure.storage.blob import BlockBlobService
+
+        storageAccount = 'helloaixpact'
+        accountKey = '/K/UXeclbEGQ6qxVEEXLrD47hwrxHGJGJnpGPVNZXu2dEEhJWSJ9G4+iDsvWDx4IfDYpIBW9OM+EX/4iNFbR1g=='
+
+        block_blob_service = BlockBlobService(account_name=storageAccount, account_key=accountKey)
+        block_blob_service.create_container(container_name)
+    except Exception as err:
+        return jsonify(status='failed', response=f'Failed to create blob: {err}')
 
     # Upload the file from path
     block_blob_service.create_blob_from_path(container_name, blob_name, file_name)
