@@ -64,7 +64,7 @@ except:
     print('local debug')
 
 
-def to_blob_(file, container_name='hAPIdays', blob_name='api_upload'):
+def to_blob(file, container_name='hAPIdays', blob_name='upload'):
     """"""
     # Save file to root dir in Azure - create path
     file_name = file.filename
@@ -90,7 +90,7 @@ def to_blob_(file, container_name='hAPIdays', blob_name='api_upload'):
     return http
 
 
-async def to_blob(file, container_name='hapidays', blob_name='api_upload'):
+async def to_blob_async(file, container_name='hapidays', blob_name='upload'):
     """https://pypi.org/project/azure-storage-blob/"""
     from azure.storage.blob.aio import BlobClient
 
@@ -231,7 +231,8 @@ def upload_form():
                 file.save(file_in)
             except:
                 # Azure
-                file_in = to_blob(file)
+                blob_name = form.email.data.replace('@', '_').replace('.', '_').replace('-', '_')
+                file_in = to_blob(file, blob_name=blob_name)
         flash(f'File: {filename} is saved @ {file_in}')
         return redirect(url_for('thankyou', message=file_in))
     return render_template('upload.html', form=form)
