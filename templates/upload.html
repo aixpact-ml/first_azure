@@ -2,28 +2,28 @@
 
 {% block content %}
 <div class="jumbotron-fluid">
-        <h1>h<b>API</b>days</h1>
-        <h2>One free API a day</h2>
-        <span>This API forecasts your timeseries.</span><br>
+    <h1>h<b>API</b>days</h1>
+    <h2>One free API a day</h2>
+    <span>This API forecasts your timeseries.</span><br>
 
-        <form action="" method="post" enctype="multipart/form-data" novalidate>
-            {{ form.hidden_tag() }}
-            <p>
-                <span>Upload your local file for this API.</span><br>
-                {{ form.file.label }}: {{ form.file(size=64) }}
-            </p>
-            <p>
-                <span>We will send the API result to your email.</span><br>
+    <form action="" method="post" enctype="multipart/form-data" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            <span>Upload your local file for this API.</span><br>
+            {{ form.file.label }}: {{ form.file(size=64) }}
+        </p>
+        <p>
+            <span>We will send the API result to your email.</span><br>
 
-                {{ form.email.label }}: {{ form.email(size=32) }}
-            </p>
+            {{ form.email.label }}: {{ form.email(size=32) }}
+        </p>
 
-            <button type="submit" class="btn btn-outline-primary">
-            Get it!
-            <!-- {{ form.submit() }} -->
-            </button>
-            <p></p>
-        </form>
+        <button type="submit" class="btn btn-outline-primary">
+        Get it!
+        <!-- {{ form.submit() }} -->
+        </button>
+        <p></p>
+    </form>
 </div>
 {% endblock %}
 

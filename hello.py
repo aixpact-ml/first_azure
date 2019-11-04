@@ -39,19 +39,19 @@ try:
     from azure.storage.blob import BlockBlobService
 
     directory_name = 'sampledir'
-    file_in = f"https://{Config['STORAGE_ACCOUNT']}.file.core.windows.net/myshare/myfile2"
+    file_in = f"https://{config.STORAGE_ACCOUNT}.file.core.windows.net/myshare/myfile2"
 
     file_service = FileService(
-        account_name=Config['STORAGE_ACCOUNT'],
-        account_key=Config['ACCOUNT_KEY'])
+            account_name=config.STORAGE_ACCOUNT,
+            account_key=config.ACCOUNT_KEY)
     file_service.create_share('myshare')
     file_service.create_directory('myshare', 'sampledir')
 
     # Create the BlockBlockService that the system uses to call the Blob service for the storage account.
     # https://docs.microsoft.com/nl-nl/azure/storage/blobs/storage-quickstart-blobs-python
     block_blob_service = BlockBlobService(
-        account_name=Config['STORAGE_ACCOUNT'],
-        account_key=Config['ACCOUNT_KEY'])
+            account_name=config.STORAGE_ACCOUNT,
+            account_key=config.ACCOUNT_KEY)
 
     # Create a container called 'quickstartblobs'.
     container_name = 'quickstartblobs'
@@ -75,8 +75,8 @@ def to_blob(file, container_name='hAPIdays', blob_name='upload'):
         from azure.storage.blob import BlockBlobService
 
         block_blob_service = BlockBlobService(
-            account_name=Config['STORAGE_ACCOUNT'],
-            account_key=Config['ACCOUNT_KEY'])
+            account_name=config.STORAGE_ACCOUNT,
+            account_key=config.ACCOUNT_KEY)
 
         block_blob_service.create_container(container_name)
     except Exception as err:
@@ -85,7 +85,7 @@ def to_blob(file, container_name='hAPIdays', blob_name='upload'):
 
     # Upload the file from path
     block_blob_service.create_blob_from_path(container_name, blob_name, file_name)
-    http = f"https://{Config['STORAGE_ACCOUNT']}.blob.core.windows.net/{container_name}/{blob_name}"
+    http = f"https://{config.STORAGE_ACCOUNT}.blob.core.windows.net/{container_name}/{blob_name}"
     logging.info(f'Blob upload finished @ {http}')
     return http
 
@@ -107,7 +107,7 @@ async def to_blob_async(file, container_name='hapidays', blob_name='upload'):
     with open(file_name, "rb") as data:
         await blob.upload_blob(data)
 
-    http = f"https://{Config['STORAGE_ACCOUNT']}.blob.core.windows.net/{container_name}/{blob_name}"
+    http = f"https://{config.STORAGE_ACCOUNT}.blob.core.windows.net/{container_name}/{blob_name}"
     logging.info(f'Blob upload finished @ {http}')
     return http
 
@@ -214,7 +214,7 @@ def upload():
 
         # return jsonify(status='completed', response=os.path.getsize(filename))
             if app.config['DEV']:
-                file_in = os.path.join(Config['LOCAL'], f'in_{filename}')
+                file_in = os.path.join(config.LOCAL, f'in_{filename}')
                 file.save(file_in)
             else:
                 file_in = to_blob(file)
@@ -245,7 +245,7 @@ def upload_form():
             flash(f'File: {filename} is recieved, saving...')
             try:
                 # Local dev
-                file_in = os.path.join(Config['LOCAL'], f'in_{filename}')
+                file_in = os.path.join(config.LOCAL, f'in_{filename}')
                 file.save(file_in)
             except:
                 # Azure
