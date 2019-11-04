@@ -2,25 +2,33 @@
 
 {% block content %}
 <div class="jumbotron-fluid">
-    <h1>hAPIdays</h1>
-    <h2>One free API a day</h2>
-    <span>This API forecasts your timeseries.</span><br>
+    <div class="row align-items-center justify-content-center">
+        <h1>hAPIdays</h1>
+        <h2>One free API a day</h2>
+        <span>This API forecasts your timeseries.</span><br>
 
-    <form action="" method="post" enctype="multipart/form-data" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            <span>Upload your local file for this API.</span><br>
-            {{ form.file.label }}: {{ form.file(size=64) }}
-        </p>
-        <p>
-            <span>We will send the API result to your email.</span><br>
-            {{ form.email.label }}: {{ form.email(size=32) }}
-        </p>
-        <button type="submit" class="btn btn-outline-primary">
-        Get it!
-        <!-- {{ form.submit() }} -->
-        </button>
-        <p></p>
-    </form>
+        <form action="" method="post" enctype="multipart/form-data" novalidate>
+            {{ form.hidden_tag() }}
+            <p>
+                <span>Upload your local file for this API.</span><br>
+                {{ form.file.label }}: {{ form.file(size=64) }}
+            </p>
+            <p>
+                <span>We will send the API result to your email.</span><br>
+
+                {{ form.email.label }}: {{ form.email(size=32) }}
+            </p>
+
+            <button type="submit" class="btn btn-outline-primary">
+            Get it!
+            <!-- {{ form.submit() }} -->
+            </button>
+            <p></p>
+        </form>
+    </div>
 </div>
 {% endblock %}
+
+
+<!-- <label for="surname">Surame:</label>
+          <input type="text" class="form-control" id="surname" name="surname" placeholder="Surname?"> -->

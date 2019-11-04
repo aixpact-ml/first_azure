@@ -8,6 +8,9 @@ scipy
 sklearn
 azure-storage-file
 azure-storage-blob
+azure-keyvault
+azure-keyvault-secrets
+azure-identity
 flask-wtf
 wtforms
 wtforms-components

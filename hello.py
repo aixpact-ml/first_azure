@@ -145,6 +145,32 @@ def run_function():
     return r.text
 
 
+@app.route("/secrets")
+def secrets():
+    from azure.keyvault import KeyVaultClient
+    from azure.common.credentials import ServicePrincipalCredentials
+    from azure.identity import DefaultAzureCredential
+    from azure.keyvault.secrets import SecretClient
+
+    VAULT_URL = 'https://helloaixpact-vault.vault.azure.net'
+    SECRET_ID = 'account-key'
+
+    credential = DefaultAzureCredential()
+    secret_client = SecretClient(vault_url=VAULT_URL, credential=credential)
+
+    # credentials = ServicePrincipalCredentials(
+    #     client_id = '...',
+    #     secret = '...',
+    #     tenant = '...'
+    #     )
+    # client = KeyVaultClient(credentials)
+
+    # SECRET_VERSION = KeyVaultClient.get_secret_versions(VAULT_URL, SECRET_ID)
+    # secret_bundle = client.get_secret(VAULT_URL, SECRET_ID, SECRET_VERSION)
+    # secret = secret_bundle.value
+    return jsonify(status='succes', response=secret)
+
+
 @app.route("/files")
 def files():
     """"""
