@@ -2,7 +2,8 @@
 
 {% block content %}
 <div class="jumbotron-fluid">
-    <h1>One free API a day</h1>
+    <h1>hAPIdays</h1>
+    <h2>One free API a day</h2>
     <span>This API forecasts your timeseries.</span><br>
 
     <form action="" method="post" enctype="multipart/form-data" novalidate>
@@ -16,7 +17,8 @@
             {{ form.email.label }}: {{ form.email(size=32) }}
         </p>
         <button type="button" class="btn btn-outline-primary">
-        {{ form.submit() }}
+        Get it!
+        <!-- {{ form.submit() }} -->
         </button>
         <p></p>
     </form>

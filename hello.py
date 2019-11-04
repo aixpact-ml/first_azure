@@ -25,7 +25,7 @@ LOCAL_PATH = '/home/jovyan/aixpact/project/'
 app.config['SHARED'] = SHARED
 app.config['LOCAL_PATH'] = LOCAL_PATH
 app.config['DEV'] = False
-
+Config['BLOB_CONN']
 
 def _log_msg(msg):
     logging.info("{}: {}".format(datetime.datetime.now(), msg))
@@ -65,7 +65,7 @@ except:
     print('local debug')
 
 
-def to_blob(file, container_name='quickstartblobs', blob_name='api_upload', app_name='helloaixpact'):
+def to_blob_(file, container_name='hAPIdays', blob_name='api_upload', app_name='helloaixpact'):
     """"""
     # Save file to root dir in Azure - create path
     file_name = file.filename
@@ -90,6 +90,29 @@ def to_blob(file, container_name='quickstartblobs', blob_name='api_upload', app_
     http = f'https://{app_name}.blob.core.windows.net/{container_name}/{blob_name}'
     logging.info(f'Blob upload finished @ {http}')
     return http
+
+
+def to_blob(file, container_name='hAPIdays', blob_name='api_upload', app_name='helloaixpact'):
+    """https://pypi.org/project/azure-storage-blob/"""
+    from azure.storage.blob.aio import BlobClient
+
+    # Save file to root dir in Azure - create path
+    file_name = file.filename
+    file.save(file_name)
+
+    # Make private - pickle file
+    blob = BlobClient.from_connection_string(
+        conn_str=Config['BLOB_CONN'],
+        container_name=container_name,
+        blob_name=blob_name)
+
+    with open(file_name, "rb") as data:
+        await blob.upload_blob(data)
+
+    http = f'https://{app_name}.blob.core.windows.net/{container_name}/{blob_name}'
+    logging.info(f'Blob upload finished @ {http}')
+    return http
+
 
 
 @app.route("/hello", methods=['GET', 'POST'])
