@@ -208,7 +208,7 @@ def upload_form():
                 # Azure
                 file_in = to_blob(file)
         flash(f'File: {filename} is saved @ {file_in}')
-        return redirect(url_for('thankyou'), message=file_in)
+        return redirect(url_for('thankyou', message=file_in))
     return render_template('upload.html', form=form)
 
 
