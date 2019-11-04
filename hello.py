@@ -81,7 +81,7 @@ def to_blob(file, container_name='hAPIdays', blob_name='upload'):
         block_blob_service.create_container(container_name)
     except Exception as err:
         logging.info(f'Failed to create container: {err}')
-        return f'Failed to create container: {err}'
+        # return f'Failed to create container: {err}'
 
     # Upload the file from path
     block_blob_service.create_blob_from_path(container_name, blob_name, file_name)
@@ -100,7 +100,7 @@ async def to_blob_async(file, container_name='hapidays', blob_name='upload'):
 
     # Make private - pickle file
     blob = BlobClient.from_connection_string(
-        conn_str=Config['BLOB_CONN'],
+        conn_str=config.BLOB_CONN,
         container_name=container_name,
         blob_name=blob_name)
 
