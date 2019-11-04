@@ -158,7 +158,7 @@ def secrets():
     credential = DefaultAzureCredential()
     secret_client = SecretClient(vault_url=VAULT_URL, credential=credential)
 
-    secret = secret_client.get_secret("secret-name")
+    secret = secret_client.get_secret("account-key")
 
     print(secret.name)
     print(secret.value)
