@@ -28,7 +28,7 @@ app.config['DEV'] = False
 
 
 def _log_msg(msg):
-    logging.info("{}: {}".format(datetime.now(), msg))
+    logging.info("{}: {}".format(datetime.datetime.now(), msg))
 
 
 def allowed_file(filename):

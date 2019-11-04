@@ -1,12 +1,20 @@
 {% extends "base_empty.html" %}
 
 {% block content %}
-    <h1>Sign In</h1>
+    <h1>One free API a day</h1>
+    <span>This API forecasts your timeseries.</span>
+
     <form action="" method="post" enctype="multipart/form-data" novalidate>
         {{ form.hidden_tag() }}
         <p>
+            <span>Upload your local file for this API.</span>
             {{ form.file.label }}<br>
             {{ form.file(size=64) }}
+        </p>
+        <p>
+            <span>We will send the API result to your email.</span>
+            {{ form.email.label }}<br>
+            {{ form.email(size=32) }}
         </p>
         <p>{{ form.submit() }}</p>
     </form>

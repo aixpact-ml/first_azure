@@ -1,11 +1,14 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, EmailField
+from wtforms.validators import DataRequired, Email, InputRequired
 
 from flask_wtf.file import FileField, FileRequired
 
 class FileForm(FlaskForm):
-    file = FileField(validators=[FileRequired()])
+    file = FileField('File', validators=[FileRequired()])
+    email = EmailField('Email address', validators=[
+        InputRequired("Please enter your email address."),
+        Email("Please enter your email address.")])
     submit = SubmitField('Subimt')
 
 
