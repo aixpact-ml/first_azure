@@ -179,6 +179,26 @@ def upload():
         return jsonify(status='uncompleted', response='no response')
 
 
+@app.route('/upload_form', methods=['GET', 'POST'])
+def upload_form():
+    form = FileForm()
+    if form.validate_on_submit():
+        file = form.file.data
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+
+            if app.config['DEV']:
+                file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
+                file.save(file_in)
+            else:
+                file_in = to_blob(file)
+        flash(f'File: {filename} is saved @ {file_in}')
+        return redirect(url_for('index'))
+
+    return render_template('upload.html', form=form)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -187,18 +207,6 @@ def login():
             form.username.data, form.remember_me.data))
         return redirect('/index')
     return render_template('login.html', title='Sign In', form=form)
-
-
-@app.route('/upload_form', methods=['GET', 'POST'])
-def upload_form():
-    form = FileForm()
-    if form.validate_on_submit():
-        f = form.file.data
-        filename = secure_filename(f.filename)
-        f.save(os.path.join(app.instance_path, 'project', filename))
-        return redirect(url_for('index'))
-
-    return render_template('upload.html', form=form)
 
 
 # @app.route('/login', methods=['GET', 'POST'])
