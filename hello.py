@@ -97,14 +97,15 @@ def hello2(name):
     #     name = 'stranger'
     return jsonify(status='succes', response=f'hello {name}')
 
+
 @app.route("/")
 def index():
     """Takes some time....."""
     text = 'woh'
     logging.info(f'some logging {text}')
-    r = requests.get('http://www.aixpact.ml/api/httptrigger?name=frank')
+    # r = requests.get('http://www.aixpact.ml/api/httptrigger?name=frank')
     # print(r.content, r.status_code)
-    return r.text
+    return jsonify(status='succes', response='api is online') #r.text
 
 
 @app.route("/files")
@@ -184,18 +185,18 @@ def upload_form():
     form = FileForm()
     if form.validate_on_submit():
         file = form.file.data
-
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-
-            if app.config['DEV']:
+            flash(f'File: {filename} is recieved, saving...')
+            try:
+                # Local dev
                 file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
                 file.save(file_in)
-            else:
+            except:
+                # Azure
                 file_in = to_blob(file)
         flash(f'File: {filename} is saved @ {file_in}')
         return redirect(url_for('index'))
-
     return render_template('upload.html', form=form)
 
 
