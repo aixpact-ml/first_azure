@@ -10,11 +10,11 @@ class FileForm(FlaskForm):
     email = EmailField('Email address', validators=[
         InputRequired("Please enter your email address."),
         Email("Please enter your email address.")])
-    # submit = SubmitField('Submit')
+    submit = SubmitField('Submit')
 
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
-    # submit = SubmitField('Sign In')
+    submit = SubmitField('Sign In')
