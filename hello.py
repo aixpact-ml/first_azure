@@ -157,22 +157,8 @@ def secrets():
 
     credential = DefaultAzureCredential()
     secret_client = SecretClient(vault_url=VAULT_URL, credential=credential)
-
     secret = secret_client.get_secret(SECRET_ID)
 
-    print(secret.name)
-    print(secret.value)
-
-    # credentials = ServicePrincipalCredentials(
-    #     client_id = '...',
-    #     secret = '...',
-    #     tenant = '...'
-    #     )
-    # client = KeyVaultClient(credentials)
-
-    # SECRET_VERSION = KeyVaultClient.get_secret_versions(VAULT_URL, SECRET_ID)
-    # secret_bundle = client.get_secret(VAULT_URL, SECRET_ID, SECRET_VERSION)
-    # secret = secret_bundle.value
     return jsonify(status='succes', response={'secret_name': secret.name, 'secret_value': secret.value})
 
 
