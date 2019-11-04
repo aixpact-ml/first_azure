@@ -147,17 +147,20 @@ def run_function():
 
 @app.route("/secrets")
 def secrets():
-    from azure.identity import DefaultAzureCredential
-    from azure.keyvault.secrets import SecretClient
+    import os
+    # from azure.identity import DefaultAzureCredential
+    # from azure.keyvault.secrets import SecretClient
 
-    VAULT_URL = 'https://helloaixpact-vault.vault.azure.net'
-    SECRET_ID = 'account-key'
+    # VAULT_URL = 'https://helloaixpact-vault.vault.azure.net'
+    # SECRET_ID = 'account-key'
 
-    credential = DefaultAzureCredential()
-    secret_client = SecretClient(vault_url=VAULT_URL, credential=credential)
-    secret = secret_client.get_secret(SECRET_ID)
+    # credential = DefaultAzureCredential()
+    # secret_client = SecretClient(vault_url=VAULT_URL, credential=credential)
+    # secret = secret_client.get_secret(SECRET_ID)
+    # return jsonify(status='succes', response={'secret_name': secret.name, 'secret_value': secret.value})
 
-    return jsonify(status='succes', response={'secret_name': secret.name, 'secret_value': secret.value})
+    return {item: value for item, value in os.environ.items()}
+
 
 
 @app.route("/files")
