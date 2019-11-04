@@ -168,7 +168,7 @@ def secrets():
     # SECRET_VERSION = KeyVaultClient.get_secret_versions(VAULT_URL, SECRET_ID)
     # secret_bundle = client.get_secret(VAULT_URL, SECRET_ID, SECRET_VERSION)
     # secret = secret_bundle.value
-    return jsonify(status='succes', response=secret)
+    return jsonify(status='succes', response=secret_client)
 
 
 @app.route("/files")
