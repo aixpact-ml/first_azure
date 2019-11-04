@@ -147,8 +147,6 @@ def run_function():
 
 @app.route("/secrets")
 def secrets():
-    # from azure.keyvault import KeyVaultClient
-    # from azure.common.credentials import ServicePrincipalCredentials
     from azure.identity import DefaultAzureCredential
     from azure.keyvault.secrets import SecretClient
 
