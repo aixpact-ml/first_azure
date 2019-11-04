@@ -92,7 +92,7 @@ def to_blob_(file, container_name='hAPIdays', blob_name='api_upload', app_name='
     return http
 
 
-def to_blob(file, container_name='hAPIdays', blob_name='api_upload', app_name='helloaixpact'):
+async def to_blob(file, container_name='hapidays', blob_name='api_upload', app_name='helloaixpact'):
     """https://pypi.org/project/azure-storage-blob/"""
     from azure.storage.blob.aio import BlobClient
 
@@ -112,7 +112,6 @@ def to_blob(file, container_name='hAPIdays', blob_name='api_upload', app_name='h
     http = f'https://{app_name}.blob.core.windows.net/{container_name}/{blob_name}'
     logging.info(f'Blob upload finished @ {http}')
     return http
-
 
 
 @app.route("/hello", methods=['GET', 'POST'])
