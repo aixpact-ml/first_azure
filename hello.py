@@ -9,23 +9,18 @@ from werkzeug.utils import secure_filename
 from forms import LoginForm, FileForm
 
 import algo
-
+from flask_wtf.csrf import CsrfProtect
 from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
-
-from flask_wtf.csrf import CsrfProtect
 CsrfProtect(app)
+
 
 HTTP_BAD_REQUEST = 400
 ALLOWED_EXTENSIONS = set(['txt', 'csv'])
-SHARED = 'https://helloaixpact.file.core.windows.net/'
-LOCAL_PATH = '/home/jovyan/aixpact/project/'
-app.config['SHARED'] = SHARED
-app.config['LOCAL_PATH'] = LOCAL_PATH
 app.config['DEV'] = False
-Config['BLOB_CONN']
+
 
 def _log_msg(msg):
     logging.info("{}: {}".format(datetime.datetime.now(), msg))
@@ -41,18 +36,20 @@ try:
     from azure.storage.file import FileService, ContentSettings
     from azure.storage.blob import BlockBlobService
 
-    storageAccount = 'helloaixpact'
-    accountKey = '/K/UXeclbEGQ6qxVEEXLrD47hwrxHGJGJnpGPVNZXu2dEEhJWSJ9G4+iDsvWDx4IfDYpIBW9OM+EX/4iNFbR1g=='
     directory_name = 'sampledir'
-    file_in = f'https://helloaixpact.file.core.windows.net/myshare/myfile2'
+    file_in = f'https://{Config['STORAGE_ACCOUNT']}.file.core.windows.net/myshare/myfile2'
 
-    file_service = FileService(account_name=storageAccount, account_key=accountKey)
+    file_service = FileService(
+        account_name=Config['STORAGE_ACCOUNT'],
+        account_key=Config['ACCOUNT_KEY'])
     file_service.create_share('myshare')
     file_service.create_directory('myshare', 'sampledir')
 
     # Create the BlockBlockService that the system uses to call the Blob service for the storage account.
     # https://docs.microsoft.com/nl-nl/azure/storage/blobs/storage-quickstart-blobs-python
-    block_blob_service = BlockBlobService(account_name=storageAccount, account_key=accountKey)
+    block_blob_service = BlockBlobService(
+        account_name=Config['STORAGE_ACCOUNT'],
+        account_key=Config['ACCOUNT_KEY'])
 
     # Create a container called 'quickstartblobs'.
     container_name = 'quickstartblobs'
@@ -65,7 +62,7 @@ except:
     print('local debug')
 
 
-def to_blob_(file, container_name='hAPIdays', blob_name='api_upload', app_name='helloaixpact'):
+def to_blob_(file, container_name='hAPIdays', blob_name='api_upload'):
     """"""
     # Save file to root dir in Azure - create path
     file_name = file.filename
@@ -75,11 +72,10 @@ def to_blob_(file, container_name='hAPIdays', blob_name='api_upload', app_name='
     try:
         from azure.storage.blob import BlockBlobService
 
-        # TODO hide creds in file
-        storageAccount = 'helloaixpact'
-        accountKey = '/K/UXeclbEGQ6qxVEEXLrD47hwrxHGJGJnpGPVNZXu2dEEhJWSJ9G4+iDsvWDx4IfDYpIBW9OM+EX/4iNFbR1g=='
+        block_blob_service = BlockBlobService(
+            account_name=Config['STORAGE_ACCOUNT'],
+            account_key=Config['ACCOUNT_KEY'])
 
-        block_blob_service = BlockBlobService(account_name=storageAccount, account_key=accountKey)
         block_blob_service.create_container(container_name)
     except Exception as err:
         logging.info(f'Failed to create blob: {err}')
@@ -87,12 +83,12 @@ def to_blob_(file, container_name='hAPIdays', blob_name='api_upload', app_name='
 
     # Upload the file from path
     block_blob_service.create_blob_from_path(container_name, blob_name, file_name)
-    http = f'https://{app_name}.blob.core.windows.net/{container_name}/{blob_name}'
+    http = f'https://{Config['STORAGE_ACCOUNT']}.blob.core.windows.net/{container_name}/{blob_name}'
     logging.info(f'Blob upload finished @ {http}')
     return http
 
 
-async def to_blob(file, container_name='hapidays', blob_name='api_upload', app_name='helloaixpact'):
+async def to_blob(file, container_name='hapidays', blob_name='api_upload'):
     """https://pypi.org/project/azure-storage-blob/"""
     from azure.storage.blob.aio import BlobClient
 
@@ -109,7 +105,7 @@ async def to_blob(file, container_name='hapidays', blob_name='api_upload', app_n
     with open(file_name, "rb") as data:
         await blob.upload_blob(data)
 
-    http = f'https://{app_name}.blob.core.windows.net/{container_name}/{blob_name}'
+    http = f'https://{Config['STORAGE_ACCOUNT']}.blob.core.windows.net/{container_name}/{blob_name}'
     logging.info(f'Blob upload finished @ {http}')
     return http
 
@@ -195,7 +191,7 @@ def upload():
 
         # return jsonify(status='completed', response=os.path.getsize(filename))
             if app.config['DEV']:
-                file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
+                file_in = os.path.join(Config['LOCAL'], f'in_{filename}')
                 file.save(file_in)
             else:
                 file_in = to_blob(file)
@@ -226,7 +222,7 @@ def upload_form():
             flash(f'File: {filename} is recieved, saving...')
             try:
                 # Local dev
-                file_in = os.path.join(app.config['LOCAL_PATH'], f'in_{filename}')
+                file_in = os.path.join(Config['LOCAL'], f'in_{filename}')
                 file.save(file_in)
             except:
                 # Azure
