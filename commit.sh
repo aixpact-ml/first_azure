@@ -10,3 +10,4 @@ git push -u origin master
 # delete remote file and keep local file
 # git rm --cached somefile.ext
 # git rm --cached Dockerfile *.yml
+# then commit
