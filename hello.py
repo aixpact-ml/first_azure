@@ -304,7 +304,7 @@ def upload_form():
                 file.save(file_in)
             except:
                 # Azure
-                blob_name = form.email.data.replace('@', '_').replace('.', '_').replace('-', '_') + file_name.split('.')[-1]
+                blob_name = form.email.data.replace('@', '_').replace('.', '_').replace('-', '_') + filename.split('.')[-1]
                 file.save(blob_name)
                 block_blob(blob_name)
                 file_in = blob_name  # to_blob(file, blob_name=blob_name)
