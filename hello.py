@@ -46,7 +46,7 @@ def _try_renderer_template(template_path, ext='txt', **kwargs):
         pass
 
 
-def deliver_email(recipients, template=None, ctx={}, *args, **kwargs):
+def deliver_email(recipients, attachments, template=None, ctx={}, *args, **kwargs):
     """
     Send a templated e-mail using a similar signature as Flask-Mail:
     http://pythonhosted.org/Flask-Mail/
@@ -361,7 +361,7 @@ def upload_form():
                 block_blob(blob_name)
                 file_in = blob_name  # to_blob(file, blob_name=blob_name)
         flash(f'File: {filename} is saved @ {file_in}')
-        deliver_email(form.email.data)
+        deliver_email(form.email.data, file_in)
         return redirect(url_for('thankyou', message=file_in))
         flash(f'Try again.....')
     return render_template('upload.html', form=form)
