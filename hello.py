@@ -73,13 +73,13 @@ def deliver_email(recipients, attachments, template=None, ctx={}, *args, **kwarg
     :return: None
     """
     ctx = {'recipients': recipients}
-    kwargs['template'] = 'email_message',
-    kwargs['subject'] = 'hAPIdays from AIxPact',
-    kwargs['sender'] = 'frank@aixpact.com',
-    kwargs['recipients'] = recipients,
-    kwargs['bcc'] = 'frank@aixpact.com'
+    template = 'email_message'
     kwargs['body'] = _try_renderer_template(template, **ctx)
     kwargs['html'] = _try_renderer_template(template, ext='html', **ctx)
+    kwargs['subject'] = 'hAPIdays from AIxPact'
+    kwargs['sender'] = 'frank@aixpact.com'
+    kwargs['recipients'] = recipients
+    kwargs['bcc'] = 'frank@aixpact.com'
 
     mail.send_message(*args, **kwargs)
     return None
