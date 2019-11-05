@@ -168,8 +168,9 @@ def secrets():
     # secret_client = SecretClient(vault_url=VAULT_URL, credential=credential)
     # secret = secret_client.get_secret(SECRET_ID)
     # return jsonify(status='succes', response={'secret_name': secret.name, 'secret_value': secret.value})
-
-    return {item: value for item, value in os.environ.items()}
+    return {'_'.join(item.split('_')[1:]): value for item, value in os.environ.items()
+                                             if item.split('_')[0] == 'APPSETTING'}
+    # return {item: value for item, value in os.environ.items()}
 
 
 
