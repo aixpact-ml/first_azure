@@ -64,7 +64,7 @@ try:
 
     # Set the permission so the blobs are public.
     # block_blob_service.set_container_acl(
-    #     container_name, public_access=PublicAccess.Container)
+    #     container_name, public_access=PublicAccess.Container).
 except:
     print('local debug')
 
