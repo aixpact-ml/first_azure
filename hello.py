@@ -45,67 +45,22 @@ mail = Mail()
 mail.init_app(app)
 
 
-
-
 def send_email(recipients, filename):
     try:
         msg = Message('hAPIdays from AIxPact',
             sender='frank@aixpact.com',
             recipients=[recipients])
-        msg.body = 'Hello ' + recipients + ',\nblahblahblah'
+        msg.body = render_template('email_message.txt', recipients=recipients)
+        # 'Hello ' + recipients + ',\nblahblahblah'
         msg.html = None  # render_template('email_message.html', recipients=recipients)
 
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
         mime = mimetypes.guess_type(filename, strict=False)[0]
-        with open(filename, 'r') as fp:
-            msg.attach(filename, mime, fp.read())
-
-        # file = Attachment(filename=filename, content_type='text/csv', data=data)
-        # msg.attachment = [file]
+        with open(filename, 'r') as f:
+            msg.attach(filename, mime, f.read())
         mail.send(msg)
     except Exception as err:
         print(err)
-
-
-def _try_renderer_template(template_path, ext='txt', **kwargs):
-    try:
-        return render_template(f'{template_path}.{ext}', **kwargs)
-    except IOError:
-        pass
-
-
-def deliver_email(recipients, attachments, template=None, ctx={}, *args, **kwargs):
-    """
-    Send a templated e-mail using a similar signature as Flask-Mail:
-    http://pythonhosted.org/Flask-Mail/
-
-    Except, it also supports template rendering. If you want to use a template
-    then just omit the body and html kwargs to Flask-Mail and instead supply
-    a path to a template. It will auto-lookup and render text/html messages.
-
-    Example:
-        ctx = {'user': current_user, 'reset_token': token}
-        send_template_message('Password reset from Foo', ['you@example.com'],
-                              template='user/mail/password_reset', ctx=ctx)
-
-    :params: subject, recipients, body, html, sender, cc, bcc, attachments,
-        reply_to, date, charset, extra_headers, mail_options, rcpt_options,
-    :template: Path to a template without the extension
-    :param context: Dictionary of anything you want in the template context
-    :return: None
-    """
-    ctx = {'recipients': recipients}
-    template = 'email_message'
-    kwargs['body'] = _try_renderer_template(template, **ctx)
-    kwargs['html'] = _try_renderer_template(template, ext='html', **ctx)
-    kwargs['subject'] = 'hAPIdays from AIxPact'
-    kwargs['sender'] = 'frank@aixpact.com'
-    kwargs['recipients'] = [recipients]
-    kwargs['attachments'] = [attachments]
-    kwargs['bcc'] = ['frank@aixpact.com']
-
-    mail.send_message(*args, **kwargs)
-    return None
 
 
 def _log_msg(msg):
@@ -368,20 +323,18 @@ def upload_form():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             flash(f'File: {filename} is recieved, saving...')
+
+            ext = '.' + filename.split('.')[-1]
+            file_in = email.replace('@', '_').replace('.', '_').replace('-', '_') + ext
             try:
                 # Local dev
-                file_in = os.path.join(config.LOCAL, f'in_{filename}')
-                file.save(file_in)
+                file.save(os.path.join(config.LOCAL, file_in))
             except:
                 # Azure
-                ext = '.' + filename.split('.')[-1]
-                blob_name = email.replace('@', '_').replace('.', '_').replace('-', '_') + ext
-                file.save(blob_name)
-                block_blob(blob_name)
-                file_in = blob_name  # to_blob(file, blob_name=blob_name)
-        flash(f'thank you an email has been sent to: {email} with attachment: {file_in}')
-        # deliver_email(recipients=email, attachments=file_in)
+                file.save(file_in)
+                block_blob(file_in)
         send_email(email, file_in)
+        flash(f'thank you an email has been sent to: {email} with attachment: {file_in}')
         return redirect(url_for('thankyou', message=file_in))
         flash(f'Try again.....')
     return render_template('upload.html', form=form)
