@@ -72,11 +72,12 @@ def deliver_email(recipients, attachments, template=None, ctx={}, *args, **kwarg
     :param context: Dictionary of anything you want in the template context
     :return: None
     """
-    template = 'email_message'
-    subject = 'hAPIdays from AIxPact'
-    sender = 'frank@aixpact.com'
-    recipients = ['frank@aixpact.com'] + [recipients]
-    bcc = 'frank@aixpact.com'
+    ctx = {'recipients': recipients}
+    kwargs['template'] = 'email_message',
+    kwargs['subject'] = 'hAPIdays from AIxPact',
+    kwargs['sender'] = 'frank@aixpact.com',
+    kwargs['recipients'] = recipients,
+    kwargs['bcc'] = 'frank@aixpact.com'
     kwargs['body'] = _try_renderer_template(template, **ctx)
     kwargs['html'] = _try_renderer_template(template, ext='html', **ctx)
 
@@ -355,7 +356,7 @@ def upload_form():
                 file.save(blob_name)
                 block_blob(blob_name)
                 file_in = blob_name  # to_blob(file, blob_name=blob_name)
-        flash(f'thankyou an email has been sent to: {email} with attachment: {file_in}')
+        flash(f'thank you an email has been sent to: {email} with attachment: {file_in}')
         deliver_email(recipients=email, attachments=file_in)
         return redirect(url_for('thankyou', message=file_in))
         flash(f'Try again.....')
