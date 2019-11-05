@@ -9,15 +9,15 @@ from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
 from werkzeug.utils import secure_filename
 from forms import LoginForm, FileForm
 
-import algo
+from utils.functions import *
 
+import algo
 
 # CONFIG SETTINGS
 from config.settings import config
 app = Flask(__name__)
 app.config.from_object(config)
 
-HTTP_BAD_REQUEST = 400
 ALLOWED_EXTENSIONS = set(['txt', 'csv'])
 app.config['DEV'] = False
 
@@ -45,80 +45,80 @@ mail = Mail()
 mail.init_app(app)
 
 
-def send_email(recipients, filename):
-    try:
-        msg = Message('hAPIdays from AIxPact',
-            sender='frank@aixpact.com',
-            recipients=[recipients])
-        try:
-            msg.body = render_template('email_message.txt', recipients=recipients)
-        except:
-            msg.body = 'Hello ' + recipients + ',\nblahblahblah'
-        msg.html = None  # render_template('email_message.html', recipients=recipients)
+# def send_email(recipients, filename):
+#     try:
+#         msg = Message('hAPIdays from AIxPact',
+#             sender='frank@aixpact.com',
+#             recipients=[recipients])
+#         try:
+#             msg.body = render_template('email_message.txt', recipients=recipients)
+#         except:
+#             msg.body = 'Hello ' + recipients + ',\nblahblahblah'
+#         msg.html = None  # render_template('email_message.html', recipients=recipients)
 
-        # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
-        mime = mimetypes.guess_type(filename, strict=False)[0]
-        with open(filename, 'r') as f:
-            msg.attach(filename, mime, f.read())
-        mail.send(msg)
-    except Exception as err:
-        print(err)
-
-
-def _log_msg(msg):
-    logging.info("{}: {}".format(datetime.datetime.now(), msg))
+#         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
+#         mime = mimetypes.guess_type(filename, strict=False)[0]
+#         with open(filename, 'r') as f:
+#             msg.attach(filename, mime, f.read())
+#         mail.send(msg)
+#     except Exception as err:
+#         print(err)
 
 
-def allowed_file(filename):
-    _log_msg('checking allowed file ...')
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+# def _log_msg(msg):
+#     logging.info("{}: {}".format(datetime.datetime.now(), msg))
 
 
-def block_blob(filename):
-    # https://azuresdkdocs.blob.core.windows.net/$web/python/azure-storage-blob/12.0.0b5/azure.storage.blob.html
-    SOURCE_FILE = filename
-    DEST_FILE = 'something_temp.csv'
-    CONTAINER = 'hapidays'
+# def allowed_file(filename):
+#     _log_msg('checking allowed file ...')
+#     return '.' in filename and \
+#            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-    # Instantiate a new BlobServiceClient using a connection string
-    from azure.storage.blob import BlobServiceClient
-    blob_service_client = BlobServiceClient.from_connection_string(config.BLOB_CONX)
 
-    # Instantiate a new ContainerClient
-    container_client = blob_service_client.get_container_client(CONTAINER)
+# def block_blob(filename):
+#     # https://azuresdkdocs.blob.core.windows.net/$web/python/azure-storage-blob/12.0.0b5/azure.storage.blob.html
+#     SOURCE_FILE = filename
+#     DEST_FILE = 'something_temp.csv'
+#     CONTAINER = 'hapidays'
 
-    try:
-        # Create new container in the service
-        container_client.create_container()
+#     # Instantiate a new BlobServiceClient using a connection string
+#     from azure.storage.blob import BlobServiceClient
+#     blob_service_client = BlobServiceClient.from_connection_string(config.BLOB_CONX)
 
-        # List containers in the storage account
-        list_response = blob_service_client.list_containers()
-    except Exception as err:
-        logging.info(f'Failed to create/list container: {err}')
+#     # Instantiate a new ContainerClient
+#     container_client = blob_service_client.get_container_client(CONTAINER)
 
-    try:
-        # Instantiate a new BlobClient
-        blob_client = container_client.get_blob_client(SOURCE_FILE)
-        # blob_client = blob_service_client.get_blob_client(CONTAINER, SOURCE_FILE)
+#     try:
+#         # Create new container in the service
+#         container_client.create_container()
 
-        # [START upload_a_blob]
-        # Upload content to block blob
-        with open(SOURCE_FILE, "rb") as data:
-            blob_client.upload_blob(data)
-        # [END upload_a_blob]
+#         # List containers in the storage account
+#         list_response = blob_service_client.list_containers()
+#     except Exception as err:
+#         logging.info(f'Failed to create/list container: {err}')
 
-        # [START download_a_blob]
-        # with open(DEST_FILE, "wb") as my_blob:
-        #     download_stream = blob_client.download_blob()
-        #     my_blob.write(download_stream.readall())
-        # [END download_a_blob]
+#     try:
+#         # Instantiate a new BlobClient
+#         blob_client = container_client.get_blob_client(SOURCE_FILE)
+#         # blob_client = blob_service_client.get_blob_client(CONTAINER, SOURCE_FILE)
 
-        # [START delete_blob]
-        # blob_client.delete_blob()
-        # [END delete_blob]
-    except Exception as err:
-        logging.info(f'Failed to create blob: {err}')
+#         # [START upload_a_blob]
+#         # Upload content to block blob
+#         with open(SOURCE_FILE, "rb") as data:
+#             blob_client.upload_blob(data)
+#         # [END upload_a_blob]
+
+#         # [START download_a_blob]
+#         # with open(DEST_FILE, "wb") as my_blob:
+#         #     download_stream = blob_client.download_blob()
+#         #     my_blob.write(download_stream.readall())
+#         # [END download_a_blob]
+
+#         # [START delete_blob]
+#         # blob_client.delete_blob()
+#         # [END delete_blob]
+#     except Exception as err:
+#         logging.info(f'Failed to create blob: {err}')
 
 
 @app.route("/")

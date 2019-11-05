@@ -9,6 +9,7 @@ from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
 from werkzeug.utils import secure_filename
 from forms import LoginForm, FileForm
 
+from utils.functions import *
 import algo
 
 
