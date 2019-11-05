@@ -13,7 +13,7 @@ import algo
 
 
 # CONFIG SETTINGS
-from config.settings import config
+from config import config
 app = Flask(__name__)
 app.config.from_object(config)
 
