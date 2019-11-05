@@ -6,11 +6,12 @@ import mimetypes
 from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
                    render_template, session, current_app, make_response,
                    send_file, send_from_directory)
+from flask_mail import Mail, Message
 from werkzeug.utils import secure_filename
 from forms import LoginForm, FileForm
 
 # import algo
-from ..extensions import mail
+from _first_azure.extensions import mail
 
 
 # # Flask-Mail settings via Azure ENV and below
