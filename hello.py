@@ -39,9 +39,21 @@ app.config['MAIL_USE_SSL'] = False
 assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', 'Flask-Mail settings failed'
 
 
-from flask_mail import Mail
+from flask_mail import Mail, Message
 mail = Mail()
 mail.init_app(app)
+
+
+def send_email(recipients):
+    try:
+        msg = Message('hAPIdays from AIxPact',
+            sender='frank@aixpact.com',
+            recipients=[recipients])
+        msg.body = 'Hello ' + recipients + ',\nblahblahblah'
+        msg.html = None  # render_template('email_message.html', recipients=recipients)
+        mail.send(msg)
+    except Exception as err:
+        print(err)
 
 
 def _try_renderer_template(template_path, ext='txt', **kwargs):
@@ -357,7 +369,7 @@ def upload_form():
                 block_blob(blob_name)
                 file_in = blob_name  # to_blob(file, blob_name=blob_name)
         flash(f'thank you an email has been sent to: {email} with attachment: {file_in}')
-        deliver_email(recipients=email, attachments=file_in)
+        send_email(recipients=email, attachments=file_in)
         return redirect(url_for('thankyou', message=file_in))
         flash(f'Try again.....')
     return render_template('upload.html', form=form)
