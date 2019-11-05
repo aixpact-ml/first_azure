@@ -9,8 +9,8 @@ from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
 from werkzeug.utils import secure_filename
 from forms import LoginForm, FileForm
 
-from .utils.functions import *
-from .extensions import db, login_manager, csrf, debug_toolbar, mail
+from _first_azure.utils.functions import *
+from _first_azure.extensions import db, login_manager, csrf, debug_toolbar, mail
 
 import algo
 
