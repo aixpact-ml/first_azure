@@ -355,7 +355,7 @@ def upload_form():
                 file.save(blob_name)
                 block_blob(blob_name)
                 file_in = blob_name  # to_blob(file, blob_name=blob_name)
-        flash(f'thankyou an email has been sent to {email}', message=file_in)
+        flash(f'thankyou an email has been sent to: {email} with attachment: {file_in}')
         deliver_email(recipients=email, attachments=file_in)
         return redirect(url_for('thankyou', message=file_in))
         flash(f'Try again.....')
