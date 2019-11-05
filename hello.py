@@ -40,8 +40,8 @@ def allowed_file(filename):
 
 try:
     # https://docs.microsoft.com/en-us/azure/storage/files/storage-python-how-to-use-file-storage
-    from azure.storage.file import FileService, ContentSettings
     from azure.storage.blob import BlockBlobService
+    from azure.storage.file import FileService, ContentSettings
 
     directory_name = 'sampledir'
     file_in = f"https://{config.STORAGE_ACCOUNT}.file.core.windows.net/myshare/myfile2"
