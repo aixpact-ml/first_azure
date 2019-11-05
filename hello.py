@@ -50,8 +50,8 @@ def send_email(recipients, filename):
         msg = Message('hAPIdays from AIxPact',
             sender='frank@aixpact.com',
             recipients=[recipients])
-        msg.body = render_template('email_message.txt', recipients=recipients)
-        # 'Hello ' + recipients + ',\nblahblahblah'
+        # msg.body = render_template('email_message.txt', recipients=recipients)
+        msg.body = 'Hello ' + recipients + ',\nblahblahblah'
         msg.html = None  # render_template('email_message.html', recipients=recipients)
 
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
