@@ -141,7 +141,7 @@ def index():
 def function(function_name):
     """Takes some time....."""
     response = requests.get(f'http://www.aixpact.ml/api/{function_name}')
-    return jsonify(response=response.text)
+    return jsonify(response=response.content)
 
 
 @app.route("/run_function/<function_name>")
