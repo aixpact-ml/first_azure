@@ -10,25 +10,27 @@ from forms import LoginForm, FileForm
 
 import algo
 
+# CONFIG SETTINGS
 from config import config
 app = Flask(__name__)
 app.config.from_object(config)
-
-from flask_wtf.csrf import CsrfProtect
-app.config['SECRET_KEY'] = config.SECRET_KEY  # extra
-CsrfProtect(app)
-
 
 HTTP_BAD_REQUEST = 400
 ALLOWED_EXTENSIONS = set(['txt', 'csv'])
 app.config['DEV'] = False
 
+# Sanity check config settings
+assert config.FRANK == 'test this environmental value', 'config settings failed'
+assert config.FRANK == app.config['FRANK'], 'config settings failed'
+
+# Set SECRET_KEY for Flask/wtforms
+from flask_wtf.csrf import CsrfProtect
+app.config['SECRET_KEY'] = config.SECRET_KEY  # extra / no need?
+CsrfProtect(app)
+
 
 def _log_msg(msg):
     logging.info("{}: {}".format(datetime.datetime.now(), msg))
-
-# Sanity check
-_log_msg(config.FRANK)
 
 
 def allowed_file(filename):
@@ -67,7 +69,7 @@ except:
     print('local debug')
 
 
-def to_blob(file, container_name='hAPIdays', blob_name='upload'):
+def to_blob(file, container_name='hapidays', blob_name='upload.txt'):
     """"""
     # Save file to root dir in Azure - create path
     file_name = file.filename
@@ -86,24 +88,26 @@ def to_blob(file, container_name='hAPIdays', blob_name='upload'):
         logging.info(f'Failed to create container: {err}')
         # return f'Failed to create container: {err}'
 
-    # Upload the file from path
+    # Upload the file from path - TODO blob_name or file_name
+    blob_name = file_name
     block_blob_service.create_blob_from_path(container_name, blob_name, file_name)
     http = f"https://{config.STORAGE_ACCOUNT}.blob.core.windows.net/{container_name}/{blob_name}"
     logging.info(f'Blob upload finished @ {http}')
     return http
 
 
-async def to_blob_async(file, container_name='hapidays', blob_name='upload'):
+async def to_blob_async(file, container_name='hapidays', blob_name='upload.txt'):
     """https://pypi.org/project/azure-storage-blob/"""
     from azure.storage.blob.aio import BlobClient
 
     # Save file to root dir in Azure - create path
     file_name = file.filename
     file.save(file_name)
+    blob_name = file_name
 
     # Make private - pickle file
     blob = BlobClient.from_connection_string(
-        conn_str=config.BLOB_CONN,
+        conn_str=config.BLOB_CONX,
         container_name=container_name,
         blob_name=blob_name)
 
@@ -171,7 +175,6 @@ def secrets():
     return {'_'.join(item.split('_')[1:]): value for item, value in os.environ.items()
                                              if item.split('_')[0] == 'APPSETTING'}
     # return {item: value for item, value in os.environ.items()}
-
 
 
 @app.route("/files")
