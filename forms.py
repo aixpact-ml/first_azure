@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired, Email, InputRequired
 
 from flask_wtf.file import FileField, FileRequired
 
+
 class FileForm(FlaskForm):
     file = FileField('File', validators=[FileRequired()])
     email = EmailField('Email address', validators=[
