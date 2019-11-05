@@ -69,29 +69,37 @@ def allowed_file(filename):
 #     print('local debug')
 
 
-def block_blob(file):
-
-    SOURCE_FILE = file
-    DEST_FILE = 'something.csv'
+def block_blob(filename):
+    # https://azuresdkdocs.blob.core.windows.net/$web/python/azure-storage-blob/12.0.0b5/azure.storage.blob.html
+    SOURCE_FILE = filename
+    DEST_FILE = 'something_temp.csv'
+    CONTAINER = 'hapidays'
 
     # Instantiate a new BlobServiceClient using a connection string
     from azure.storage.blob import BlobServiceClient
     blob_service_client = BlobServiceClient.from_connection_string(config.BLOB_CONX)
 
     # Instantiate a new ContainerClient
-    container_client = blob_service_client.get_container_client("myblockcontainersync")
+    container_client = blob_service_client.get_container_client(CONTAINER)
 
     try:
-        # Create new Container in the service
+        # Create new container in the service
         container_client.create_container()
 
+        # List containers in the storage account
+        list_response = blob_service_client.list_containers()
+    except Exception as err:
+        logging.info(f'Failed to create/list container: {err}')
+
+    try:
         # Instantiate a new BlobClient
-        blob_client = container_client.get_blob_client("myblockblob")
+        blob_client = container_client.get_blob_client(SOURCE_FILE)
+        # blob_client = blob_service_client.get_blob_client(CONTAINER, SOURCE_FILE)
 
         # [START upload_a_blob]
         # Upload content to block blob
         with open(SOURCE_FILE, "rb") as data:
-            blob_client.upload_blob(data, blob_type="BlockBlob")
+            blob_client.upload_blob(data)
         # [END upload_a_blob]
 
         # [START download_a_blob]
@@ -103,11 +111,8 @@ def block_blob(file):
         # [START delete_blob]
         # blob_client.delete_blob()
         # [END delete_blob]
-
-    finally:
-        pass
-        # Delete the container
-        # container_client.delete_container()
+    except Exception as err:
+        logging.info(f'Failed to create blob: {err}')
 
 
 def to_blob(file, container_name='hapidays', blob_name='upload.txt'):
@@ -304,7 +309,7 @@ def upload_form():
                 file.save(file_in)
             except:
                 # Azure
-                blob_name = form.email.data.replace('@', '_').replace('.', '_').replace('-', '_') + filename.split('.')[-1]
+                blob_name = form.email.data.replace('@', '_').replace('.', '_').replace('-', '_') + '.' + filename.split('.')[-1]
                 file.save(blob_name)
                 block_blob(blob_name)
                 file_in = blob_name  # to_blob(file, blob_name=blob_name)
