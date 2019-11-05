@@ -79,6 +79,7 @@ def deliver_email(recipients, attachments, template=None, ctx={}, *args, **kwarg
     kwargs['subject'] = 'hAPIdays from AIxPact'
     kwargs['sender'] = 'frank@aixpact.com'
     kwargs['recipients'] = recipients
+    kwargs['attachments'] = attachments
     kwargs['bcc'] = 'frank@aixpact.com'
 
     mail.send_message(*args, **kwargs)
