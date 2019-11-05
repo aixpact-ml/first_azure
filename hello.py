@@ -75,6 +75,8 @@ def deliver_email(recipients, attachments, template=None, ctx={}, *args, **kwarg
     template = 'email_message'
     subject = 'hAPIdays from AIxPact'
     sender = 'frank@aixpact.com'
+    recipients = ['frank@aixpact.com'] + [recipients]
+    bcc = 'frank@aixpact.com'
     kwargs['body'] = _try_renderer_template(template, **ctx)
     kwargs['html'] = _try_renderer_template(template, ext='html', **ctx)
 
@@ -93,7 +95,6 @@ def allowed_file(filename):
 
 # try:
 #     # https://docs.microsoft.com/en-us/azure/storage/files/storage-python-how-to-use-file-storage
-#     from azure.storage.blob import BlobServiceClient
 #     from azure.storage.file import FileService, ContentSettings
 
 #     directory_name = 'sampledir'
@@ -104,20 +105,6 @@ def allowed_file(filename):
 #             account_key=config.ACCOUNT_KEY)
 #     file_service.create_share('myshare')
 #     file_service.create_directory('myshare', 'sampledir')
-
-#     # Create the BlockBlockService that the system uses to call the Blob service for the storage account.
-#     # https://docs.microsoft.com/nl-nl/azure/storage/blobs/storage-quickstart-blobs-python
-#     block_blob_service = BlobServiceClient(
-#             account_name=config.STORAGE_ACCOUNT,
-#             account_key=config.ACCOUNT_KEY)
-
-#     # Create a container called 'quickstartblobs'.
-#     container_name = 'quickstartblobs'
-#     block_blob_service.create_container(container_name)
-
-#     # Set the permission so the blobs are public.
-#     # block_blob_service.set_container_acl(
-#     #     container_name, public_access=PublicAccess.Container).
 # except:
 #     print('local debug')
 
@@ -353,6 +340,7 @@ def upload_form():
     form = FileForm()
     if form.validate_on_submit():
         file = form.file.data
+        email = form.email.data
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             flash(f'File: {filename} is recieved, saving...')
@@ -362,12 +350,13 @@ def upload_form():
                 file.save(file_in)
             except:
                 # Azure
-                blob_name = form.email.data.replace('@', '_').replace('.', '_').replace('-', '_') + '.' + filename.split('.')[-1]
+                ext = '.' + filename.split('.')[-1]
+                blob_name = email.replace('@', '_').replace('.', '_').replace('-', '_') + ext
                 file.save(blob_name)
                 block_blob(blob_name)
                 file_in = blob_name  # to_blob(file, blob_name=blob_name)
-        flash(f'File: {filename} is saved @ {file_in}')
-        deliver_email(form.email.data, file_in)
+        flash(f'thankyou an email has been sent to {email}', message=file_in)
+        deliver_email(recipients=email, attachments=file_in)
         return redirect(url_for('thankyou', message=file_in))
         flash(f'Try again.....')
     return render_template('upload.html', form=form)
