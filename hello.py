@@ -2,6 +2,7 @@ import logging
 import datetime
 import requests
 import os
+import mimetypes
 from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
                    render_template, session, current_app, make_response,
                    send_file, send_from_directory)
@@ -44,6 +45,8 @@ mail = Mail()
 mail.init_app(app)
 
 
+
+
 def send_email(recipients, filename):
     try:
         msg = Message('hAPIdays from AIxPact',
@@ -53,8 +56,12 @@ def send_email(recipients, filename):
         msg.html = None  # render_template('email_message.html', recipients=recipients)
 
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
-        file = Attachment(filename=filename, content_type='text/csv')
-        msg.attachment = [file]
+        mime = mimetypes.guess_type(filename, strict=False)[0]
+        with open(filename, 'r') as fp:
+            msg.attach(filename, mime, fp.read())
+
+        # file = Attachment(filename=filename, content_type='text/csv', data=data)
+        # msg.attachment = [file]
         mail.send(msg)
     except Exception as err:
         print(err)
