@@ -27,6 +27,9 @@ app.config['DEV'] = False
 def _log_msg(msg):
     logging.info("{}: {}".format(datetime.datetime.now(), msg))
 
+# Sanity check
+_log_msg(config.FRANK)
+
 
 def allowed_file(filename):
     _log_msg('checking allowed file ...')
