@@ -28,11 +28,17 @@ assert config.FRANK == app.config['FRANK'], 'config settings failed'
 
 # Set SECRET_KEY for Flask/wtforms
 from flask_wtf.csrf import CsrfProtect
-app.config['SECRET_KEY'] = config.SECRET_KEY  # extra / no need?
+assert app.config['SECRET_KEY'] == config.SECRET_KEY, 'SECRET_KEY not set'
 CsrfProtect(app)
 
 
-# Email
+# Flask-Mail settings via Azure ENV and below
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', 'Flask-Mail settings failed'
+
+
 from flask_mail import Mail
 mail = Mail()
 mail.init_app(app)
