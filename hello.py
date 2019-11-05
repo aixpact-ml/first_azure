@@ -137,10 +137,18 @@ def index():
     return jsonify(status='succes', response='api is online')
 
 
-@app.route("/run_function")
-def run_function():
+@app.route("/function/<function_name>")
+def function(function_name):
     """Takes some time....."""
-    r = requests.get('http://www.aixpact.ml/api/httptrigger?name=frank')
+    r = requests.get(f'http://www.aixpact.ml/api/{function_name}')
+    print(r.content, r.status_code)
+    return r.text
+
+
+@app.route("/run_function/<function_name>")
+def run_function(function_name):
+    """Takes some time....."""
+    r = requests.get(f'http://www.aixpact.ml/api/{function_name}?name=frank')
     print(r.content, r.status_code)
     return r.text
 
