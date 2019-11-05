@@ -6,6 +6,7 @@ azure-identity
 #
 Flask==1.1.1
 Werkzeug==0.16.0
+Flask-Mail==0.9.1
 flask-wtf
 wtforms
 wtforms-components
