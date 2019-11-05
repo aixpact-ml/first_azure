@@ -140,9 +140,8 @@ def index():
 @app.route("/function/<function_name>")
 def function(function_name):
     """Takes some time....."""
-    r = requests.get(f'http://www.aixpact.ml/api/{function_name}')
-    print(r.content, r.status_code)
-    return r.text
+    response = requests.get(f'http://www.aixpact.ml/api/{function_name}')
+    return response
 
 
 @app.route("/run_function/<function_name>")
