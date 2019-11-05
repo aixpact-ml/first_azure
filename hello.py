@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 from forms import LoginForm, FileForm
 
 from utils.functions import *
+from .extensions import db, login_manager, csrf, debug_toolbar, mail
 
 import algo
 
@@ -30,7 +31,7 @@ assert config.FRANK == app.config['FRANK'], 'config settings failed'
 # Set SECRET_KEY for Flask/wtforms
 from flask_wtf.csrf import CsrfProtect
 assert app.config['SECRET_KEY'] == config.SECRET_KEY, 'SECRET_KEY not set'
-CsrfProtect(app)
+# CsrfProtect(app)
 
 
 # Flask-Mail settings via Azure ENV and below
@@ -41,8 +42,8 @@ assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', 'Flask-Mail set
 
 
 from flask_mail import Mail, Message, Attachment
-mail = Mail()
-mail.init_app(app)
+# mail = Mail()
+# mail.init_app(app)
 
 
 # def send_email(recipients, filename):
@@ -121,19 +122,7 @@ mail.init_app(app)
 #         logging.info(f'Failed to create blob: {err}')
 
 
-@app.route("/")
-def index():
-    return jsonify(status='succes', response='api is online')
-
-
-@app.route("/function/<function_name>")
-def function(function_name):
-    """Takes some time....."""
-    response = requests.get(f'http://www.aixpact.ml/api/{function_name}')
-    return response.text  # jsonify(response=response.content)
-
-
-@app.route('/upload_form', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def upload_form():
     form = FileForm()
     if form.validate_on_submit():
@@ -162,6 +151,13 @@ def upload_form():
 @app.route("/thankyou")
 def thankyou():
     return jsonify(status='succes', response=request.args.get('message'))
+
+
+@app.route("/function/<function_name>")
+def function(function_name):
+    """Takes some time....."""
+    response = requests.get(f'http://www.aixpact.ml/api/{function_name}')
+    return response.text  # jsonify(response=response.content)
 
 
 # Run and debug locally in Jupyter

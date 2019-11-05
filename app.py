@@ -10,8 +10,8 @@ from werkzeug.utils import secure_filename
 from forms import LoginForm, FileForm
 
 from utils.functions import *
-import algo
-
+# import algo
+from .extensions import db, login_manager, csrf, mail
 
 # CONFIG SETTINGS
 from config.settings import config
