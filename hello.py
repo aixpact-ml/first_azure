@@ -45,7 +45,6 @@ mail.init_app(app)
 
 
 def _try_renderer_template(template_path, ext='txt', **kwargs):
-    from flask import render_template
     try:
         return render_template(f'{template_path}.{ext}', **kwargs)
     except IOError:
@@ -66,9 +65,9 @@ def deliver_email(recipients, attachments, template=None, ctx={}, *args, **kwarg
         send_template_message('Password reset from Foo', ['you@example.com'],
                               template='user/mail/password_reset', ctx=ctx)
 
-    :params subject:recipients:body:html:sender:cc:bcc:attachments:reply_to:date:
-    charset:extra_headers:mail_options:rcpt_options:
-    template: Path to a template without the extension
+    :params: subject, recipients, body, html, sender, cc, bcc, attachments,
+        reply_to, date, charset, extra_headers, mail_options, rcpt_options,
+    :template: Path to a template without the extension
     :param context: Dictionary of anything you want in the template context
     :return: None
     """
@@ -78,9 +77,9 @@ def deliver_email(recipients, attachments, template=None, ctx={}, *args, **kwarg
     kwargs['html'] = _try_renderer_template(template, ext='html', **ctx)
     kwargs['subject'] = 'hAPIdays from AIxPact'
     kwargs['sender'] = 'frank@aixpact.com'
-    kwargs['recipients'] = recipients
-    kwargs['attachments'] = attachments
-    kwargs['bcc'] = 'frank@aixpact.com'
+    kwargs['recipients'] = [recipients]
+    kwargs['attachments'] = [attachments]
+    kwargs['bcc'] = ['frank@aixpact.com']
 
     mail.send_message(*args, **kwargs)
     return None
