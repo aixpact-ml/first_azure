@@ -10,6 +10,7 @@ from forms import LoginForm, FileForm
 
 import algo
 
+
 # CONFIG SETTINGS
 from config import config
 app = Flask(__name__)
@@ -19,14 +20,60 @@ HTTP_BAD_REQUEST = 400
 ALLOWED_EXTENSIONS = set(['txt', 'csv'])
 app.config['DEV'] = False
 
+
 # Sanity check config settings
 assert config.FRANK == 'test this environmental value', 'config settings failed'
 assert config.FRANK == app.config['FRANK'], 'config settings failed'
+
 
 # Set SECRET_KEY for Flask/wtforms
 from flask_wtf.csrf import CsrfProtect
 app.config['SECRET_KEY'] = config.SECRET_KEY  # extra / no need?
 CsrfProtect(app)
+
+
+# Email
+from flask_mail import Mail
+mail = Mail()
+mail.init_app(app)
+
+
+def _try_renderer_template(template_path, ext='txt', **kwargs):
+    from flask import render_template
+    try:
+        return render_template(f'{template_path}.{ext}', **kwargs)
+    except IOError:
+        pass
+
+
+def deliver_email(recipients, template=None, ctx={}, *args, **kwargs):
+    """
+    Send a templated e-mail using a similar signature as Flask-Mail:
+    http://pythonhosted.org/Flask-Mail/
+
+    Except, it also supports template rendering. If you want to use a template
+    then just omit the body and html kwargs to Flask-Mail and instead supply
+    a path to a template. It will auto-lookup and render text/html messages.
+
+    Example:
+        ctx = {'user': current_user, 'reset_token': token}
+        send_template_message('Password reset from Foo', ['you@example.com'],
+                              template='user/mail/password_reset', ctx=ctx)
+
+    :params subject:recipients:body:html:sender:cc:bcc:attachments:reply_to:date:
+    charset:extra_headers:mail_options:rcpt_options:
+    template: Path to a template without the extension
+    :param context: Dictionary of anything you want in the template context
+    :return: None
+    """
+    template = 'email_message'
+    subject = 'hAPIdays from AIxPact'
+    sender = 'frank@aixpact.com'
+    kwargs['body'] = _try_renderer_template(template, **ctx)
+    kwargs['html'] = _try_renderer_template(template, ext='html', **ctx)
+
+    mail.send_message(*args, **kwargs)
+    return None
 
 
 def _log_msg(msg):
@@ -314,7 +361,9 @@ def upload_form():
                 block_blob(blob_name)
                 file_in = blob_name  # to_blob(file, blob_name=blob_name)
         flash(f'File: {filename} is saved @ {file_in}')
+        deliver_email(form.email.data)
         return redirect(url_for('thankyou', message=file_in))
+        flash(f'Try again.....')
     return render_template('upload.html', form=form)
 
 
