@@ -70,14 +70,14 @@ def to_blob(file, container_name='hAPIdays', blob_name='upload'):
     file_name = file.filename
     file.save(file_name)
 
-    # Create blob service and container
-    try:
-        from azure.storage.blob import BlockBlobService
+    from azure.storage.blob import BlockBlobService
 
-        block_blob_service = BlockBlobService(
+    block_blob_service = BlockBlobService(
             account_name=config.STORAGE_ACCOUNT,
             account_key=config.ACCOUNT_KEY)
 
+    # Create blob service and container
+    try:
         block_blob_service.create_container(container_name)
     except Exception as err:
         logging.info(f'Failed to create container: {err}')
