@@ -38,35 +38,76 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-try:
-    # https://docs.microsoft.com/en-us/azure/storage/files/storage-python-how-to-use-file-storage
-    from azure.storage.blob import BlockBlobService
-    from azure.storage.file import FileService, ContentSettings
+# try:
+#     # https://docs.microsoft.com/en-us/azure/storage/files/storage-python-how-to-use-file-storage
+#     from azure.storage.blob import BlobServiceClient
+#     from azure.storage.file import FileService, ContentSettings
 
-    directory_name = 'sampledir'
-    file_in = f"https://{config.STORAGE_ACCOUNT}.file.core.windows.net/myshare/myfile2"
+#     directory_name = 'sampledir'
+#     file_in = f"https://{config.STORAGE_ACCOUNT}.file.core.windows.net/myshare/myfile2"
 
-    file_service = FileService(
-            account_name=config.STORAGE_ACCOUNT,
-            account_key=config.ACCOUNT_KEY)
-    file_service.create_share('myshare')
-    file_service.create_directory('myshare', 'sampledir')
+#     file_service = FileService(
+#             account_name=config.STORAGE_ACCOUNT,
+#             account_key=config.ACCOUNT_KEY)
+#     file_service.create_share('myshare')
+#     file_service.create_directory('myshare', 'sampledir')
 
-    # Create the BlockBlockService that the system uses to call the Blob service for the storage account.
-    # https://docs.microsoft.com/nl-nl/azure/storage/blobs/storage-quickstart-blobs-python
-    block_blob_service = BlockBlobService(
-            account_name=config.STORAGE_ACCOUNT,
-            account_key=config.ACCOUNT_KEY)
+#     # Create the BlockBlockService that the system uses to call the Blob service for the storage account.
+#     # https://docs.microsoft.com/nl-nl/azure/storage/blobs/storage-quickstart-blobs-python
+#     block_blob_service = BlobServiceClient(
+#             account_name=config.STORAGE_ACCOUNT,
+#             account_key=config.ACCOUNT_KEY)
 
-    # Create a container called 'quickstartblobs'.
-    container_name = 'quickstartblobs'
-    block_blob_service.create_container(container_name)
+#     # Create a container called 'quickstartblobs'.
+#     container_name = 'quickstartblobs'
+#     block_blob_service.create_container(container_name)
 
-    # Set the permission so the blobs are public.
-    # block_blob_service.set_container_acl(
-    #     container_name, public_access=PublicAccess.Container).
-except:
-    print('local debug')
+#     # Set the permission so the blobs are public.
+#     # block_blob_service.set_container_acl(
+#     #     container_name, public_access=PublicAccess.Container).
+# except:
+#     print('local debug')
+
+
+def block_blob(file):
+
+    SOURCE_FILE = file
+    DEST_FILE = 'something.csv'
+
+    # Instantiate a new BlobServiceClient using a connection string
+    from azure.storage.blob import BlobServiceClient
+    blob_service_client = BlobServiceClient.from_connection_string(config.BLOB_CONX)
+
+    # Instantiate a new ContainerClient
+    container_client = blob_service_client.get_container_client("myblockcontainersync")
+
+    try:
+        # Create new Container in the service
+        container_client.create_container()
+
+        # Instantiate a new BlobClient
+        blob_client = container_client.get_blob_client("myblockblob")
+
+        # [START upload_a_blob]
+        # Upload content to block blob
+        with open(SOURCE_FILE, "rb") as data:
+            blob_client.upload_blob(data, blob_type="BlockBlob")
+        # [END upload_a_blob]
+
+        # [START download_a_blob]
+        # with open(DEST_FILE, "wb") as my_blob:
+        #     download_stream = blob_client.download_blob()
+        #     my_blob.write(download_stream.readall())
+        # [END download_a_blob]
+
+        # [START delete_blob]
+        # blob_client.delete_blob()
+        # [END delete_blob]
+
+    finally:
+        pass
+        # Delete the container
+        # container_client.delete_container()
 
 
 def to_blob(file, container_name='hapidays', blob_name='upload.txt'):
@@ -75,9 +116,9 @@ def to_blob(file, container_name='hapidays', blob_name='upload.txt'):
     file_name = file.filename
     file.save(file_name)
 
-    from azure.storage.blob import BlockBlobService
+    from azure.storage.blob import BlobServiceClient
 
-    block_blob_service = BlockBlobService(
+    block_blob_service = BlobServiceClient(
             account_name=config.STORAGE_ACCOUNT,
             account_key=config.ACCOUNT_KEY)
 
@@ -263,8 +304,10 @@ def upload_form():
                 file.save(file_in)
             except:
                 # Azure
-                blob_name = form.email.data.replace('@', '_').replace('.', '_').replace('-', '_')
-                file_in = to_blob(file, blob_name=blob_name)
+                blob_name = form.email.data.replace('@', '_').replace('.', '_').replace('-', '_') + file_name.split('.')[-1]
+                file.save(blob_name)
+                block_blob(blob_name)
+                file_in = blob_name  # to_blob(file, blob_name=blob_name)
         flash(f'File: {filename} is saved @ {file_in}')
         return redirect(url_for('thankyou', message=file_in))
     return render_template('upload.html', form=form)
