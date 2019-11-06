@@ -70,12 +70,16 @@ def thankyou():
     file_out = f'{function_name}_file_in'
     url = f'http://www.aixpact.ml/api/{function_name}'
 
+    # Call serverless function and save content to csv
     response = requests.post(url, files={'file': open(file_in, 'rb')})
+    assert len(response.text) > 0, f'DEBUG response: {response.text}'
+
     df = pd.read_csv(response.text, header=0)
     df.to_csv(file_out)
 
+    # Send email
     send_email(email, file_out)
-    flash(f'thank you an email has been sent to: {email} (attachment: {file_out})')
+    flash(f'Thank you! \n\nAn email has been sent to: {email} \nAttachment: {file_out}')
 
     # return # jsonify(response=response.content)
     try:
