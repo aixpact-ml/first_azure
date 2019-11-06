@@ -13,7 +13,7 @@ from werkzeug.utils import secure_filename
 from forms import LoginForm, FileForm
 
 from config.settings import config
-from utils.functions import _log_msg, allowed_file, send_email, block_blob
+from utils.functions import _log_msg, allowed_file, send_email, block_blob, binary2csv
 from utils.functions import mail
 # from functions import *
 # import algo

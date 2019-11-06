@@ -88,3 +88,28 @@ def block_blob(filename, connection_string):
 
     except Exception as err:
         logging.info(f'Failed to create blob: {err}')
+
+
+def binary2csv(text, path):
+    """"""
+    import ast
+    import pandas as pd
+    lines = []
+    for i, x in enumerate(text.decode('utf-8').split()):
+        try:
+            sample = ast.literal_eval(x)
+            # Ignore duplicate headers
+            if i == 0:
+                lines.append(sample)
+            else:
+                if ''.join(sample) != ''.join(lines[0]):
+                    lines.append(sample)
+        except:
+            continue
+    df = pd.DataFrame(lines)
+    df.columns = df.iloc[0]
+    df = df[1:]
+    df.to_csv(path, index=False)
+    with open(path, 'r') as f:
+        logging.info((f.read()))
+    return pd.read_csv(path)
