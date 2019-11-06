@@ -7,10 +7,10 @@ import mimetypes
 from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
                    render_template, session, current_app, make_response,
                    send_file, send_from_directory)
-from flask_mail import Mail, Message
+from flask_mail import Message
 from werkzeug.utils import secure_filename
 
-from .forms import LoginForm, FileForm
+from .forms import FileForm  # , LoginForm
 
 from config.settings import config
 from utils.functions import _log_msg, allowed_file, send_email, block_blob, binary2csv
