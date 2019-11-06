@@ -54,11 +54,17 @@ def upload_form():
                 block_blob(file_in, config.BLOB_CONX)
         send_email(email, file_in)
         flash(f'thank you an email has been sent to: {email} (attachment: {file_in})')
-        return redirect(url_for('thankyou', message=file_in))
+        return redirect(url_for('base_blueprint.thankyou', message=file_in, email=email))
         flash(f'Try again.....')
     return render_template('upload.html', form=form)
 
 
 @blueprint.route("/thankyou")
 def thankyou():
-    return jsonify(status='succes', response=request.args.get('message'))
+    try:
+        r = render_template('thankyou.html',
+            email=request.args.get('email'),
+            file=request.args.get('email'))
+        return r
+    else:
+        return jsonify(status='succes', response=request.args.get('message'))

@@ -1,0 +1,17 @@
+{% extends 'base_site.html' %}
+
+{% block title %}Thanks for joining hAPIdays {% endblock %}
+
+{% block content %}
+  <div class="jumbotron">
+  </div>
+  <div class="row">
+    <div class="col-md-5 col-md-push-1 col-md-offset-1 well">
+      <p>Hi {{ email }}, Check your mailbox!</p>
+      <p>The result of your API request is attached to your mail: {{ file }}</p>
+      <p>Best, frank</p>
+      <a>aixpact.com</a>
+    </div>
+  </div>
+
+{% endblock %}
