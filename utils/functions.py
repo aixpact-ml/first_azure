@@ -11,7 +11,7 @@ from flask_mail import Message
 # from forms import LoginForm, FileForm
 
 # import algo
-from extensions import mail
+from webapp.extensions import mail
 
 
 # # Flask-Mail settings via Azure ENV and below
