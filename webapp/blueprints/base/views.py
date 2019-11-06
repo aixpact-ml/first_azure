@@ -56,13 +56,13 @@ def upload_form():
         flash(f'thank you an email has been sent to: {email} (attachment: {file_in})')
         return redirect(url_for('base_blueprint.thankyou', message=file_in, email=email))
         flash(f'Try again.....')
-    return render_template('upload.html', form=form)
+    return render_template('base/upload.html', form=form)
 
 
 @blueprint.route("/thankyou")
 def thankyou():
     try:
-        r = render_template('thankyou.html',
+        r = render_template('base/thankyou.html',
             email=request.args.get('email'),
             file=request.args.get('email'))
         return r
