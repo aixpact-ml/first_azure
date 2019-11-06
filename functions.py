@@ -56,7 +56,7 @@ def send_email(recipients, filename):
         print(err)
 
 
-def block_blob(filename):
+def block_blob(filename, connection_string):
     # https://azuresdkdocs.blob.core.windows.net/$web/python/azure-storage-blob/12.0.0b5/azure.storage.blob.html
     SOURCE_FILE = filename
     DEST_FILE = 'something_temp.csv'
@@ -64,7 +64,7 @@ def block_blob(filename):
 
     # Instantiate a new BlobServiceClient using a connection string
     from azure.storage.blob import BlobServiceClient
-    blob_service_client = BlobServiceClient.from_connection_string(config.BLOB_CONX)
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
 
     # Instantiate a new ContainerClient
     container_client = blob_service_client.get_container_client(CONTAINER)

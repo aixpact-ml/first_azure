@@ -174,7 +174,7 @@ def upload_form():
             except:
                 # Azure
                 file.save(file_in)
-                block_blob(file_in)
+                block_blob(file_in, config.BLOB_CONX)
         send_email(email, file_in)
         flash(f'thank you an email has been sent to: {email} with attachment: {file_in}')
         return redirect(url_for('thankyou', message=file_in))
