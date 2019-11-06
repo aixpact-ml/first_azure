@@ -34,12 +34,12 @@ from extensions import db, login_manager, csrf
 # gunicorn -w 2 -b :19000 --reload "webapp.app:create_app()"
 #
 
-
 def create_app():
     app = Flask(__name__)
     config_app(app)
     register_blueprints(app)
     init_extensions(app)
+    return app
 
 
 def register_blueprints(app):
@@ -72,8 +72,8 @@ def init_extensions(app):
     db.init_app(app)
     login_manager.init_app(app)
 
-
-
+#
+app = create_app()
 
 
 
