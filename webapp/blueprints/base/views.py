@@ -10,7 +10,7 @@ from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
 from flask_mail import Mail, Message
 from werkzeug.utils import secure_filename
 
-from forms import LoginForm, FileForm
+from .forms import LoginForm, FileForm
 
 from config.settings import config
 from utils.functions import _log_msg, allowed_file, send_email, block_blob, binary2csv
