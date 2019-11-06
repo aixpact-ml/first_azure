@@ -40,7 +40,7 @@ def upload_form():
     if form.validate_on_submit():
         file = form.file.data
         email = form.email.data
-        api_function = form.api.data
+        function = form.function.data
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
@@ -59,7 +59,7 @@ def upload_form():
         return redirect(url_for('base_blueprint.thankyou',
             file_in=file_in,
             email=email,
-            function_name=api_function))
+            function_name=function))
         flash(f'Try again.....')
     return render_template('base/upload.html', form=form)
 
@@ -68,9 +68,9 @@ def upload_form():
 def thankyou():
     file_in = request.args.get('file_in')
     email = request.args.get('email')
-    function_name = request.args.get('function_name')
-    file_out = f'{function_name}_file_in'
-    url = f'http://www.aixpact.ml/api/{function_name}'
+    function = request.args.get('function')
+    file_out = f'{function}_file_in'
+    url = f'http://www.aixpact.ml/api/{function}'
 
     # Call serverless function and save content to csv
     response = requests.post(url, files={'file': open(file_in, 'rb')})
