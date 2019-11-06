@@ -44,7 +44,7 @@ def create_app():
 
 def register_blueprints(app):
     for module_name in ('blueprints.base',):
-        module = import_module('webapp.{}.views'.format(module_name))
+        module = import_module(f'webapp.{module_name}.views')
         app.register_blueprint(module.blueprint)
 
 
