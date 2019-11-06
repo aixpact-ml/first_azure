@@ -74,7 +74,7 @@ def thankyou():
 
     # Call serverless function and save content to csv
     response = requests.post(url, files={'file': open(file_in, 'rb')})
-    assert len(response.text) > 0, f'DEBUG response: {response.text}'
+    assert len(response.text) > 0, f'DEBUG response: {response}'
     assert len(response.text) > 0, f'DEBUG response: {response.text}'
 
     df = pd.read_csv(response.text, header=0)
