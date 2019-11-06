@@ -40,6 +40,8 @@ def upload_form():
     if form.validate_on_submit():
         file = form.file.data
         email = form.email.data
+        api_function = form.api.data
+
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             flash(f'File: {filename} is recieved, saving...')
@@ -57,7 +59,7 @@ def upload_form():
         return redirect(url_for('base_blueprint.thankyou',
             file_in=file_in,
             email=email,
-            function_name='HttpTrigger'))
+            function_name=api_function))
         flash(f'Try again.....')
     return render_template('base/upload.html', form=form)
 
@@ -72,6 +74,7 @@ def thankyou():
 
     # Call serverless function and save content to csv
     response = requests.post(url, files={'file': open(file_in, 'rb')})
+    assert len(response.text) > 0, f'DEBUG response: {response.text}'
     assert len(response.text) > 0, f'DEBUG response: {response.text}'
 
     df = pd.read_csv(response.text, header=0)
