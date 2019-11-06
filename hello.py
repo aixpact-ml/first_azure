@@ -45,10 +45,16 @@ def init_extensions(app):
     login_manager.init_app(app)
 
 
+def register_blueprints(app):
+    for module_name in ('blueprints.base'):
+        module = import_module('app_name.{}.views'.format(module_name))
+        app.register_blueprint(module.blueprint)
+
 #
 app = Flask(__name__)
 config_app(app)
 init_extensions(app)
+register_blueprints(app)
 
 
 # ALLOWED_EXTENSIONS = set(['txt', 'csv'])
@@ -170,11 +176,11 @@ def upload_form():
             file_in = email.replace('@', '_').replace('.', '_').replace('-', '_') + ext
             try:
                 # Local dev
-                file.save(os.path.join(config.LOCAL, file_in))
+                file.save(os.path.join(app.config['LOCAL'], file_in))
             except:
                 # Azure
                 file.save(file_in)
-                block_blob(file_in, config.BLOB_CONX)
+                block_blob(file_in, app.config['BLOB_CONX'])
         send_email(email, file_in)
         flash(f'thank you an email has been sent to: {email} with attachment: {file_in}')
         return redirect(url_for('thankyou', message=file_in))
