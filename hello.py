@@ -6,42 +6,75 @@ import mimetypes
 from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
                    render_template, session, current_app, make_response,
                    send_file, send_from_directory)
+from flask_mail import Mail, Message, Attachment
 from werkzeug.utils import secure_filename
 from forms import LoginForm, FileForm
 
-from _first_azure.utils.functions import *
-from _first_azure.extensions import db, login_manager, csrf, debug_toolbar, mail
+from config.settings import config_app
+from functions import *
+from extensions import db, login_manager, csrf #, mail
+
 
 import algo
 
-# CONFIG SETTINGS
-from config.settings import config
+
+def config_app(app):
+
+    #
+    app.config.from_object(config)
+    app.config['DEV'] = False
+
+    # Flask-Mail settings via Azure ENV and below
+    app.config['MAIL_PORT'] = 587
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USE_SSL'] = False
+    assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', 'Flask-Mail settings failed'
+
+    # Sanity check config settings
+    assert config.FRANK == 'test this environmental value', 'config settings failed'
+    assert config.FRANK == app.config['FRANK'], 'config settings failed'
+    assert app.config['SECRET_KEY'] == config.SECRET_KEY, 'SECRET_KEY not set'
+
+
+def init_extensions(app):
+    #
+    csrf.init_app(app)
+    mail.init_app(app)
+    db.init_app(app)
+    login_manager.init_app(app)
+
+
+#
 app = Flask(__name__)
-app.config.from_object(config)
+config_app(app)
+init_extensions(app)
+
 
 ALLOWED_EXTENSIONS = set(['txt', 'csv'])
-app.config['DEV'] = False
+# app.config.from_object(config)
+# app.config['DEV'] = False
+
 
 
 # Sanity check config settings
-assert config.FRANK == 'test this environmental value', 'config settings failed'
-assert config.FRANK == app.config['FRANK'], 'config settings failed'
+# assert config.FRANK == 'test this environmental value', 'config settings failed'
+# assert config.FRANK == app.config['FRANK'], 'config settings failed'
 
 
 # Set SECRET_KEY for Flask/wtforms
-from flask_wtf.csrf import CsrfProtect
-assert app.config['SECRET_KEY'] == config.SECRET_KEY, 'SECRET_KEY not set'
+# from flask_wtf.csrf import CsrfProtect
+# assert app.config['SECRET_KEY'] == config.SECRET_KEY, 'SECRET_KEY not set'
 # CsrfProtect(app)
 
 
-# Flask-Mail settings via Azure ENV and below
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
-assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', 'Flask-Mail settings failed'
+# # Flask-Mail settings via Azure ENV and below
+# app.config['MAIL_PORT'] = 587
+# app.config['MAIL_USE_TLS'] = True
+# app.config['MAIL_USE_SSL'] = False
+# assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', 'Flask-Mail settings failed'
 
 
-from flask_mail import Mail, Message, Attachment
+# from flask_mail import Mail, Message, Attachment
 # mail = Mail()
 # mail.init_app(app)
 

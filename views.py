@@ -11,7 +11,7 @@ from forms import LoginForm, FileForm
 
 from utils.functions import *
 # import algo
-from .extensions import db, login_manager, csrf, mail
+from .extensions import db, login_manager, csrf #, mail
 
 # CONFIG SETTINGS
 from config.settings import config
@@ -31,7 +31,7 @@ assert config.FRANK == app.config['FRANK'], 'config settings failed'
 # Set SECRET_KEY for Flask/wtforms
 from flask_wtf.csrf import CsrfProtect
 assert app.config['SECRET_KEY'] == config.SECRET_KEY, 'SECRET_KEY not set'
-CsrfProtect(app)
+# CsrfProtect(app)
 
 
 # Flask-Mail settings via Azure ENV and below
@@ -42,8 +42,8 @@ assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', 'Flask-Mail set
 
 
 from flask_mail import Mail, Message, Attachment
-mail = Mail()
-mail.init_app(app)
+# mail = Mail()
+# mail.init_app(app)
 
 
 def send_email(recipients, filename):

@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 from forms import LoginForm, FileForm
 
 # import algo
-from _first_azure.extensions import mail
+from extensions import mail
 
 
 # # Flask-Mail settings via Azure ENV and below
