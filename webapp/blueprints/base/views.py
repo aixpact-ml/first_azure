@@ -66,5 +66,5 @@ def thankyou():
             email=request.args.get('email'),
             file=request.args.get('email'))
         return r
-    else:
+    except:
         return jsonify(status='succes', response=request.args.get('message'))
