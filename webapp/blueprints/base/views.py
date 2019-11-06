@@ -41,13 +41,11 @@ def upload_form():
         file = form.file.data
         email = form.email.data
         function = form.function.data
+        ext = '.' + file.filename.split('.')[-1]
+        file_in = email.replace('@', '_').replace('.', '_').replace('-', '_') + ext
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            flash(f'File: {filename} is recieved, saving...')
-
-            ext = '.' + filename.split('.')[-1]
-            file_in = email.replace('@', '_').replace('.', '_').replace('-', '_') + ext
             try:
                 # Local dev
                 file.save(os.path.join(config.LOCAL, file_in))
@@ -55,6 +53,8 @@ def upload_form():
                 # Azure
                 file.save(file_in)
                 block_blob(file_in, config.BLOB_CONX)
+        else:
+            return render_template('base/upload.html', form=form)  # TODO
 
         return redirect(url_for('base_blueprint.thankyou',
             file_in=file_in,
