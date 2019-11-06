@@ -1,17 +1,17 @@
 import logging
 import datetime
-import requests
-import os
+# import requests
+# import os
 import mimetypes
 from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
                    render_template, session, current_app, make_response,
                    send_file, send_from_directory)
-from flask_mail import Mail, Message
-from werkzeug.utils import secure_filename
-from forms import LoginForm, FileForm
+from flask_mail import Message
+# from werkzeug.utils import secure_filename
+# from forms import LoginForm, FileForm
 
 # import algo
-from extensions import mail
+# from extensions import mail
 
 
 # # Flask-Mail settings via Azure ENV and below
@@ -20,13 +20,23 @@ from extensions import mail
 # app.config['MAIL_USE_SSL'] = False
 # assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', 'Flask-Mail settings failed'
 
-
 # from flask_mail import Mail, Message, Attachment
 # mail = Mail()
 # mail.init_app(app)
 
 
+def _log_msg(msg):
+    logging.info("{}: {}".format(datetime.datetime.now(), msg))
+
+
+def allowed_file(filename, allowed_extensions=['txt', 'csv']):
+    _log_msg('checking allowed file ...')
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in allowed_extensions
+
+
 def send_email(recipients, filename):
+    from extensions import mail
     try:
         msg = Message('hAPIdays from AIxPact',
             sender='frank@aixpact.com',
@@ -44,16 +54,6 @@ def send_email(recipients, filename):
         mail.send(msg)
     except Exception as err:
         print(err)
-
-
-def _log_msg(msg):
-    logging.info("{}: {}".format(datetime.datetime.now(), msg))
-
-
-def allowed_file(filename):
-    _log_msg('checking allowed file ...')
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def block_blob(filename):

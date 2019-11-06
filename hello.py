@@ -10,9 +10,10 @@ from flask_mail import Mail, Message, Attachment
 from werkzeug.utils import secure_filename
 from forms import LoginForm, FileForm
 
-from config.settings import config_app
-from functions import *
-from extensions import db, login_manager, csrf #, mail
+from config.settings import config
+from functions import _log_msg, allowed_file, send_email, block_blob
+from functions import mail
+from extensions import db, login_manager, csrf
 
 
 import algo
@@ -50,7 +51,7 @@ config_app(app)
 init_extensions(app)
 
 
-ALLOWED_EXTENSIONS = set(['txt', 'csv'])
+# ALLOWED_EXTENSIONS = set(['txt', 'csv'])
 # app.config.from_object(config)
 # app.config['DEV'] = False
 
