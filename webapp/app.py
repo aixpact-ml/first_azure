@@ -4,7 +4,7 @@ from importlib import import_module
 
 from config.settings import config
 from utils.functions import mail
-from extensions import csrf  #, db, login_manager
+from .extensions import csrf  #, db, login_manager
 
 # Azure configuration > general settings > Startup Command:
 # gunicorn --bind=0.0.0.0 --timeout 1200 webapp.app:create_app()
