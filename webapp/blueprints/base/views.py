@@ -24,7 +24,7 @@ from . import blueprint
 
 @blueprint.route("/")
 def index():
-    return jsonify(status='succes', response='api is online')
+    return jsonify(status='succes', response='webapp is running')
 
 
 @blueprint.route("/function/<function_name>")
