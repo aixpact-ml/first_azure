@@ -43,7 +43,7 @@ def create_app():
 
 
 def register_blueprints(app):
-    for module_name in ('blueprints.base'):
+    for module_name in ('blueprints.base',):
         module = import_module('webapp.{}.views'.format(module_name))
         app.register_blueprint(module.blueprint)
 
