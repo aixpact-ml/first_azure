@@ -55,7 +55,7 @@ def upload_form():
                 block_blob(file_in, config.BLOB_CONX)
 
         return redirect(url_for('base_blueprint.thankyou',
-            message=file_in,
+            file_in=file_in,
             email=email,
             function_name='HttpTrigger'))
         flash(f'Try again.....')
