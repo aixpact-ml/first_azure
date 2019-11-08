@@ -36,19 +36,19 @@ def allowed_file(filename, allowed_extensions=['txt', 'csv']):
 
 
 def send_email(recipients, filename):
-    from extensions import mail
     try:
         msg = Message('hAPIdays from AIxPact',
             sender='frank@aixpact.com',
             recipients=[recipients])
+        name = recipients.split('@')[0].lower().capitalize()
         try:
-            msg.body = render_template('email_message.txt', recipients=recipients)
+            msg.body = render_template('email_message.txt', recipients=name)
         except:
-            msg.body = 'Hello ' + recipients + ',\nblahblahblah'
+            msg.body = 'Hello ' + name + ', \n Thank you for joining hAPIdays, enjoy your result!\n'
         msg.html = None  # render_template('email_message.html', recipients=recipients)
 
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
-        mime = mimetypes.guess_type(filename, strict=False)[0]
+        mime = mimetypes.guess_type(filename, strict=False)[0] or 'text/txt'
         with open(filename, 'r') as f:
             msg.attach(filename, mime, f.read())
         mail.send(msg)

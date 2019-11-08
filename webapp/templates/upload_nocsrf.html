@@ -6,18 +6,28 @@
         <h2>One free API a day</h2>
         <span>This API forecasts your timeseries.</span><br>
 
+        <form action="" method="post" enctype="multipart/form-data" novalidate>
             <p>
-                <span>Hi {{ email }},</span><br>
+                <span>Upload your local file for this API.</span><br>
+                {{ form.file.label }}: {{ form.file(size=64) }}
+            </p>
+            <p>
+                <span>We will send the API result to your email.</span><br>
 
-                Blablah...
+                {{ form.email.label }}: {{ form.email(size=32) }}
+            </p>
+            <p>
+                <span>Choose API function</span><br>
 
-                Thanks,
-                Frank
-
-                Attachment: {{ file }} }}
-
+                {{ form.api.label }}: {{ form.api(size=64) }}
             </p>
 
+            <button type="submit" class="btn btn-outline-primary">
+            Get it!
+            <!-- {{ form.submit() }} -->
+            </button>
+            <p></p>
+        </form>
     </div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}

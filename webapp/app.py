@@ -38,6 +38,10 @@ def config_app(app):
     app.config['MAIL_USE_TLS'] = True
     app.config['MAIL_USE_SSL'] = False
 
+    #
+    # app.config['SERVER_NAME'] = '192.168.99.100:8000'
+    # app.config['WTF_CSRF_CHECK_DEFAULT'] = False
+
     # Sanity check config settings
     assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', 'Flask-Mail settings failed'
     assert config.FRANK == 'test this environmental value', 'config settings failed'

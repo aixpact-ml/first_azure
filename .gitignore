@@ -32,6 +32,7 @@ Dockerfile
 *.pkl
 *.fje
 dev_backup/
+config/env/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
