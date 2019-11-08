@@ -51,6 +51,8 @@ def send_email(recipients, filename):
         mime = mimetypes.guess_type(filename, strict=False)[0] or 'text/txt'
         with open(filename, 'r') as f:
             msg.attach(filename, mime, f.read())
+        f.close()
+        print(msg)  # create timeout to solve 'downloading issue'
         mail.send(msg)
     except Exception as err:
         print(err)
