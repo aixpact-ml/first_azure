@@ -50,6 +50,7 @@ def send_email(recipients, filename):
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
         mime = mimetypes.guess_type(filename, strict=False)[0] or 'text/txt'
         with open(filename, 'r') as f:
+            print(f)
             msg.attach(filename, mime, f.read())
         f.close()
         print(msg)  # create timeout to solve 'downloading issue'
