@@ -48,12 +48,12 @@ def send_email(recipients, filename):
         msg.html = None  # render_template('email_message.html', recipients=recipients)
 
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
-        mime = mimetypes.guess_type(filename, strict=False)[0] or 'text/txt'
+        mime = mimetypes.guess_type(filename, strict=False)[0] or 'text/plain'
         with open(filename, 'r') as f:
-            print(f)
-            msg.attach(filename, mime, f.read())
-        f.close()
-        print(msg)  # create timeout to solve 'downloading issue'
+            # print(f)
+            msg.attach(filename, 'text/plain', f.read())
+        # f.close()
+        # print(msg)  # create timeout to solve 'downloading issue'
         mail.send(msg)
     except Exception as err:
         print(err)
