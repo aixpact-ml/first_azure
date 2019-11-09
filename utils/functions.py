@@ -73,6 +73,10 @@ def blob_upload(source_file):
     """Upload the blob from a local file."""
     try:
         blob_client = _blob_client(source_file)
+        try:
+            blob_client.delete_blob()
+        except:
+            print('no existing blob')
         with open(source_file, "rb") as data:
             blob_client.upload_blob(data)
     except Exception as err:
