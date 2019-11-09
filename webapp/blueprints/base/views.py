@@ -69,7 +69,10 @@ def debug():
             except:
                 # Azure
                 file.save(file_in)
-                block_blob(file_in, config.BLOB_CONX)
+                blob_upload(file_in)
+                # block_blob(file_in, config.BLOB_CONX)
+                blob_download('some_temp.txt')
+
         else:
             return render_template('base/upload.html', form=form)  # TODO
 
@@ -110,8 +113,8 @@ def upload_form():
             except:
                 # Azure
                 file.save(file_in)
-                blob_upload(file_in)
-                # block_blob(file_in, config.BLOB_CONX)
+                # blob_upload(file_in)
+                block_blob(file_in, config.BLOB_CONX)
         else:
             return render_template('base/upload.html', form=form)  # TODO
 

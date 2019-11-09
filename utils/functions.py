@@ -76,7 +76,7 @@ def blob_upload(source_file):
         try:
             blob_client.delete_blob()
         except:
-            print('no existing blob')
+            print('no existing blob to delete/replace')
         with open(source_file, "rb") as data:
             blob_client.upload_blob(data)
     except Exception as err:
