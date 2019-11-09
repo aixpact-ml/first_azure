@@ -38,7 +38,8 @@ def send_email(recipients, filename):
             # with current_app.open_resource(filename, 'rb') as f:
             # TODO doesnot work from Azure - doesnot download file
             msg.attach(filename, mime, f.read())
-        mail.send(msg)
+        with current_app.app_context():
+            mail.send(msg)
     except Exception as err:
         print(err)
 
