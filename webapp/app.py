@@ -32,6 +32,7 @@ def config_app(app):
     # app.config settings
     app.config.from_object(config)
     app.config['DEV'] = False
+    app.config['DEBUG'] = True  # DEBUG logging
 
     # Flask-Mail settings via Azure ENV and below
     app.config['MAIL_PORT'] = 587

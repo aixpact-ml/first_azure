@@ -13,7 +13,7 @@ from werkzeug.utils import secure_filename
 from .forms import FileForm  # , LoginForm
 
 from config.settings import config
-from utils.functions import _log_msg, allowed_file, send_email, block_blob, binary2csv
+from utils.functions import _log_msg, allowed_file, send_email, block_blob, binary2csv, blob_upload, blob_download
 from utils.functions import mail
 # from functions import *
 # import algo
@@ -110,7 +110,8 @@ def upload_form():
             except:
                 # Azure
                 file.save(file_in)
-                block_blob(file_in, config.BLOB_CONX)
+                blob_upload(file_in)
+                # block_blob(file_in, config.BLOB_CONX)
         else:
             return render_template('base/upload.html', form=form)  # TODO
 

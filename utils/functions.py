@@ -1,28 +1,13 @@
 import logging
 import datetime
-# import requests
-# import os
 import mimetypes
 from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
                    render_template, session, current_app, make_response,
                    send_file, send_from_directory)
 from flask_mail import Message
-# from werkzeug.utils import secure_filename
-# from forms import LoginForm, FileForm
+from azure.storage.blob import BlobServiceClient
 
-# import algo
 from webapp.extensions import mail
-
-
-# # Flask-Mail settings via Azure ENV and below
-# app.config['MAIL_PORT'] = 587
-# app.config['MAIL_USE_TLS'] = True
-# app.config['MAIL_USE_SSL'] = False
-# assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', 'Flask-Mail settings failed'
-
-# from flask_mail import Mail, Message, Attachment
-# mail = Mail()
-# mail.init_app(app)
 
 
 def _log_msg(msg):
@@ -49,14 +34,59 @@ def send_email(recipients, filename):
 
         # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
         mime = mimetypes.guess_type(filename, strict=False)[0] or 'text/plain'
-        with open(filename, 'r') as f:
-            # print(f)
-            msg.attach(filename, 'text/plain', f.read())
-        # f.close()
-        # print(msg)  # create timeout to solve 'downloading issue'
+        with open(filename, 'rb', buffering=0) as f:
+            # with current_app.open_resource(filename, 'rb') as f:
+            # TODO doesnot work from Azure - doesnot download file
+            msg.attach(filename, mime, f.read())
         mail.send(msg)
     except Exception as err:
         print(err)
+
+
+def _blob_client(source_file, container='hapidays'):
+    # https://azuresdkdocs.blob.core.windows.net/$web/python/azure-storage-blob/12.0.0b5/azure.storage.blob.html
+    connection_string = current_app.config.get('BLOB_CONX', 'wtf')
+    assert connection_string != 'wtf', 'connection string undefined'
+
+    # Instantiate a new BlobServiceClient using a connection string
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+
+    # Instantiate a new ContainerClient
+    container_client = blob_service_client.get_container_client(container)
+
+    # Create new container in the service
+    try:
+        container_client.create_container()
+    except Exception as err:
+        logging.info(f'Failed to create/list container: {err}')
+
+    try:
+        # Instantiate a new BlobClient
+        blob_client = container_client.get_blob_client(source_file)
+    except Exception as err:
+        logging.info(f'Failed to create blob: {err}')
+        return None
+    return blob_client
+
+
+def blob_upload(source_file):
+    """Upload the blob from a local file."""
+    try:
+        blob_client = _blob_client(source_file)
+        with open(source_file, "rb") as data:
+            blob_client.upload_blob(data)
+    except Exception as err:
+        logging.info(f'Failed to upload blob: {err}')
+
+
+def blob_download(destination_file='something_temp.csv'):
+    """Download the blob to a local file."""
+    try:
+        blob_client = _blob_client(filename)
+        with open(destination_file, "wb") as f:
+            f.write(blob_client.download_blob().readall())
+    except Exception as err:
+        logging.info(f'Failed to download blob: {err}')
 
 
 def block_blob(filename, connection_string):

@@ -1,0 +1,29 @@
+[2019-11-09 08:00:21 +0000] [1653] [INFO] Starting gunicorn 19.9.0
+[2019-11-09 08:00:21 +0000] [1653] [INFO] Listening at: http://0.0.0.0:29000 (1653)
+[2019-11-09 08:00:21 +0000] [1653] [INFO] Using worker: sync
+[2019-11-09 08:00:21 +0000] [1656] [INFO] Booting worker with pid: 1656
+[2019-11-09 08:00:21 +0000] [1658] [INFO] Booting worker with pid: 1658
+[2019-11-09 08:10:17 +0000] [1656] [INFO] Worker reloading: /home/jovyan/aixpact/_first_azure/utils/functions.py modified
+[2019-11-09 08:10:17 +0000] [1658] [INFO] Worker reloading: /home/jovyan/aixpact/_first_azure/utils/functions.py modified
+[2019-11-09 08:33:23 +0000] [1656] [INFO] Worker exiting (pid: 1656)
+[2019-11-09 08:33:23 +0000] [1658] [INFO] Worker exiting (pid: 1658)
+[2019-11-09 08:33:23 +0000] [1667] [INFO] Booting worker with pid: 1667
+[2019-11-09 08:33:23 +0000] [1669] [INFO] Booting worker with pid: 1669
+[2019-11-09 08:35:01 +0000] [1669] [INFO] Worker reloading: /home/jovyan/aixpact/_first_azure/utils/functions.py modified
+[2019-11-09 08:35:01 +0000] [1667] [INFO] Worker reloading: /home/jovyan/aixpact/_first_azure/utils/functions.py modified
+[2019-11-09 08:38:56 +0000] [1669] [INFO] Worker exiting (pid: 1669)
+[2019-11-09 08:38:56 +0000] [1667] [INFO] Worker exiting (pid: 1667)
+[2019-11-09 08:38:57 +0000] [1678] [INFO] Booting worker with pid: 1678
+[2019-11-09 08:38:57 +0000] [1680] [INFO] Booting worker with pid: 1680
+[2019-11-09 08:40:51 +0000] [1678] [INFO] Worker reloading: /home/jovyan/aixpact/_first_azure/utils/functions.py modified
+[2019-11-09 08:40:51 +0000] [1680] [INFO] Worker reloading: /home/jovyan/aixpact/_first_azure/utils/functions.py modified
+[2019-11-09 08:41:45 +0000] [1680] [INFO] Worker exiting (pid: 1680)
+[2019-11-09 08:41:45 +0000] [1678] [INFO] Worker exiting (pid: 1678)
+[2019-11-09 08:41:45 +0000] [1689] [INFO] Booting worker with pid: 1689
+[2019-11-09 08:41:45 +0000] [1691] [INFO] Booting worker with pid: 1691
+[2019-11-09 08:43:29 +0000] [1691] [INFO] Worker reloading: /home/jovyan/aixpact/_first_azure/utils/functions.py modified
+[2019-11-09 08:43:29 +0000] [1689] [INFO] Worker reloading: /home/jovyan/aixpact/_first_azure/utils/functions.py modified
+[2019-11-09 08:45:12 +0000] [1653] [INFO] Handling signal: int
+[2019-11-09 08:45:12 +0000] [1689] [INFO] Worker exiting (pid: 1689)
+[2019-11-09 08:45:12 +0000] [1691] [INFO] Worker exiting (pid: 1691)
+[2019-11-09 08:45:12 +0000] [1653] [INFO] Shutting down: Master
