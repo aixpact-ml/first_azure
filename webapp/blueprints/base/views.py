@@ -60,7 +60,7 @@ def index():
             filename = secure_filename(file.filename)
             try:
                 # Local dev
-                file_in = os.path.join(config.LOCAL, file_in)
+                file_in = os.path.join(config.LOCAL, file_in)  ######### full path
                 # file_out = os.path.join(config.LOCAL, file_out)
             except:
                 # Azure
