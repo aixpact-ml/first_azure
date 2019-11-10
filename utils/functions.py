@@ -20,15 +20,16 @@ def predict(file_in, file_out, function, binary=False):
         response = requests.post(url, files={'file': f})
 
     # Save as temp file
+    file_path = os.path.join(os.getcwd(), file_out)  ####### TODO
     if binary:
-        with open(file_out, 'wb') as f:
+        with open(file_path, 'wb') as f:
             f.write(response.content)
     else:
-        with open(file_out, 'w') as f:
+        with open(file_path, 'w') as f:
             f.write(response.text)
     # Upload temp file to blob
     try:
-        blob_upload(file_out, config.BLOB_CONX)
+        blob_upload(file_path, config.BLOB_CONX)
         print(f'Finished function and uploaded result as blob {file_out}')
     except Exception as err:
         print('blob error:', err)
