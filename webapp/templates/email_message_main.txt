@@ -1,4 +1,4 @@
-Hi {{ recipients }},
+Hi {{ name }},
 
 Thank you for joining the hAPIdays!
 

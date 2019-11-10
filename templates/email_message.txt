@@ -1,9 +1,11 @@
-Hi {{ recipients }},
+Hi {{ name }},
 
 Thank you for joining the hAPIdays!
 
 Please find attached your result.
 
+Download: https://helloaixpact.blob.core.windows.net/hapidays/{{ filename }}
 
 Thanks,
 Aixpact
+txt

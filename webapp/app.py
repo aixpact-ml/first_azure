@@ -3,7 +3,8 @@ from flask import Flask
 from importlib import import_module
 
 from config.settings import config
-from utils.functions import mail
+# from utils.functions import mail
+from utils.email import mail
 from .extensions import csrf  #, db, login_manager
 
 # Azure configuration > general settings > Startup Command:

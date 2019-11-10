@@ -1,10 +1,10 @@
-Hi {{ recipients }},
+Hi,
 
 Thank you for joining the hAPIdays!
 
 Please find attached your result.
 
+Utils
 
 Thanks,
 Aixpact
-

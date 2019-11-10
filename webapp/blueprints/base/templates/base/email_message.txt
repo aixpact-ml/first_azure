@@ -1,8 +1,8 @@
-Hi {{ recipients }},
+Hi {{ name }},
 
 Thank you for joining the hAPIdays!
 
-Please find attached your result.
+Download: {{ filename }}
 
 
 Thanks and regards,
