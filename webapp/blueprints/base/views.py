@@ -62,7 +62,8 @@ def index():
                 # Local dev
                 file_in = os.path.join(config.LOCAL, file_in)
             except:
-                pass
+                # Azure
+                file_in = os.path.join(os.getcwd(), file_in)
             file.save(file_in)
 
             # Send email
