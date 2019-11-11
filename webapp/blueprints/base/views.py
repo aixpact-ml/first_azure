@@ -30,7 +30,8 @@ def hello():
         # https://stackoverflow.com/questions/10434599/get-the-data-received-in-a-flask-request
         return jsonify(status='succes', response=f'Hello, {request.form.get("name")}!')
     else:
-        return render_template('base_empty.html')  # TODO jsonify(status='succes', response='webapp is running')
+        return render_template('base_empty.html')
+        # TODO jsonify(status='succes', response='webapp is running')
 
 
 @blueprint.route('/', methods=['GET', 'POST'])
@@ -71,21 +72,25 @@ def index():
             # Send email
             try:
                 download = f'https://helloaixpact.blob.core.windows.net/hapidays/{file_out}'
-                template = render_template('base/email_message.html', name=name, filename=download)
+                template = render_template('base/email_message.html',
+                                            name=name,
+                                            filename=download)
                 send_email(template, email, download)
             except Exception as err:
                 print('email error:', err)
 
             # Call serverless function
-            _ = predict(file_in, file_out, function)
+            data = predict(file_in, file_out, function)
 
         else:
             return render_template('base/upload.html', form=form)  # TODO
 
         return redirect(url_for('base_blueprint.thankyou',
                         file_in=file_in,
+                        file_out=file_out,
                         email=email,
-                        function=function))
+                        function=function,
+                        data=data[:10]))  # Check/debug data from within Azure
         flash(f'Try again.....')
     return render_template('base/upload.html', form=form)
 
@@ -95,7 +100,8 @@ def thankyou():
     file_in = request.args.get('file_in')
     email = request.args.get('email')
     function = request.args.get('function')
-    file_out = f'{function}.txt'
+    file_out = request.args.get('file_out')
+    data = request.args.get('data')
 
     flash(f'Thank you! \n\nAn email has been sent to: {email} \nAttachment: {file_out}')
     try:
@@ -104,7 +110,10 @@ def thankyou():
                             file=file_out)
         return r
     except:
-        return jsonify(status='succes', response='....')
+        return jsonify(status='succes',
+                       response=f'Thank you! \n\nAn email has been sent to: {email} \n \
+                                  Attachment: {file_out}',
+                       data=data)  # Check/debug data from within Azure
 
 
 @blueprint.route("/function/<function_name>")

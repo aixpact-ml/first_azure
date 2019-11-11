@@ -13,7 +13,7 @@ from .decorators import fire_and_forget
 from config.settings import config
 
 
-@fire_and_forget
+# @fire_and_forget
 def predict(file_in, file_out, function, binary=False):
     """Call serverless function and save result as blob."""
     # Call function
@@ -21,7 +21,7 @@ def predict(file_in, file_out, function, binary=False):
     with open(file_in, 'r') as f:
         response = requests.post(url, files={'file': f})
 
-    print('DEBUG response:', len(response.content), response.content)
+    print('DEBUG response:', len(response.content), response.content[:5])
     # TODO check for content
     if len(response.content) < 5:
         response.content = b'Hello, World!'
