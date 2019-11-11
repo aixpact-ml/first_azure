@@ -11,32 +11,22 @@ from config.settings import config
 
 
 def _blob_client(source_file, container='hapidays'):
-    # from webapp.app import app
-    # https://azuresdkdocs.blob.core.windows.net/$web/python/azure-storage-blob/12.0.0b5/azure.storage.blob.html
-    connection_string = config.BLOB_CONX
-    # assert connection_string != 'wtf', 'connection string undefined'
-
+    """https://azuresdkdocs.blob.core.windows.net/$web/python/azure-storage-blob/12.0.0b5/azure.storage.blob.html"""
     # Instantiate a new BlobServiceClient using a connection string
-    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+    blob_service_client = BlobServiceClient.from_connection_string(config.BLOB_CONX)
 
-    # Instantiate a new ContainerClient
+    # Instantiate a new ContainerClient to create new container in the service
     container_client = blob_service_client.get_container_client(container)
-
-    # Create new container in the service
     try:
         container_client.create_container()
     except Exception as err:
         pass
-        # print(f'Failed to create/list container: {err}')
-        # logging.info(f'Failed to create/list container: {err}')
 
+    # Instantiate a new BlobClient to create blobs
     try:
-        # Instantiate a new BlobClient
         blob_client = container_client.get_blob_client(source_file)
     except Exception as err:
         blob_client = None
-        # print(f'Failed to create blob: {err}')
-        # logging.info(f'Failed to create blob: {err}')
 
     return blob_client
 

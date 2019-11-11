@@ -31,7 +31,7 @@ def predict(file_in, file_out, function, binary=False):
     #         f.write(response.text)
     # Upload temp file to blob
     try:
-        blob_upload(file_out, response.text)
+        blob_upload(file_out, response.content)
         print(f'Finished function and uploaded result as blob {file_out}')
     except Exception as err:
         print('blob error:', err)
