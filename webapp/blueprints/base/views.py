@@ -59,14 +59,17 @@ def index():
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            # try:
+            #     # Local dev
+            #     file_in = os.path.join(config.LOCAL, file_in)  ######### full path
+            #     # file_out = os.path.join(config.LOCAL, file_out)
+            # except:
+            # Azure
             try:
-                # Local dev
-                file_in = os.path.join(config.LOCAL, file_in)  ######### full path
-                # file_out = os.path.join(config.LOCAL, file_out)
+                os.mkdir('./data')
             except:
-                # Azure
-                file_in = os.path.join(os.getcwd(), file_in)
-                # file_out = os.path.join(os.getcwd(), file_out)
+                pass
+            file_in = os.path.join('./data', file_in)
             file.save(file_in)
 
             # Send email
@@ -81,6 +84,7 @@ def index():
 
             # Call serverless function
             data = predict(file_in, file_out, function)
+            # data = predict(file, file_out, function)  # test this
 
         else:
             return render_template('base/upload.html', form=form)  # TODO
