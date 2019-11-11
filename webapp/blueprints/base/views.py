@@ -80,18 +80,18 @@ def index():
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-
-            # if request.files['file'] == form.file.data:
-            #     return jsonify(status='succes',
-            #            file=str(request.files['file']))
+            assert request.files['file'] == form.file.data, 'wtf'
             try:
-                handle_uploaded_file(request.files['file'], file_in)
-            except:
                 handle_uploaded_file(form.file.data, file_in)
+            except Exception as err:
+                return jsonify(status='failed',
+                               error=err,
+                               file=str(form.file.data),
+                               data=str(open(os.path.join('./data', file_in), 'rb')))
 
             return jsonify(status='succes',
                            file=str(form.file.data),
-                           data=str(open(os.path.join('./data', file_in), 'rb')))
+                           data=str(open(os.path.join('./data', file_in), 'rb').read()[:100]))
 
 
             # print('DEBUG', type(file), '\n', request.files['file']) #, isinstance(file))
