@@ -64,8 +64,9 @@ def index():
             #     file_in = os.path.join(config.LOCAL, file_in)  ######### full path
             #     # file_out = os.path.join(config.LOCAL, file_out)
             # except:
-            print('DEBUG', type(file)) #, isinstance(file))
+            print('DEBUG', type(file), '\n', request.files['file']) #, isinstance(file))
             # local: DEBUG <class 'werkzeug.datastructures.FileStorage'>
+            # Azure: DEBUG <class
             # Azure
             try:
                 os.mkdir('./data')
@@ -73,10 +74,11 @@ def index():
                 pass
             file_in = os.path.join('./data', file_in)
             try:
-                with open(file_in, "w") as f:
-                    f.write(file)
+                with open(file_in, "wb") as f:
+                    f.write(request.files['file'])
             except:
                 file.save(file_in) ########### file = storage(POST request) or data(form data)!
+                file.close()
 
             # Send email
             try:
