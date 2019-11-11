@@ -56,6 +56,15 @@ def hello():
         # TODO jsonify(status='succes', response='webapp is running')
 
 
+@blueprint.route('/debug', methods=['GET', 'POST'])
+def debug():
+    # Call function
+    url = f'https://hello-aixpact.azurewebsites.net/api/{function}'
+    response = requests.post(url, data={'name': request.args.get('name')})
+    return jsonify(status='succes',
+                   response=str(response))
+
+
 @blueprint.route('/', methods=['GET', 'POST'])
 def index():
     # https://stackoverflow.com/questions/38079288/flask-file-not-detecting-on-upload
@@ -113,7 +122,8 @@ def index():
 
             # Call function
             url = f'https://hello-aixpact.azurewebsites.net/api/{function}'
-            response = requests.post(url, files={'file': open(file_dest, 'rb').read()})
+            files = {'file': open(file_dest, 'rb')}
+            response = requests.post(url, files=files)
 
 
             return jsonify(status='succes',
