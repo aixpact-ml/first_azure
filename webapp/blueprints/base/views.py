@@ -109,8 +109,8 @@ def index():
             #     print('email error:', err)
 
             # Call serverless function
-            data = predict(file_dest, file_out, function)
-            # data = predict(file, file_out, function)  # test this
+            # data = predict(file_dest, file_out, function)
+            data = predict(open(file_dest, 'rb'), file_out, function)  # test file handle
 
             return jsonify(status='succes',
                            file=str(form.file.data),
