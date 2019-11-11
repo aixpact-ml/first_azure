@@ -72,7 +72,7 @@ def index():
             file_in = os.path.join('./data', file_in)
             try:
                 with open(file_in, "w") as f:
-                f.write(file)
+                    f.write(file)
             except:
                 file.save(file_in) ########### file = storage(POST request) or data(form data)!
 
