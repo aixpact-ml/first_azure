@@ -88,7 +88,7 @@ def index():
                 return jsonify(status='failed',
                                error=err,
                                file=str(form.file.data),
-                               data=str(open(os.path.join('./data', file_in), 'rb')))
+                               data=str(open(file_dest, 'rb')))
 
             return jsonify(status='succes',
                            file=str(form.file.data),
@@ -112,7 +112,7 @@ def index():
             #     print('email error:', err)
 
             # Call serverless function
-            # data = predict(file_dest, file_out, function)
+            data = predict(file_dest, file_out, function)
             # data = predict(file, file_out, function)  # test this
 
         else:
