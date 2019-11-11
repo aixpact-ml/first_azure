@@ -79,11 +79,13 @@ def blob_upload(source_file, data, connection_string):
     """Upload the blob from a local file."""
     try:
         os.mkdir('./data')
+        path = os.path.join('./data', source_file)
+        with open(path, "w") as f:
+            f.write('Hello, World!')
     except:
-        pass
-    path = os.path.join('./data', source_file)
-    with open(path, "w") as f:  ######### test
-        f.write('Hello, World!')
+        with open(source_file, "w") as f:
+            f.write('Hello, World!')
+
     try:
         blob_client = _blob_client(source_file, connection_string)
         try:
