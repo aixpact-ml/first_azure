@@ -24,7 +24,7 @@ def predict(file_in, file_out, function, binary=False):
     print('DEBUG response:', len(response.content), response.content[:5])
     # TODO check for content
     if len(response.content) < 5:
-        response.content = b'Hello, World!'
+        print(response.content)
 
     try:
         blob_upload(file_out, response.content)  # TODO str or binary??
