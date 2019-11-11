@@ -91,7 +91,6 @@ def index():
                                data=str(open(file_dest, 'rb')))
 
 
-
             # print('DEBUG', type(file), '\n', request.files['file']) #, isinstance(file))
             # logging.info('DEBUG', type(file), '\n', request.files["file"]) #, isinstance(file))
             # assert 1 == 0, f'{request.files["file"]}'
@@ -110,12 +109,17 @@ def index():
 
             # Call serverless function
             # data = predict(file_dest, file_out, function)
-            data = predict(open(file_dest, 'rb').read(), file_out, function)  # test file handle
+            # data = predict(open(file_dest, 'rb').read(), file_out, function)  # test file handle
+
+            # Call function
+            url = f'https://hello-aixpact.azurewebsites.net/api/{function}'
+            response = requests.post(url, files={'file': open(file_dest, 'rb').read()})
+
 
             return jsonify(status='succes',
                            file=str(form.file.data),
                            data=str(open(file_dest, 'rb').read()[:100]),
-                           predict=str(data[:100]))  ###### was os.path....
+                           predict=str(response.text[:100]))  ###### was os.path....
 
         else:
             return render_template('base/upload.html', form=form)  # TODO
