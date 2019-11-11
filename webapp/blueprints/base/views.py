@@ -119,6 +119,7 @@ def index():
             return jsonify(status='succes',
                            file=str(form.file.data),
                            data=str(open(file_dest, 'rb').read()[:100]),
+                           reponse_status=response.status_code,
                            predict=str(response.text[:100]))  ###### was os.path....
 
         else:
