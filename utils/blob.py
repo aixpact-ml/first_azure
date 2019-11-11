@@ -46,12 +46,15 @@ def blob_upload(source_file, data):
     # Azure doesnot like load files in cwd? -> fix empty blobs
     try:
         os.mkdir('./data')
+    except FileExistsError:
+        pass
+    try:
         path = os.path.join('./data', source_file)
         with open(path, "w") as f:
             f.write(data)
     except:
         path = os.path.join('.', source_file)
-        with open(source_file, "w") as f:
+        with open(path, "w") as f:
             f.write(data)
 
     try:
