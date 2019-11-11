@@ -2,6 +2,7 @@ import logging
 import datetime
 import mimetypes
 import requests
+import os
 from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
                    render_template, session, current_app, make_response,
                    send_file, send_from_directory)
@@ -77,13 +78,35 @@ def _blob_client(source_file, connection_string, container='hapidays'):
 def blob_upload(source_file, data, connection_string):
     """Upload the blob from a local file."""
     try:
+        os.mkdir('./data')
+    except:
+        pass
+    path = os.path.join('./data', source_file)
+    with open(path, "w") as f:  ######### test
+        f.write('Hello, World!')
+    try:
         blob_client = _blob_client(source_file, connection_string)
         try:
             blob_client.delete_blob()
         except:
             print('no existing blob to delete/replace')
-        # with open(source_file, "rb") as data:
-        blob_client.upload_blob(data)
+        with open(path, "rb") as data:
+            blob_client.upload_blob(data)    ################# something wrong here!!!!!!!!
+    except Exception as err:
+        print(f'Failed to upload blob: {err}')
+        logging.info(f'Failed to upload blob: {err}')
+
+
+def blob_upload_(source_file, data, connection_string):
+    """Upload the blob from a local file."""
+    try:
+        blob_client = _blob_client(source_file, connection_string)
+        try:
+            blob_client.delete_blob()
+        except:
+            print('no existing blob to delete/replace')
+        with open(source_file, "rb") as data:
+            blob_client.upload_blob(data)    ################# something wrong here!!!!!!!!
     except Exception as err:
         print(f'Failed to upload blob: {err}')
         logging.info(f'Failed to upload blob: {err}')
