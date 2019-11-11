@@ -90,9 +90,6 @@ def index():
                                file=str(form.file.data),
                                data=str(open(file_dest, 'rb')))
 
-            return jsonify(status='succes',
-                           file=str(form.file.data),
-                           data=str(open(file_dest, 'rb').read()[:100]))  ###### was os.path....
 
 
             # print('DEBUG', type(file), '\n', request.files['file']) #, isinstance(file))
@@ -114,6 +111,11 @@ def index():
             # Call serverless function
             data = predict(file_dest, file_out, function)
             # data = predict(file, file_out, function)  # test this
+
+            return jsonify(status='succes',
+                           file=str(form.file.data),
+                           data=str(open(file_dest, 'rb').read()[:100]),
+                           predict=str(data[:100]))  ###### was os.path....
 
         else:
             return render_template('base/upload.html', form=form)  # TODO
