@@ -8,6 +8,7 @@ from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
                    send_file, send_from_directory)
 from azure.storage.blob import BlobServiceClient
 
+from .blob import blob_upload, blob_download
 from .decorators import fire_and_forget
 from config.settings import config
 
@@ -30,7 +31,7 @@ def predict(file_in, file_out, function, binary=False):
     #         f.write(response.text)
     # Upload temp file to blob
     try:
-        blob_upload(file_out, response, config.BLOB_CONX)
+        blob_upload(file_out, response.text)
         print(f'Finished function and uploaded result as blob {file_out}')
     except Exception as err:
         print('blob error:', err)
@@ -47,81 +48,82 @@ def allowed_file(filename, allowed_extensions=['txt', 'csv']):
            filename.rsplit('.', 1)[1].lower() in allowed_extensions
 
 
-def _blob_client(source_file, connection_string, container='hapidays'):
-    # from webapp.app import app
-    # https://azuresdkdocs.blob.core.windows.net/$web/python/azure-storage-blob/12.0.0b5/azure.storage.blob.html
-    assert connection_string != 'wtf', 'connection string undefined'
+# def _blob_client(source_file, connection_string, container='hapidays'):
+#     # from webapp.app import app
+#     # https://azuresdkdocs.blob.core.windows.net/$web/python/azure-storage-blob/12.0.0b5/azure.storage.blob.html
+#     assert connection_string != 'wtf', 'connection string undefined'
 
-    # Instantiate a new BlobServiceClient using a connection string
-    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+#     # Instantiate a new BlobServiceClient using a connection string
+#     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
 
-    # Instantiate a new ContainerClient
-    container_client = blob_service_client.get_container_client(container)
+#     # Instantiate a new ContainerClient
+#     container_client = blob_service_client.get_container_client(container)
 
-    # Create new container in the service
-    try:
-        container_client.create_container()
-    except Exception as err:
-        print(f'Failed to create/list container: {err}')
-        logging.info(f'Failed to create/list container: {err}')
+#     # Create new container in the service
+#     try:
+#         container_client.create_container()
+#     except Exception as err:
+#         print(f'Failed to create/list container: {err}')
+#         logging.info(f'Failed to create/list container: {err}')
 
-    try:
-        # Instantiate a new BlobClient
-        blob_client = container_client.get_blob_client(source_file)
-    except Exception as err:
-        print(f'Failed to create blob: {err}')
-        logging.info(f'Failed to create blob: {err}')
-        return None
-    return blob_client
-
-
-def blob_upload(source_file, data, connection_string):
-    """Upload the blob from a local file."""
-    try:
-        os.mkdir('./data')
-        path = os.path.join('./data', source_file)
-        with open(path, "w") as f:
-            f.write('Hello, World!')
-    except:
-        with open(source_file, "w") as f:
-            f.write('Hello, World!')
-
-    try:
-        blob_client = _blob_client(source_file, connection_string)
-        try:
-            blob_client.delete_blob()
-        except:
-            print('no existing blob to delete/replace')
-        with open(path, "rb") as data:
-            blob_client.upload_blob(data)    ################# something wrong here!!!!!!!!
-    except Exception as err:
-        print(f'Failed to upload blob: {err}')
-        logging.info(f'Failed to upload blob: {err}')
+#     try:
+#         # Instantiate a new BlobClient
+#         blob_client = container_client.get_blob_client(source_file)
+#     except Exception as err:
+#         print(f'Failed to create blob: {err}')
+#         logging.info(f'Failed to create blob: {err}')
+#         return None
+#     return blob_client
 
 
-def blob_upload_(source_file, data, connection_string):
-    """Upload the blob from a local file."""
-    try:
-        blob_client = _blob_client(source_file, connection_string)
-        try:
-            blob_client.delete_blob()
-        except:
-            print('no existing blob to delete/replace')
-        with open(source_file, "rb") as data:
-            blob_client.upload_blob(data)    ################# something wrong here!!!!!!!!
-    except Exception as err:
-        print(f'Failed to upload blob: {err}')
-        logging.info(f'Failed to upload blob: {err}')
+# def blob_upload(source_file, connection_string):
+#     """Upload the blob from a local file."""
+#     # Azure doesnot like load files in cwd? -> fix empty blobs
+#     try:
+#         os.mkdir('./data')
+#         path = os.path.join('./data', source_file)
+#         with open(path, "w") as f:
+#             f.write('Hello, World!')
+#     except:
+#         with open(source_file, "w") as f:
+#             f.write('Hello, World!')
+
+#     try:
+#         blob_client = _blob_client(source_file, connection_string)
+#         try:
+#             blob_client.delete_blob()
+#         except:
+#             print('no existing blob to delete/replace')
+#         with open(path, "rb") as data:
+#             blob_client.upload_blob(data)
+#     except Exception as err:
+#         print(f'Failed to upload blob: {err}')
+#         logging.info(f'Failed to upload blob: {err}')
 
 
-def blob_download(destination_file='something_temp.csv'):
-    """Download the blob to a local file."""
-    try:
-        blob_client = _blob_client(destination_file, connection_string)
-        with open(destination_file, "wb") as f:
-            f.write(blob_client.download_blob().readall())
-    except Exception as err:
-        logging.info(f'Failed to download blob: {err}')
+# def blob_upload_(source_file, connection_string):
+#     """Upload the blob from a local file."""
+#     try:
+#         blob_client = _blob_client(source_file, connection_string)
+#         try:
+#             blob_client.delete_blob()
+#         except:
+#             print('no existing blob to delete/replace')
+#         with open(source_file, "rb") as data:
+#             blob_client.upload_blob(data)    # empty blob??
+#     except Exception as err:
+#         print(f'Failed to upload blob: {err}')
+#         logging.info(f'Failed to upload blob: {err}')
+
+
+# def blob_download(destination_file='something_temp.csv'):
+#     """Download the blob to a local file."""
+#     try:
+#         blob_client = _blob_client(destination_file, connection_string)
+#         with open(destination_file, "wb") as f:
+#             f.write(blob_client.download_blob().readall())
+#     except Exception as err:
+#         logging.info(f'Failed to download blob: {err}')
 
 
 # def block_blob(filename, connection_string):
