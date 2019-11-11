@@ -23,6 +23,27 @@ from webapp.extensions import mail
 from . import blueprint
 
 
+def handle_uploaded_file(file, file_dest):
+    # Azure vs. local, web form vs. POST
+    try:
+        os.mkdir('./data')
+    except:
+        pass
+    file_in = os.path.join('./data', file_dest)
+    try:
+        # When file in is raw data
+        with open(file_dest, "wb") as dest:
+            dest.write(file)
+        print('DEBUG write to file', type(file))
+        logging.info('DEBUG write to file', type(file))
+    except:
+        # When file_in is <class 'werkzeug.datastructures.FileStorage'>
+        file.save(file_dest)
+        file.close()
+        print('DEBUG save as file', type(file))
+        logging.info('DEBUG save as file', type(file))
+
+
 @blueprint.route('/hello', methods=['GET', 'POST'])
 def hello():
     # return jsonify(status='succes', response='webapp is running')
@@ -59,26 +80,14 @@ def index():
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            # try:
-            #     # Local dev
-            #     file_in = os.path.join(config.LOCAL, file_in)  ######### full path
-            #     # file_out = os.path.join(config.LOCAL, file_out)
-            # except:
+
+            handle_uploaded_file(request.files['file'], file_in)
+
             print('DEBUG', type(file), '\n', request.files['file']) #, isinstance(file))
+            logging.info('DEBUG', type(file), '\n', request.files["file"]) #, isinstance(file))
+            assert 1 == 0, f'{request.files["file"]}'
             # local: DEBUG <class 'werkzeug.datastructures.FileStorage'>
             # Azure: DEBUG <class
-            # Azure
-            try:
-                os.mkdir('./data')
-            except:
-                pass
-            file_in = os.path.join('./data', file_in)
-            try:
-                with open(file_in, "wb") as f:
-                    f.write(request.files['file'])
-            except:
-                file.save(file_in) ########### file = storage(POST request) or data(form data)!
-                file.close()
 
             # Send email
             try:
