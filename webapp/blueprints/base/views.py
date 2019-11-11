@@ -29,7 +29,7 @@ def handle_uploaded_file(file, file_dest):
         os.mkdir('./data')
     except:
         pass
-    file_in = os.path.join('./data', file_dest)
+    file_dest = os.path.join('./data', file_dest)  # was file_in =
     try:
         # When file in is raw data
         with open(file_dest, "wb") as dest:
@@ -42,6 +42,7 @@ def handle_uploaded_file(file, file_dest):
         file.close()
         print('DEBUG save as file', type(file))
         logging.info('DEBUG save as file', type(file))
+    return file_dest
 
 
 @blueprint.route('/hello', methods=['GET', 'POST'])
@@ -82,7 +83,7 @@ def index():
             filename = secure_filename(file.filename)
             assert request.files['file'] == form.file.data, 'wtf'
             try:
-                handle_uploaded_file(form.file.data, file_in)
+                file_dest = handle_uploaded_file(form.file.data, file_in)
             except Exception as err:
                 return jsonify(status='failed',
                                error=err,
@@ -91,7 +92,7 @@ def index():
 
             return jsonify(status='succes',
                            file=str(form.file.data),
-                           data=str(open(os.path.join('./data', file_in), 'rb').read()[:100]))
+                           data=str(open(file_dest, 'rb').read()[:100]))  ###### was os.path....
 
 
             # print('DEBUG', type(file), '\n', request.files['file']) #, isinstance(file))
@@ -110,9 +111,9 @@ def index():
             # except Exception as err:
             #     print('email error:', err)
 
-            # # Call serverless function
-            # data = predict(file_in, file_out, function)
-            # # data = predict(file, file_out, function)  # test this
+            # Call serverless function
+            # data = predict(file_dest, file_out, function)
+            # data = predict(file, file_out, function)  # test this
 
         else:
             return render_template('base/upload.html', form=form)  # TODO
