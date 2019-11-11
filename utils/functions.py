@@ -21,17 +21,13 @@ def predict(file_in, file_out, function, binary=False):
     with open(file_in, 'r') as f:
         response = requests.post(url, files={'file': f})
 
-    # Save as temp file
-    # file_path = os.path.join(os.getcwd(), file_out)  ####### TODO
-    # if binary:
-    #     with open(file_out, 'wb') as f:
-    #         f.write(response.content)
-    # else:
-    #     with open(file_out, 'w') as f:
-    #         f.write(response.text)
-    # Upload temp file to blob
+    print('DEBUG response:', len(response.content), response.content)
+    # TODO check for content
+    if len(response.content) < 5:
+        response.content = b'Hello, World!'
+
     try:
-        blob_upload(file_out, response.content)
+        blob_upload(file_out, response.content)  # TODO str or binary??
         print(f'Finished function and uploaded result as blob {file_out}')
     except Exception as err:
         print('blob error:', err)

@@ -33,6 +33,7 @@ def _blob_client(source_file, container='hapidays'):
 
 def blob_upload(source_file, data):
     """Upload the blob from a local file."""
+
     # Azure doesnot like load files in cwd? -> fix empty blobs
     # path = os.path.join('./data', source_file)
     # try:
@@ -53,6 +54,7 @@ def blob_upload(source_file, data):
         blob_client.upload_blob(data)
         # with open(path, "rb") as data:
         #     blob_client.upload_blob(data)
+        print('Uploaded blob')
     except Exception as err:
         print(f'Failed to upload blob: {err}')
         logging.info(f'Failed to upload blob: {err}')
