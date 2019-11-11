@@ -59,11 +59,11 @@ def hello():
 def index():
     # https://stackoverflow.com/questions/38079288/flask-file-not-detecting-on-upload
     # When using email with file attached
-    from werkzeug.datastructures import CombinedMultiDict
-    form = FileForm(CombinedMultiDict((request.files, request.form)))
+    # from werkzeug.datastructures import CombinedMultiDict
+    # form = FileForm(CombinedMultiDict((request.files, request.form)))
 
     # If email without file upload
-    # form = FileForm(request.form)
+    form = FileForm()
 
     # Set csrf token in hidden field - avoid error message
     csrf_token = eval(str(form.csrf_token).split('=')[-1][:-1])
@@ -81,7 +81,7 @@ def index():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
 
-            if request.files['file'] != form.file.data:
+            if request.files['file'] == form.file.data:
                 return jsonify(status='succes',
                        file=str(request.files['file']))
             try:
