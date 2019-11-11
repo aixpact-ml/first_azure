@@ -110,7 +110,7 @@ def index():
 
             # Call serverless function
             # data = predict(file_dest, file_out, function)
-            data = predict(open(file_dest, 'rb'), file_out, function)  # test file handle
+            data = predict(open(file_dest, 'rb').read(), file_out, function)  # test file handle
 
             return jsonify(status='succes',
                            file=str(form.file.data),
