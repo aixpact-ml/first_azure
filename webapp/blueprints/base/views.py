@@ -81,27 +81,38 @@ def index():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
 
-            handle_uploaded_file(request.files['file'], file_in)
-
-            print('DEBUG', type(file), '\n', request.files['file']) #, isinstance(file))
-            logging.info('DEBUG', type(file), '\n', request.files["file"]) #, isinstance(file))
-            assert 1 == 0, f'{request.files["file"]}'
-            # local: DEBUG <class 'werkzeug.datastructures.FileStorage'>
-            # Azure: DEBUG <class
-
-            # Send email
+            if request.files['file'] != form.file.data:
+                return jsonify(status='succes',
+                       file=str(request.files['file']))
             try:
-                download = f'https://helloaixpact.blob.core.windows.net/hapidays/{file_out}'
-                template = render_template('base/email_message.html',
-                                            name=name,
-                                            filename=download)
-                send_email(template, email, download)
-            except Exception as err:
-                print('email error:', err)
+                handle_uploaded_file(request.files['file'], file_in)
+            except:
+                handle_uploaded_file(form.file.data, file_in)
 
-            # Call serverless function
-            data = predict(file_in, file_out, function)
-            # data = predict(file, file_out, function)  # test this
+            return jsonify(status='succes',
+                       file=str(request.files['file']),
+                       data=str(form.file.data))
+
+
+            # print('DEBUG', type(file), '\n', request.files['file']) #, isinstance(file))
+            # logging.info('DEBUG', type(file), '\n', request.files["file"]) #, isinstance(file))
+            # assert 1 == 0, f'{request.files["file"]}'
+            # # local: DEBUG <class 'werkzeug.datastructures.FileStorage'>
+            # # Azure: DEBUG <class
+
+            # # Send email
+            # try:
+            #     download = f'https://helloaixpact.blob.core.windows.net/hapidays/{file_out}'
+            #     template = render_template('base/email_message.html',
+            #                                 name=name,
+            #                                 filename=download)
+            #     send_email(template, email, download)
+            # except Exception as err:
+            #     print('email error:', err)
+
+            # # Call serverless function
+            # data = predict(file_in, file_out, function)
+            # # data = predict(file, file_out, function)  # test this
 
         else:
             return render_template('base/upload.html', form=form)  # TODO
