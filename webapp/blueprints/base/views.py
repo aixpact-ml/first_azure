@@ -145,7 +145,7 @@ def index():
             return jsonify(status='succes',
                            file=str(form.file.data),
                            data=str(open(file_dest, 'rb').read()[:100]),
-                           reponse=str(blob_uri))
+                           )
 
             # return jsonify(status='succes',
             #                file=str(form.file.data),
