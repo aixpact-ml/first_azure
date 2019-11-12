@@ -1,5 +1,5 @@
+{# Bootstrap WTF field with errors. #}
 {% macro render_bootstrap_field(field) %}
-
 <div class="form-group {% if field.errors %} error {% endif %}">
     <label class="col-lg-2 control-label">{{ field.label }}</label>
 

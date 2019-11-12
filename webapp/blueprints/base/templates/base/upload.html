@@ -33,7 +33,7 @@
                 {{ form.function.label }}: {{ form.function(size=64) }}
             </p> -->
 
-            {{ form.function.label }}: {{ f.form.function }}
+            {{ form.function.label }}: {{ f.render_bootstrap_field(form.function) }}
 
             <!-- Example single danger button -->
 <!--             <div class="btn-group">
