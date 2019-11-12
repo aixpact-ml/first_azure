@@ -58,9 +58,12 @@ def hello():
 
 @blueprint.route('/debug', methods=['GET', 'POST'])
 def debug():
-    # Call function
-    url = f'https://hello-aixpact.azurewebsites.net/api/{function}'
-    response = requests.post(url, data={'name': request.args.get('name')})
+    # POST function
+    # url = f'https://hello-aixpact.azurewebsites.net/api/{function}'
+    # response = requests.post(url, data={'name': request.args.get('name')})
+    # GET function
+    url = f'https://hello-aixpact.azurewebsites.net/api/{function}?name={request.args.get("name")}'
+    response = requests.get(url)
     return jsonify(status='succes',
                    response=str(response))
 
