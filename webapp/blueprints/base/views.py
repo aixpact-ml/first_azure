@@ -124,10 +124,7 @@ def index():
             # data = predict(open(file_dest, 'rb').read(), file_out, function)  # test file handle
 
             # Call serverless Azure function - returns blob_id
-            template = render_template('base/email_message.html',
-                            name=name,
-                            filename=blob_uri)
-            blob_uri = predict(file_dest, email, template, function)
+            blob_uri = predict(file_dest, email, function)
             # url = f'https://hello-aixpact.azurewebsites.net/api/{function}'
             # files = {'file': open(file_dest, 'rb')}
             # response = requests.post(url, files=files)
