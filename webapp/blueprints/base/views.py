@@ -142,7 +142,7 @@ def index():
             return jsonify(status='succes',
                            file=str(form.file.data),
                            data=str(open(file_dest, 'rb').read()[:100]),
-                           reponse=blob_uri)
+                           reponse=str(blob_uri))
 
             # return jsonify(status='succes',
             #                file=str(form.file.data),
@@ -154,6 +154,7 @@ def index():
         else:
             return render_template('base/upload.html', form=form)  # TODO
 
+        # TODO simpify thankyou
         return redirect(url_for('base_blueprint.thankyou',
                         file_in=file_in,
                         file_out=file_out,
