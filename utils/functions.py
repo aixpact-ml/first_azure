@@ -15,7 +15,7 @@ from .email import send_email
 
 
 @fire_and_forget
-def predict(file_dest, email, function):
+def predict(file_dest, email, template, function):
     """Call serverless function and save result as blob."""
 
     # Call serverless Azure function - returns blob_id
@@ -27,9 +27,9 @@ def predict(file_dest, email, function):
 
     # Send email
     try:
-        template = render_template('base/email_message.html',
-                                    name=name,
-                                    filename=blob_uri)
+        # template = render_template('base/email_message.html',
+        #                             name=name,
+        #                             filename=blob_uri)
         send_email(template, email, blob_uri)
     except Exception as err:
         print('email error:', err)
