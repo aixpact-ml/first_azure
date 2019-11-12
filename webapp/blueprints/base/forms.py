@@ -14,7 +14,7 @@ class FileForm(FlaskForm):
     email = EmailField('Email address', validators=[
         InputRequired("Please enter your email address."),
         Email("Please enter your email address.")])
-    function = SelectField('API name', choises=functions, validators=[DataRequired()])
+    function = SelectField('API name', choices=functions, validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
