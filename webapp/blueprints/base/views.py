@@ -91,8 +91,9 @@ def index():
                 blob_uri = predict(file_dest, email, function)
             except Exception as err:
                 return jsonify(status='failed', error=str(err))
-        else:
-            return render_template('base/upload.html', form=form)
+        #     return redirect(url_for('base_blueprint.thankyou', name=email.split('@')[0]))
+        # else:
+        #     return render_template('base/upload.html', form=form)
 
         return redirect(url_for('base_blueprint.thankyou', name=email.split('@')[0]))
 
