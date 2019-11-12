@@ -1,5 +1,5 @@
 {% extends "base_empty.html" %}
-{% import 'macros/dropdown.html' %}
+{% import 'macros/dropdown.html' as f with context %}
 
 {% block content %}
     <div class="jumbotron-fluid">
@@ -33,7 +33,7 @@
                 {{ form.function.label }}: {{ form.function(size=64) }}
             </p> -->
 
-            {{ form.function.label }}: {{ render_bootstrap_field(form.function) }}
+            {{ form.function.label }}: {{ f.form.function) }}
 
             <!-- Example single danger button -->
 <!--             <div class="btn-group">
