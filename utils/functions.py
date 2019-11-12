@@ -27,10 +27,11 @@ def predict(file_dest, email, function):
 
     # Send email
     try:
-        template = render_template('base/email_message.html',
-                                    name=name,
-                                    filename=blob_uri)
-        send_email(template, email, blob_uri)
+        # print('template')
+        # blob_uri = 'debug'
+        # print('send email')
+        send_email(email, blob_uri)
+        # print('email sent')
     except Exception as err:
         print('email error:', err)
 

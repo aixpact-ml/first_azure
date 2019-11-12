@@ -1,16 +1,26 @@
 from flask_mail import Message
 from webapp.extensions import mail
-from .decorators import fire_and_forget
+# from .decorators import fire_and_forget
+from jinja2 import Template
+import os
 
 
-@fire_and_forget
+# print([f for f in os.walk('./utils/')])
+
+
+# @fire_and_forget
 def send_async_email(msg):
     from webapp.app import app
     with app.app_context():
         mail.send(msg)
 
 
-def send_email(template, recipients, filename):
+def send_email(recipients, filename):
+
+    # Use template outside flask app
+    with open('./utils/templates/email_message.html') as f:
+        html_template = Template(f.read())
+
     try:
         msg = Message('hAPIdays from AIxPact',
                       sender='frank@aixpact.com',
@@ -18,17 +28,18 @@ def send_email(template, recipients, filename):
                       recipients=[recipients])
         name = recipients.split('@')[0].lower().capitalize()
         try:
-            msg.body = template
-            msg.html = template
+            # msg.body = template
+            msg.html = html_template.render(recipients=recipients, filename=filename)
+            # render_template(f'./email_message.html', recipients, filename)
         except Exception as err:
             print('msg.body err:', err)
-            msg.body = f"""Hi ' + {name} + ',
+            msg.body = f"""Hi {name},
             Thank you for joining hAPIdays, enjoy your result!
             Download: {filename}
 
             Cheers, Frank
             """
-            msg.html = None
+            # msg.html = None
 
         send_async_email(msg)
     except Exception as err:

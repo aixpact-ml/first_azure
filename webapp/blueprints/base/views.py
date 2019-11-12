@@ -132,9 +132,9 @@ def index():
 
             # Send email
             # try:
-            #     template = render_template('base/email_message.html',
-            #                                 name=name,
-            #                                 filename=blob_uri)
+            # template = render_template('base/email_message.html',
+            #                             name=name,
+            #                             filename=blob_uri)
             #     send_email(template, email, blob_uri)
             # except Exception as err:
             #     print('email error:', err)
