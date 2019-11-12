@@ -15,7 +15,15 @@
             <p>
                 <span>We will send the API result to your email.</span><br>
 
-                {{ form.email.label }}: {{ form.email(size=32) }}
+                <!-- {{ form.email.label }}: {{ form.email(size=32) }} -->
+                <div class="col-md-3 mb-3">
+                    <label for="email">Email</label>
+                    <input type="text" class="form-control" id="email" placeholder="me@email.com" required>
+                    <div class="invalid-feedback">
+                        Please provide a valid email address.
+                    </div>
+                </div>
+
             </p>
             <p>
                 <span>API function</span><br>
@@ -27,6 +35,11 @@
             <p></p>
         </form>
     </div>
+
+
+
+
+
 
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
