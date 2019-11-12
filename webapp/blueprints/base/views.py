@@ -94,7 +94,7 @@ def index():
         else:
             return render_template('base/upload.html', form=form)
 
-        return redirect(url_for('base_blueprint.thankyou', name=email.split('@')[0].lower().capitalize()))
+        return redirect(url_for('base_blueprint.thankyou', name=email.split('@')[0]))
 
     return render_template('base/upload.html', form=form)
 
