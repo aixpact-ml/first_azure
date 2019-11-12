@@ -131,20 +131,25 @@ def index():
             # blob_uri = f'https://helloaixpact.blob.core.windows.net/hapidays/{response.text}'
 
             # Send email
-            try:
-                template = render_template('base/email_message.html',
-                                            name=name,
-                                            filename=blob_uri)
-                send_email(template, email, blob_uri)
-            except Exception as err:
-                print('email error:', err)
+            # try:
+            #     template = render_template('base/email_message.html',
+            #                                 name=name,
+            #                                 filename=blob_uri)
+            #     send_email(template, email, blob_uri)
+            # except Exception as err:
+            #     print('email error:', err)
 
             return jsonify(status='succes',
                            file=str(form.file.data),
                            data=str(open(file_dest, 'rb').read()[:100]),
-                           reponse_status=response.status_code,
-                           reponse_reason=response.reason,
-                           predict=str(response.text[:100]))  ###### was os.path....
+                           reponse=blob_uri)
+
+            # return jsonify(status='succes',
+            #                file=str(form.file.data),
+            #                data=str(open(file_dest, 'rb').read()[:100]),
+            #                reponse_status=response.status_code,
+            #                reponse_reason=response.reason,
+            #                predict=str(response.text[:100]))  ###### was os.path....
 
         else:
             return render_template('base/upload.html', form=form)  # TODO
