@@ -124,10 +124,11 @@ def index():
             # data = predict(open(file_dest, 'rb').read(), file_out, function)  # test file handle
 
             # Call serverless Azure function - returns blob_id
-            url = f'https://hello-aixpact.azurewebsites.net/api/{function}'
-            files = {'file': open(file_dest, 'rb')}
-            response = requests.post(url, files=files)
-            blob_uri = f'https://helloaixpact.blob.core.windows.net/hapidays/{response.text}'
+            blob_uri = predict(file_dest, email, function)
+            # url = f'https://hello-aixpact.azurewebsites.net/api/{function}'
+            # files = {'file': open(file_dest, 'rb')}
+            # response = requests.post(url, files=files)
+            # blob_uri = f'https://helloaixpact.blob.core.windows.net/hapidays/{response.text}'
 
             # Send email
             try:

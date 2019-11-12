@@ -11,29 +11,30 @@ from azure.storage.blob import BlobServiceClient
 from .blob import blob_upload, blob_download
 from .decorators import fire_and_forget
 from config.settings import config
+from .email import send_email
 
 
-# @fire_and_forget
-def predict(file_in, file_out, function, binary=False):
+@fire_and_forget
+def predict(file_dest, email, function):
     """Call serverless function and save result as blob."""
-    # Call function
+
+    # Call serverless Azure function - returns blob_id
     url = f'https://hello-aixpact.azurewebsites.net/api/{function}'
-    response = requests.post(url, files={'file': file_in})
+    files = {'file': open(file_dest, 'rb')}
+    response = requests.post(url, files=files)
+    blob_uri = f'https://helloaixpact.blob.core.windows.net/hapidays/{response.text}'
+    name = email.split('@')[0].lower().capitalize()
 
-    # with open(file_in, 'rb') as f:   #### rb or r?
-    #     response = requests.post(url, files={'file': f.read()})
-
-    print('DEBUG response:', len(response.content), response.content[:5])
-    # TODO check for content
-    if len(response.content) < 5:
-        print(response.content)
-
+    # Send email
     try:
-        blob_upload(file_out, response.content)  # TODO str or binary??
-        print(f'Finished function and uploaded result as blob {file_out}')
+        template = render_template('base/email_message.html',
+                                    name=name,
+                                    filename=blob_uri)
+        send_email(template, email, blob_uri)
     except Exception as err:
-        print('blob error:', err)
-    return response.text
+        print('email error:', err)
+
+    return blob_uri
 
 
 def _log_msg(msg):

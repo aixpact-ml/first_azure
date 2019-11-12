@@ -3,7 +3,7 @@ from webapp.extensions import mail
 from .decorators import fire_and_forget
 
 
-# @fire_and_forget
+@fire_and_forget
 def send_async_email(msg):
     from webapp.app import app
     with app.app_context():
