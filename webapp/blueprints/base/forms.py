@@ -5,8 +5,9 @@ from wtforms.validators import DataRequired, Email, InputRequired
 from flask_wtf.file import FileField, FileRequired
 
 
-functions = [('1', 'HttpTrigger'),
-             ('2', 'Hello')]
+functions = [('HttpTrigger', 'Forecast POS'),
+             ('ForecastAPI', 'Forecast temperature'),
+             ('Hello', 'Hello, World!')]
 
 
 class FileForm(FlaskForm):
