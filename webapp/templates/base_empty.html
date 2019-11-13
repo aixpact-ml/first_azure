@@ -52,6 +52,21 @@
           crossorigin="anonymous"></script>
       {% endblock %}
       <!-- Custom Theme Scripts -->
+
+      <!-- OnChange Form handler -->
+      <!-- Opens route on SelectField change -->
+      <!-- https://github.com/PrettyPrinted/dynamic_select_flask_wtf_javascript/-->
+      <script>
+        var field_select = document.getElementById("function");
+        field_select.onchange = function()  {
+            fetch('/populate/' + field_select.value).then(function(response) {
+                response.json().then(function(data) {
+                    document.getElementById("test_dynamic").innerHTML = data;
+                })
+            });
+        }
+
+      </script>
     {% endblock body %}
   </body>
 </html>

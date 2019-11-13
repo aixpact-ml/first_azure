@@ -77,10 +77,13 @@ def index():
     csrf_token = eval(str(form.csrf_token).split('=')[-1][:-1])
     form.csrf_token.data = csrf_token
 
+    # form.comments.data = form.email.data
+
     if form.validate_on_submit():
         file = form.file.data
         email = form.email.data
         function = form.function.data
+        # form.comments.data = form.email.data
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
@@ -93,9 +96,6 @@ def index():
                 return jsonify(status='failed', error=str(err))
         logging.info('DEBUG log', blob_uri)
         print('DEBUG print', blob_uri)
-        #     return redirect(url_for('base_blueprint.thankyou', name=email.split('@')[0]))
-        # else:
-        #     return render_template('base/upload.html', form=form)
 
         return redirect(url_for('base_blueprint.thankyou', name=email.split('@')[0]))
 
@@ -113,3 +113,26 @@ def function(function_name):
     """Takes some time....."""
     response = requests.get(f'http://www.aixpact.ml/api/{function_name}')
     return response.text
+
+
+@blueprint.route('/populate/<value>')
+def populate(value):
+    # TODO get/load instructions from file/dict/env/db
+    comments_dict = {'HttpTrigger': 'Forecast instructions here......',
+                    'Hello': 'Hello instructions here......',
+                    'ForecastAPI': 'Forecast Temperature........'
+                    }
+
+    return jsonify(comments_dict.get(value))
+
+    # cities = City.query.filter_by(state=state).all()
+
+    # cityArray = []
+
+    # for city in cities:
+    #     cityObj = {}
+    #     cityObj['id'] = city.id
+    #     cityObj['name'] = city.name
+    #     cityArray.append(cityObj)
+
+    # return jsonify({'cities' : cityArray})

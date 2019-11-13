@@ -42,6 +42,9 @@ def config_app(app):
     app.config['MAIL_USE_TLS'] = True
     app.config['MAIL_USE_SSL'] = False
 
+    # Refresh templates
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+
     #
     # app.config['SERVER_NAME'] = '192.168.99.100:8000'
     # app.config['WTF_CSRF_CHECK_DEFAULT'] = Falseport
