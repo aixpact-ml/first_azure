@@ -91,6 +91,8 @@ def index():
                 blob_uri = predict(file_dest, email, function)
             except Exception as err:
                 return jsonify(status='failed', error=str(err))
+        logging.info('DEBUG log', blob_uri)
+        print('DEBUG print', blob_uri)
         #     return redirect(url_for('base_blueprint.thankyou', name=email.split('@')[0]))
         # else:
         #     return render_template('base/upload.html', form=form)
@@ -103,7 +105,7 @@ def index():
 @blueprint.route("/thankyou")
 def thankyou():
     name = request.args.get('name')
-    return render_template('base/thankyou.html', name=name)
+    return render_template('base/thank_you.html', name=name)
 
 
 @blueprint.route("/function/<function_name>")

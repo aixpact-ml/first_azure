@@ -10,39 +10,41 @@
           {# <div class="card-header text-white bg-secundary"><h4>h<b>API</b>days</h4></div> #}
           <div class="card-body text-primary">
             <h4 class="card-title">
-                <div class="col-md-3 mb-3">h<b>API</b>days</div>
+                <div class="col-md-6 mb-6">Thank you for trying h<b>API</b>days!</div>
             </h4>
             <p class="card-text">
                 <div class="col-md-6 mb-6">
-                    Upload your file and you will receive an email with your result!
+                    <p>Hi {{ name.capitalize() }},</p>
+                    <p>We will send your result by email shortly.</p>
+                    <p>Cheers, Frank</p>
                 </div>
                 <br>
 
-                <form action="" method="post" enctype="multipart/form-data" novalidate>
+{#                 <form action="" method="post" enctype="multipart/form-data" novalidate>
                     {{ form.hidden_tag() }}
 
-                    <div class="col-md-6 mb-6">
+                    <div class="col-md-3 mb-3">
                         {% call f.form_group(form.function, css_class='sm-margin-bottom',
                         placeholder='' ) %}
                         {% endcall %}
                     </div>
 
-                    <div class="col-md-6 mb-6">
+                    <div class="col-md-3 mb-3">
                         {% call f.form_group(form.email, css_class='sm-margin-bottom',
                         placeholder='me@email.com' ) %}
                         {% endcall %}
                     </div>
 
-                    <div class="col-md-6 mb-6">
+                    <div class="col-md-3 mb-3">
                         {% call f.form_group(form.file, css_class='sm-margin-bottom',
                         placeholder='' ) %}
                         {% endcall %}
                     </div>
 
-                    <div class="col-md-6 mb-6">
+                    <div class="col-md-3 mb-3">
                         <button type="submit" class="btn btn-outline-primary">Get it!</button>
                     </div>
-                </form>
+                </form> #}
 
 
             </p>

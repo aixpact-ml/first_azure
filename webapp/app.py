@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 # from flask_login import current_user
 from importlib import import_module
@@ -16,7 +17,8 @@ from .extensions import csrf  #, db, login_manager
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__,
+                static_folder='../assets/static')
     config_app(app)
     register_blueprints(app)
     init_extensions(app)
@@ -42,10 +44,10 @@ def config_app(app):
 
     #
     # app.config['SERVER_NAME'] = '192.168.99.100:8000'
-    # app.config['WTF_CSRF_CHECK_DEFAULT'] = False
+    # app.config['WTF_CSRF_CHECK_DEFAULT'] = Falseport
 
     # Sanity check config settings
-    assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', 'Flask-Mail settings failed'
+    assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', f'Flask-Mail settings failed {os.getcwd()}'
     assert config.FRANK == 'test this environmental value', 'config settings failed'
     assert config.FRANK == app.config['FRANK'], 'config settings failed'
     assert app.config['SECRET_KEY'] == config.SECRET_KEY, 'SECRET_KEY not set'
