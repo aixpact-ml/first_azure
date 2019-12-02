@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>displaCy</title>
+    </head>
+
+    <body style="font-size: 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; padding: 4rem 2rem; direction: ltr">
+<figure style="margin-bottom: 6rem">
+<h2 style="margin: 0">AIxPact Resume Analyzer</h2>
+
+<div class="entities" style="line-height: 2.5; direction: ltr">chardet==3.0.4</br>dash==0.21.0</br>dash-core-components==0.22.1</br>dash-html-components==0.10.0</br>dash-renderer==0.12.1</br>decorator==4.3.0</br>nbformat==4.4.0</br>numpy==1.14.2</br>pandas==0.22.0</br>
+<mark class="entity" style="background: #FFF000; padding: 0.45em 0.6em; margin: 0 0.25em; line-height: 1; border-radius: 0.35em;">
+    pandas
+    <span style="font-size: 0.8em; font-weight: bold; line-height: 1; border-radius: 0.35em; text-transform: uppercase; vertical-align: middle; margin-left: 0.5rem">TECH_STACK</span>
+</mark>
+-datareader==0.6.0
+plotly==2.5.1
+python-dateutil==2.7.2
+pytz==2018.4
+requests==2.18.4
+urllib3==1.22
+Werkzeug==0.14.1
+</div>
+</figure>
+</body>
+</html>

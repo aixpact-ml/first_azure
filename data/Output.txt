@@ -1,0 +1,129 @@
+Frank J. Ebbers
+Baambrugge, Netherlands | +31615081043  | frank@aixpact.com | linkedin.com/in/ebbers | github.com/aixpact
+
+
+CAREER SUMMARY
+
+For many years I worked in the Fashion Industry, as Buying/Sourcing Manager, with companies around the world dealing with people of diverse backgrounds and cultures. I built sustainable and profitable networks of suppliers and managed huge amount of orders/purchase contracts representing millions of Euro’s. In all jobs I quickly gained full trust and paid back by results in profit and business excellence. I accomplished this by:
+Learning fast what matters most to safeguard stakeholders.
+Organising tasks by using a proactive and data driven approach.
+Staying calm and organised under pressure and in a fast-paced and dynamic environment, while keeping the helicopter/holistic view.
+Finding common grounds to solve complex issues by expertise (data), respect,  patience and strategic or out-of-the-box thinking.
+Being a true multidisciplinary-multi-tasker, ‘a 5-legged sheep’.
+Work hard, stay curious, stay modest and enjoy.
+In 2016 I changed course and followed my heart to study Computer and Data Science.
+My goal is to work as a Data Scientist consulting for companies who need expertise to transform their organisation to be data driven and develop(hands-on) AI solutions to improve their business models, strategy, operational excellence and as result to safeguard stakeholders and sustainability.
+
+
+SKILLS AND STRENGTHS
+
+Coding:
+Proficient in: Python
+Basic working proficiency: R, Java, Javascript, HTML, CSS, SQL
+
+Proficient in Python frameworks and libraries:
+Data Science: Numpy, Pandas, Scipy, Sympy, StatsModels
+Machine/Deep Learning: Scikit/Sklearn, Tensorflow, Keras, PyTorch
+Computer Vision: OpenCV
+NLP: NLTK, GenSim
+Network, geolocation: Networkx, GeoPy, Gephi
+Web, scraping: Flask, Requests, Selenium, BeautifulSoup, Scrapy
+SQL: SQLAlchemy, PyMySQL, KSQL
+Visualization: MatplotLib, Seaborn, Bokeh, Plotly, Dash
+
+Proficient in applying and engineering algorithms and models:
+Statistical analysis and time series: T-test, ANOVA, SARIMAX, Holt-Winters, FastFourierTransform
+Deep Neural Networks, like: DNN, CNN, RNN/LSTM, AE, GAN, U-Net
+Machine Learning models, like: K-Means, KNN, Hierarchical Clustering, Decision Trees, Regression Trees, PCA, Random Forest, AdaBoost, GradientBoosting, Logistic Regression, SVM, Naïve-Bayes, Linear Regression, Ridge, Lasso, LDA, LSI
+
+Basic working proficiency in Data Engineering and DevOps:
+Data stream, storage and query: Kafka, SQL, NOSQL, KSQL(Kafka)
+API: (REST)API, JSON, Kong, Flask
+Cloud: AWS, Azure, Google Cloud, Digital Ocean
+DevOps and other: Git, Docker, Bash
+
+Other skills and strengths:
+Self motivated professional with entrepreneurial mindset
+Can-do-better and problem avoiding/solving attitude
+Hands-on and accountable attitude
+Curious craftsman and innovator
+Clever negotiator with influential skills
+Modest and genuine leader (lead by example)
+Expert in product-, project- and category- and QA management
+
+
+PROFESSIONAL ACCOMPLISHMENTS - DATA SCIENCE
+
+AI As A Service - research and boilerplate development (02/2019 - Present)
+smart and scalable web app in Python
+using Docker compose with NGINX, Kafka, KSQL, ElasticSearch, Kibana, Celery, Redis, Postgres, Kong, Minio, Flask, Dash and Superset.
+functionality; authentication, stream I/O, AI algorithms, dashboards.
+Sales Forecast API (10/2018 - 02/2019)
+Model predicts future sales for 12 months, based on maximum 24 months sales history (POS data), while data is just sales units per item and may have little history and lack stock levels. Results are on par with leading industry models. API based on SKLearn, FFT, Flask and Redis.
+Extract sales pattern with exponential smoothing and FFT.
+Find similar sales pattern with KNN, when not enough sales history
+Visual recommender on style and color (09/2018)
+POC algorithm in Jupyter using Keras and SKLearn.
+Extracting feature-maps with pre-trained VGG16 and PCA
+Build KDTree with [feature-maps, colours] to search for most similar items in n-log-n time.
+Contextual/semantic search (09/2018)
+Optimised text search and conversion rate. POC algorithm in Jupyter using NLTK and GenSim.
+Built spelling check and correction, to best fit website dictionary
+Used LDA model to find item (description) with highest similarity score
+Kaggle TGS Salt Identification Challenge (top 67%) - (08/2018)
+Identifying salt layers in seismic images. Using Keras, OpenCV, SKLearn.
+Pre- and post-process and augment the images with OpenCV
+Built, evaluated and optimised models and metrics; CNN, U-Net (Encoder/Decoder)
+
+
+PROFESSIONAL ACCOMPLISHMENTS - FASHION INDUSTRY
+
+Transformed business categories to be more sustainable, more responsive, with higher stock turn, higher margins and more value-for-money products.
+Developed expertise in supply chain on sustainability, compliance(social and environmental), due-diligence and QAD, to comply with industry leading standards (C&A).
+Strengthened the company's competitiveness and profitability by building and nurturing a supplier network.
+Negotiated tens of thousand orders based on expertise, soft skills and data intelligence.
+Developed and maintained business data structures; automatic Excel sheets (VBA) and later a company-wide ERP system made with Filemaker© (SQL).
+Managed and developed international buying and merchandising teams as a mentor and teacher based on excellence principles and lead by example.
+
+
+WORK HISTORY
+
+AIXPACT, Baambrugge, Founder, Data Scientist, Business analyst, Machine Learning Engineer and Consultant, 09/2018 - Present
+D5 FASHION, Amstelveen, Manager of buying team and merchandise offices in China, Indonesia and Bangladesh, 03/2000 - 05/2016
+VROOM & DREESMANN, Amsterdam, Sr. buyer of Men’s private labels, 03/1999 - 08/2000
+KIEN, Utrecht, Manager of Men’s buying team, 09/1991 - 03/1999
+PUMPKIN, Breukelen, Start-up buying/sourcing team, 09/1990 - 09/1991
+WE FASHION, Utrecht, Apparel Engineer and Field QC (±35% in factories), 09/1987 - 09/1990
+
+
+EDUCATION
+
+COMPUTER VISION / DEEP LEARNING
+Specialization Certificate, 2018, deeplearning.ai (Andrew Ng), Deep Learning Specialization (Python)
+Specialization Certificate, 2019, deeplearning.ai (Andrew Ng), TensorFlow in Practice Specialization (Python)
+
+NLP
+Specialization Certificate, 2018, University of Michigan, Applied social network analysis (Python)
+Specialization Certificate, 2018, University of Michigan, Applied text mining (Python)
+Successfully completed, 2019, deeplearning.ai (Andrew Ng), Sequence Models (Python)
+Specialization Certificate, 2019, deeplearning.ai (Andrew Ng), Natural Language Processing in TensorFlow (Python)
+
+MACHINE LEARNING
+Specialization Certificate, 2018, University of Michigan, Applied Machine Learning (Python)
+
+DATA SCIENCE
+Audit completed, 2017, Stanford, Statistical Learning (R)
+Audit completed, 2017, GeorgiaTech, Analytics Modelling (R)
+Audit completed, 2017, Johns Hopkins, Data Science (R)
+Audit completed, 2018, UC San Diego, Data Science (Python)
+
+COMPUTER SCIENCE
+Certificate, 2016, Harvard, CS50 (C, JavaScript)
+Successfully completed, 2017, MIT, Software Construction (Java)
+Successfully completed, 2017, Princeton, Algorithms (Java)
+
+MATHEMATICS / STATISTICS
+Successfully completed, 2017, MIT, Introduction to Probability
+Specialization Certificate, 2018, Imperial College London, Mathematics for Machine Learning (Python)
+GARMENT INDUSTRY
+BSc, 1987, Hogeschool van Amsterdam, AMFI, AMSTERDAM
