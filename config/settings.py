@@ -16,6 +16,9 @@ if os.getcwd() != cwd:
                                 for item, value in os.environ.items()
                                 if item.split('_')[0] == 'APPSETTING'}
 
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS']
+    os.environ['DIALOGFLOW_PROJECT_ID'] = os.environ['APPSETTING_DIALOGFLOW_PROJECT_ID']
+
     # Save dialogFlow creds form Azure ENV - keep out of github - link in .env
     # try:
     #     with open(os.path.join(os.getcwd(), 'dialogflow_creds.json'), 'w') as f:
