@@ -164,8 +164,8 @@ def streamlit(dash):
     form = UploadForm()
 
     # Set csrf token in hidden field - avoid error message
-    csrf_token = eval(str(form.csrf_token).split('=')[-1][:-1])
-    form.csrf_token.data = csrf_token
+    # csrf_token = eval(str(form.csrf_token).split('=')[-1][:-1])
+    # form.csrf_token.data = csrf_token
 
     if form.validate_on_submit():
         file = form.file.data
