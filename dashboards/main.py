@@ -6,6 +6,9 @@ import streamlit as st
 from vega_datasets import data
 import pandas as pd
 import numpy as np
+from pathlib import Path
+
+# from _first_azure.config.settings import config
 
 # from webapp.app import session
 
@@ -24,7 +27,11 @@ st.title("AIxPact Dashboard Main")
 name = st.text_input("What's your name?", '')
 st.write(name)
 
-path = "/_first_azure/data"
+# st.write(os.getcwd())
+path = Path('./data')
+# st.write(path)
+
+# path = os.path.join('./data', file_temp)  # "/_first_azure/data"
 
 # st.markdown(os.listdir("/_first_azure/"))
 file = f'{path}/{st.selectbox("select file: ", os.listdir(path))}'

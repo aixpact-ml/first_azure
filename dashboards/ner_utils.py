@@ -11,6 +11,7 @@ from spacy.lemmatizer import Lemmatizer
 from spacy.lookups import Lookups
 
 from ner_constants import ENNEAGRAM, HEADERS, MEASURABLE_RESULTS, OCEANS, POS, SKILLS, TECH_STACK, colors
+# from config.settings import config
 
 import streamlit as st
 

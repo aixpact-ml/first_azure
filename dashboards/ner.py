@@ -7,14 +7,15 @@ from pathlib import Path
 from weasyprint import HTML, CSS
 from weasyprint.fonts import FontConfiguration
 
+# from config.settings import config
+
 from ner_utils import pos_matcher
 from ner_constants import POS
 
 font_config = FontConfiguration()
 
-PATH = "/_first_azure/data"
+PATH = Path('./data')
 text = ''
-
 
 @st.cache(allow_output_mutation=True, persist=True)
 def load_vocab():
