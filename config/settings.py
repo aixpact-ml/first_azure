@@ -11,12 +11,14 @@ cwd = '/_first_azure'
 
 if os.getcwd() != cwd:
     # Azure runtime ENV variables set in Azure API portal configuration
+    # Azure ENV variables start with: APPSETTING_
     config.__dict__ = {'_'.join(item.split('_')[1:]): value
                                 for item, value in os.environ.items()
                                 if item.split('_')[0] == 'APPSETTING'}
     # Save dialogFlow creds form Azure ENV - keep out of github - link in .env
+
     with open('dialogflow_creds.json', 'w') as f:
-        f.write(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+        f.write(os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS'])
 
 else:
     # Local ENV variables set by export
