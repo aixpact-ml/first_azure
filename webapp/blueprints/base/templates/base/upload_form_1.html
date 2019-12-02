@@ -1,0 +1,74 @@
+{% extends "base_empty.html" %}
+{% import 'macros/form.html' as f with context %}
+
+
+{% block content %}
+    <div class="jumbotron-fluid">
+        <br>
+        <div class="card border-dark mb-3" style="max-width: 80rem;">
+            <img class="card-img-top" src="{{url_for('static', filename='./clouds3.jpg')}}" alt="Card image cap">
+          {# <div class="card-header text-white bg-secundary"><h4>h<b>API</b>days</h4></div> #}
+          <div class="card-body text-primary">
+            <h4 class="card-title">
+                <div class="col-md-3 mb-3">h<b>API</b>days</div>
+            </h4>
+            <p class="card-text">
+                <div class="col-md-6 mb-6">
+                    Upload your file and you will receive an email with your result!
+                </div>
+                <br>
+                <form action="" method="post" enctype="multipart/form-data" id="form-id" novalidate>
+
+                    {{ form.hidden_tag() }}
+
+                    <div class="col-md-6 mb-6">
+                        {% call f.form_group(form.function, css_class='sm-margin-bottom',
+                        placeholder='') %}
+                        {% endcall %}
+                    </div>
+
+                    {# Dynamically added text by JS function in base template #}
+                    <div class="col-md-6 mb-6 text-dark">
+                        <small id="dynamic-text">File format instructions here...</small>
+                        <p></p>
+                    </div>
+
+
+                    <div class="col-md-6 mb-6">
+                        {% call f.form_group(form.email, css_class='sm-margin-bottom',
+                        placeholder='me@email.com') %}
+                        {% endcall %}
+                    </div>
+
+                    <div class="col-md-6 mb-6">
+                        {% call f.form_group(form.file, css_class='sm-margin-bottom',
+                        placeholder='') %}
+                        {% endcall %}
+                    </div>
+
+                    {# Dynamic div: id="HttpTrigger" #}
+                    {# <div class="visible-or-not" id="HttpTrigger"> #}
+                        <div class="col-md-6 mb-6" id="HttpTrigger">
+                            {% call f.form_group(form.comments, css_class='sm-margin-bottom',
+                            placeholder='', id='comments', value=form.email.data) %}
+                            {% endcall %}
+                        </div>
+                    {# </div> #}
+
+                    {# Dynamic div: id="HttpTrigger" #}
+                    <div class="col-md-6 mb-6" id="HttpTrigger">
+                        {% call f.form_group(form.agree, css_class='sm-margin-bottom',
+                        placeholder='I unconditionally participate!', id='agree') %}
+                        {% endcall %}
+                    </div>
+
+                    <div class="col-md-6 mb-6">
+                        <button type="submit" class="btn btn-outline-primary">Get it!</button>
+                    </div>
+                </form>
+            </p>
+          </div>
+        </div>
+    </div>
+{% endblock %}
+

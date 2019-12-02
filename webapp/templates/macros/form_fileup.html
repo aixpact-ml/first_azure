@@ -1,0 +1,24 @@
+{# {% extends "base/upload.html" %}
+{% extends "base_empty_cards.html" %}
+{% import 'macros/form.html' as f with context %} #}
+{% extends "base_empty_cards.html" %}
+{% import 'macros/form.html' as f with context %}
+
+{% macro usedalot(form) %}
+{# re-use same block mulitple times as seperate blocks #}
+
+    <form class="form-inline justify-content-end input-lg" action="" method="post" enctype="multipart/form-data" id="form-id" novalidate style="margin:-30px 0 0 0;">
+
+    {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {% call f.form_group(form.file, css_class='sm-margin-bottom', placeholder='') %}
+            {% endcall %}
+
+        </div>
+            <button type="submit" class="btn btn-outline-primary" style="margin:0 -50px 0 10px;">Upload file</button>
+
+    </form>
+</div>
+
+{% endmacro %}

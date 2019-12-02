@@ -1,0 +1,55 @@
+{% extends "base_empty_chat.html" %}
+
+{% block content %}
+
+<!-- Button trigger modal -->
+<div class="container">
+    <div class="row">
+        <div class="col-auto">
+            <button type="button" class="button-chat chat-gif" data-toggle="modal" data-target="#exampleModal">
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal pop-up chatbot -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="font-size: .8em">
+      <div class="modal-header" style="margin: -5px 0 -5px 0;">
+        <img src="{{url_for('static', filename='images/chatbot_robot.gif')}}" alt="profile-image" class="profile">
+        <h5 class="modal-title" id="exampleModalLabel" style="font-size: 1em">AIlean</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+         style="font-size: 1rem;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="chat-container">
+
+            <!-- initial chat messages -->
+            <div class="chat-message col-md-5 offset-md-7 bot-message">
+              Hi I'm AIlean your aissistant!
+            </div>
+            <div class="chat-message col-md-5 offset-md-7 bot-message">
+              Nice meeting you, just tell me what I can do for you.
+            </div>
+            <div class="chat-message col-md-5 offset-md-7 bot-message">
+              BTW, what's yr name?
+            </div>
+
+        </div>
+
+      <div class="modal-footer">
+        <form id="target">
+           <input class="input col-md-8" type="text" value="" placeholder="Enter message..." id="input_message">
+           <input type="submit" hidden>
+        </form>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

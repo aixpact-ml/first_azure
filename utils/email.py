@@ -5,9 +5,6 @@ from jinja2 import Template
 import os
 
 
-# print([f for f in os.walk('./utils/')])
-
-
 # @fire_and_forget
 def send_async_email(msg):
     from webapp.app import app

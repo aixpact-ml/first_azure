@@ -1,60 +1,39 @@
-{% extends "base_empty.html" %}
-{% import 'macros/form.html' as f with context %}
+{% extends "base_empty_cards.html" %}
+{# {% import 'macros/form.html' as f with context %} #}
+{% from 'macros/form_.html' import usedalot %}
 
+{# bootstrap snippets #}
+{# https://bootsnipp.com/snippets/X2Wlp #}
+{# https://startbootstrap.com/snippets/ #}
 
 {% block content %}
-    <div class="jumbotron-fluid">
-        <br>
-        <div class="card border-dark mb-3" style="max-width: 80rem;">
-            <img class="card-img-top" src="{{url_for('static', filename='./clouds3.jpg')}}" alt="Card image cap">
-          {# <div class="card-header text-white bg-secundary"><h4>h<b>API</b>days</h4></div> #}
-          <div class="card-body text-primary">
-            <h4 class="card-title">
-                <div class="col-md-3 mb-3">h<b>API</b>days</div>
-            </h4>
-            <p class="card-text">
-                <div class="col-md-6 mb-6">
-                    Upload your file and you will receive an email with your result!
+
+<section>
+    <div class="container">
+        <div class="row">
+            <!--Card-->
+            <div class="col-md-6 mt-6">
+                <div class="card profile-card-5">
+                    <div class="card-img-block">
+                        <img class="card-img-top" src="https://images.unsplash.com/photo-1474631245212-32dc3c8310c6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1824&q=80" alt="Card image cap"
+                        style="width: 110%; height: 250px; object-fit: cover; margin: -5px 0 0 0;">
+                    </div>
+                    <div class="card-body pt-0">
+                        <h2 class="card-title">h<b>API</b>days</h2>
+                        <p class="card-text">
+                            Upload your file and you will receive an email with your result!
+                        </p>
+                           {# Repeated form blocks imported as macro with form as param #}
+                           {{ usedalot(form) }}
+                  </div>
                 </div>
-                <br>
-                <form action="" method="post" enctype="multipart/form-data" novalidate>
-                    {{ form.hidden_tag() }}
+            </div>
 
-                    <div class="col-md-6 mb-6">
-                        {% call f.form_group(form.function, css_class='sm-margin-bottom',
-                        placeholder='', autofocus='autofocus') %}
-                        {% endcall %}
-                    </div>
-                    <div class="col-md-6 mb-6 text-dark">
-                        <small id="test_dynamic">File format instructions here....</small>
-                        <p></p>
-                    </div>
-
-                    <div class="col-md-6 mb-6">
-                        {% call f.form_group(form.email, css_class='sm-margin-bottom',
-                        placeholder='me@email.com', autofocus='autofocus') %}
-                        {% endcall %}
-                    </div>
-
-                    <div class="col-md-6 mb-6">
-                        {% call f.form_group(form.file, css_class='sm-margin-bottom',
-                        placeholder='', autofocus='autofocus') %}
-                        {% endcall %}
-                    </div>
-
-{#                     <div class="col-md-6 mb-6">
-                        {% call f.form_group(form.comments, css_class='sm-margin-bottom',
-                        placeholder='', id='comments', autofocus='autofocus', value=form.email.data) %}
-                        {% endcall %}
-                    </div> #}
-
-                    <div class="col-md-6 mb-6">
-                        <button type="submit" class="btn btn-outline-primary">Get it!</button>
-                    </div>
-                </form>
-            </p>
-          </div>
         </div>
     </div>
+</section>
+
 {% endblock %}
+
+
 

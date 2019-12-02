@@ -1,0 +1,58 @@
+{# {% extends "base/upload.html" %}
+{% extends "base_empty_cards.html" %}
+{% import 'macros/form.html' as f with context %} #}
+
+{# TODO #}
+{% block form %}
+
+<form action="" method="post" enctype="multipart/form-data" id="form-id" novalidate>
+
+    {{ form.hidden_tag() }}
+
+    <div class="col-md-6 mb-4">
+        {% call f.form_group(form.function, css_class='sm-margin-bottom',
+        placeholder='') %}
+        {% endcall %}
+    </div>
+
+    {# Dynamically added text by JS function in base template #}
+    <div class="col-md-6 mb-4 text-dark">
+        <small id="dynamic-text">File format instructions here...</small>
+        <p></p>
+    </div>
+
+
+    <div class="col-md-6 mb-4">
+        {% call f.form_group(form.email, css_class='sm-margin-bottom',
+        placeholder='me@email.com') %}
+        {% endcall %}
+    </div>
+
+    <div class="col-md-6 mb-4">
+        {% call f.form_group(form.file, css_class='sm-margin-bottom',
+        placeholder='') %}
+        {% endcall %}
+    </div>
+
+    {# Dynamic div: id="HttpTrigger" #}
+    {# <div class="visible-or-not" id="HttpTrigger"> #}
+        <div class="col-md-6 mb-4" id="HttpTrigger">
+            {% call f.form_group(form.comments, css_class='sm-margin-bottom',
+            placeholder='', id='comments', value=form.email.data) %}
+            {% endcall %}
+        </div>
+    {# </div> #}
+
+    {# Dynamic div: id="HttpTrigger" #}
+    <div class="col-md-6 mb-4" id="HttpTrigger">
+        {% call f.form_group(form.agree, css_class='sm-margin-bottom',
+        placeholder='I unconditionally participate!', id='agree') %}
+        {% endcall %}
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <button type="submit" class="btn btn-outline-primary">Get it!</button>
+    </div>
+</form>
+
+{% endblock form %}

@@ -21,32 +21,34 @@
 
       {% block stylesheets %}
         <!-- Bootstrap -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+{#         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-          crossorigin="anonymous">
-        <!-- Custom Theme Style -->
-        <link href="{{ url_for('static', filename='styles/custom.css') }}" rel="stylesheet">
-      {% endblock stylesheets %}
+          crossorigin="anonymous"> #}
       <!-- Custom Theme Style cards-->
       <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
       <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
       <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
       <!------ Include the above in your HEAD tag ---------->
+        <!-- Custom Theme Style -->
+        <link href="{{ url_for('static', filename='styles/custom.css') }}" rel="stylesheet">
+      {% endblock stylesheets %}
     {% endblock head %}
   </head>
 
   <body class="{% block body_class %}nav-md  bg-secondary{% endblock body_class %}">
     {% block body %}
-      <div class="container body">
-        <div class="main_container">
+{#       <div class="container body">
+        <div class="main_container"> #}
 
           {% block content %}
             <!-- {{ content }} -->
           {% endblock content %}
 
-        </div>
-      </div>
+        {# </div> #}
+      {# </div> #}
+
+      {{ flash.render() }}
 
       {% block javascripts %}
         <!-- jQuery -->
@@ -106,6 +108,8 @@
 
       </script>
       <script src="{{ url_for('static', filename='scripts/custom.js')}}"></script>
+
     {% endblock body %}
+
   </body>
 </html>

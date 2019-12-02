@@ -1,0 +1,168 @@
+/*Overrides the bootstrap styles*/
+
+
+/* New custome CSS here
+-------------------------------------------------- */
+/*.red-border {border-color: red !important;}*/
+/*.form-control {border-color: black;}*/
+/*.field-error {font-size: .8rem;}*/
+.text-danger {font-size: .7rem;}
+.has_errors { border: 1px solid #ff0000 }
+
+/* Dialogform
+-------------------------------------------------- */
+
+body,html {
+  height: 100%;
+}
+
+.modal-dialog {
+  /* at left bottom */
+  width: 400px;
+  max-width: 400px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin-bottom: 100px;
+  margin-right: 20px;
+}
+
+.modal-content {
+  /* at left bottom */
+  width: auto;
+}
+
+.modal-title {
+  top: 5px;
+  margin-left: 50px;
+}
+
+.modal-footer {
+  margin-bottom: -15px;
+}
+
+.profile {
+  border-radius: 50%;
+  position: absolute;
+  top: 5px;
+  left: 7%;
+  max-width: 40px;
+  /*border: 3px solid rgba(255, 255, 255, 1);*/
+  -webkit-transform: translate(-50%, 0%);
+  transform: translate(-50%, 0%);
+}
+
+.chat-container {
+width: auto;
+max-height: 350px;
+overflow-y: auto;
+margin-left: 0;
+margin: 0 0px 20px 0px;
+display: flex;
+flex-direction: column;
+position : relative;
+bottom:0;
+padding-left: 20px;
+padding-right: 20px;
+}
+
+.chat-message {
+  padding: 5px;
+  border-radius: 6px;
+  margin-bottom: 3px;
+}
+
+.bot-message {
+  /* green - left */
+  background-color: rgba(51, 153, 102, 1);
+  max-width: 270px;
+  margin: 13px 0px;
+  /*border-top-left-radius: 0px;*/
+}
+
+.human-message {
+  /* blue - right */
+  position: relative;
+  background-color: rgba(0, 153, 204, 1);
+  border-radius: .4em;
+  max-width: 270px;
+  margin-left: auto;
+  /*box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);*/
+}
+
+.human-message:after {
+  /* traingle left */
+  content: '';
+  border: 7px solid transparent;
+  border-left: 7px solid rgba(0, 153, 204, 1);
+  border-top: 7px solid rgba(0, 153, 204, 1);
+  border-bottom: 0;
+  /* POSITION THE TRIANGLE */
+  position: absolute;
+  top: 0px;
+  right: -7px;
+  margin-right: 0px;
+}
+
+.bot-message:after {
+  /* traingle left */
+  content: '';
+  border: 7px solid transparent;
+  border-right: 7px solid rgba(51, 153, 102, 1);
+  border-top: 7px solid rgba(51, 153, 102, 1);
+  border-bottom: 0;
+  /* POSITION THE TRIANGLE */
+  position: absolute;
+  top: 0px;
+  left: -7px;
+  margin-left: 0px;
+}
+
+.input {
+  left: 0;
+  /*width: auto;*/
+  /*margin: 35px 0px;*/
+  margin-left: 1%;
+  /*margin-right: 15%;*/
+}
+
+#target {
+  width: 360px;
+  left: 0;
+}
+
+/* gif button
+-------------------------------------------------- */
+.button-br {
+  border: 0px;
+  border-radius: 75px;
+  border-style: hidden;
+  background-color: transparent;
+}
+
+.button-chat:before {
+    content: "";
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position : center center;
+    background-repeat:no-repeat;
+    border-radius: 75px;
+    border-style: hidden;
+
+    /* at left bottom of div */
+    position: fixed;
+    bottom: 0;
+    right: 0;
+  }
+
+.chat-gif:before {
+     background-image : url('../images/chatbot_dance.gif');
+     background-size: 105px;
+
+     border: -1px;
+     border-style: hidden;
+}

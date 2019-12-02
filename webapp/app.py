@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, session
 # from flask_login import current_user
 from importlib import import_module
 
@@ -8,6 +8,7 @@ from config.settings import config
 from utils.email import mail
 from .extensions import csrf  #, db, login_manager
 
+from dashboards import main
 # Azure configuration > general settings > Startup Command:
 # gunicorn --bind=0.0.0.0 --timeout 1200 webapp.app:create_app()
 # gunicorn --bind=0.0.0.0 --timeout 600 hello:app
@@ -43,7 +44,7 @@ def config_app(app):
     app.config['MAIL_USE_SSL'] = False
 
     # Refresh templates
-    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    # app.config['TEMPLATES_AUTO_RELOAD'] = True
 
     #
     # app.config['SERVER_NAME'] = '192.168.99.100:8000'

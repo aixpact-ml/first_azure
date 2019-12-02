@@ -11,7 +11,11 @@ from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
 from flask_mail import Message
 from werkzeug.utils import secure_filename
 
-from .forms import FileForm
+# https://medium.com/zenofai/creating-chatbot-using-python-flask-d6947d8ef805
+import dialogflow
+import pusher
+
+from .forms import FileForm, UploadForm, ChatForm
 
 from config.settings import config
 from utils.functions import _log_msg, allowed_file, binary2csv, predict
@@ -20,6 +24,25 @@ from utils.decorators import fire_and_forget
 
 from webapp.extensions import mail
 from . import blueprint
+
+
+def detect_intent_texts(text, language_code):
+    """"""
+    project_id = os.getenv('DIALOGFLOW_PROJECT_ID')
+    session_id = 'unique'
+    session_client = dialogflow.SessionsClient()
+    session = session_client.session_path(project_id, session_id)
+
+    if text:
+        text_input = dialogflow.types.TextInput(
+            text=text, language_code=language_code)
+
+        query_input = dialogflow.types.QueryInput(text=text_input)
+
+        response = session_client.detect_intent(
+            session=session, query_input=query_input)
+
+        return response.query_result.fulfillment_text
 
 
 def handle_uploaded_file(file):
@@ -70,7 +93,8 @@ def debug():
 
 @blueprint.route('/', methods=['GET', 'POST'])
 def index():
-    """HttpTrigger"""
+    """HttpTrigger optimised/"""
+
     form = FileForm()
 
     # Set csrf token in hidden field - avoid error message
@@ -99,7 +123,7 @@ def index():
 
         return redirect(url_for('base_blueprint.thankyou', name=email.split('@')[0]))
 
-    return render_template('base/upload.html', form=form)
+    return render_template('base/upload.html', form=form, func=session.get('populate'))
 
 
 @blueprint.route("/thankyou")
@@ -117,22 +141,91 @@ def function(function_name):
 
 @blueprint.route('/populate/<value>')
 def populate(value):
+
     # TODO get/load instructions from file/dict/env/db
     comments_dict = {'HttpTrigger': 'Forecast instructions here......',
                     'Hello': 'Hello instructions here......',
                     'ForecastAPI': 'Forecast Temperature........'
                     }
 
+    # Store in session
+    session['info'] = comments_dict.get(value)
+    print(session.get(value), session.get(value))
+
     return jsonify(comments_dict.get(value))
 
-    # cities = City.query.filter_by(state=state).all()
 
-    # cityArray = []
+@blueprint.route('/streamlit/<dash>', methods=['GET', 'POST'])
+def streamlit(dash):
+    """Route to streamlit port"""
 
-    # for city in cities:
-    #     cityObj = {}
-    #     cityObj['id'] = city.id
-    #     cityObj['name'] = city.name
-    #     cityArray.append(cityObj)
+    iframe = f'http://localhost:{dash}8501/'
 
-    # return jsonify({'cities' : cityArray})
+    form = UploadForm()
+
+    # Set csrf token in hidden field - avoid error message
+    csrf_token = eval(str(form.csrf_token).split('=')[-1][:-1])
+    form.csrf_token.data = csrf_token
+
+    if form.validate_on_submit():
+        file = form.file.data
+        session['info'] = 'test this session cookie'
+        if file and allowed_file(file.filename):
+            try:
+                file_dest = os.path.join('./data', file.filename)
+                file.save(file_dest)
+            except Exception as err:
+                return jsonify(status='failed', error=str(err))
+
+        return render_template('base/streamlit.html', form=form, iframe=iframe)
+
+    return render_template('base/streamlit.html', form=form, iframe=iframe)
+
+
+@blueprint.route('/webhook', methods=['POST'])
+def webhook():
+    """"""
+    try:
+        data = request.get_json()
+        query_text = data['queryResult']['queryText']
+        response = {
+            "fulfillmentText": f'Default webhook fullfilment response on query: "{query_text}"'
+            }
+    except Exception as err:
+        return jsonify(status='fail', error=err)
+
+    return jsonify(response)
+
+
+@blueprint.route('/send_message', methods=['POST'])
+def send_message():
+    """Form is posted by dialogFlow"""
+    message = request.form['message']
+    fulfillment_text = detect_intent_texts(message, 'en')
+    response_text = {"message": fulfillment_text}
+    return jsonify(response_text)
+
+
+@blueprint.route('/chat', methods=['GET', 'POST'])
+def chat():
+    """Chat runs by custom js script."""
+    return render_template('base/dialogue.html')
+
+
+# @blueprint.route('/chat', methods=['GET', 'POST'])
+# def chat():
+#     """Route to dialogflow port"""
+
+#     # form = ChatForm()
+
+#     # # Set csrf token in hidden field - avoid error message
+#     # csrf_token = eval(str(form.csrf_token).split('=')[-1][:-1])
+#     # form.csrf_token.data = csrf_token
+#     # message = 'no message'
+#     # if form.validate_on_submit():
+#     #     message = form.message.data
+#     #     flash(message)
+
+#     #     return render_template('base/dialogue.html', form=form)
+#     # flash(message)
+#     return render_template('base/dialogue.html')

@@ -1,0 +1,55 @@
+{% import 'macros/flash.html' as flash with context %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block head %}
+      {% block meta %}
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/ico" />
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- FJE added -->
+        <meta name="description"
+          content="{% block meta_description %}{% endblock %}">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+      {% endblock meta %}
+
+      <title>Aixpact | {% block title %}{% endblock %}</title>
+
+      {% block stylesheets %}
+
+        <!-- Bootstrap -->
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+        <!-- Custom Theme Style -->
+        <link href="{{ url_for('static', filename='styles/custom_chat.css') }}" rel="stylesheet">
+
+      {% endblock stylesheets %}
+
+    {% endblock head %}
+
+  </head>
+
+    {% block body %}
+
+          {% block content %}
+            <!-- {{ content }} -->
+          {% endblock content %}
+
+    {% endblock body %}
+
+      {{ flash.render() }}
+
+      {% block javascripts %}
+        <!-- jQuery & bootstrap scripts -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+        <script src="{{ url_for('static', filename='scripts/custom.js')}}"></script>
+
+    {% endblock javascripts %}
+
+  </body>
+</html>

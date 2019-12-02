@@ -1,0 +1,41 @@
+{# {% extends "base_empty.html" %} #}
+{# {% import 'macros/form.html' as f with context %} #}
+{% extends "base_empty_cards.html" %}
+{% from 'macros/form_fileup.html' import usedalot %}
+
+{% block content %}
+    <div class='jumbotron jumbotron-fluid'>
+        <div class="container" style="font-size: 1.5rem;">
+         {{ usedalot(form) }}
+{#     <iframe
+        src="https://bot.dialogflow.com/58d2f3a0-e8e3-4779-a5ec-181097f9cbe3"
+        style='width: 350px; height:300px; margin: -50px 0 -50px 0;'
+        allow="microphone;">
+    </iframe> #}
+
+    <!-- chat messages -->
+    <div class="h-100 justify-content-center">
+        <div class="chat-container" style="overflow: auto; max-height: 80vh">
+            {# <div class="chat-message col-md-5 offset-md-7 bot-message"> #}
+              Welcome to AIxPact. How can I help you?
+            {# </div> #}
+        </div>
+        <form id="target">
+           <input class="input" type="text" value="" placeholder="Enter message..." id="input_message"/>
+           <input type="submit" hidden>
+        </form>
+    </div>
+
+
+        </div>
+    </div>
+
+    <!-- streamlit -->
+    <iframe
+        src="{{ iframe }}"
+        style='position: absolute; width: 100%; height:100%; margin: -50px 0 0 0;'
+        frameborder='0' noresize='noresize' frameborder="-1" >
+    </iframe>
+
+
+{% endblock %}
