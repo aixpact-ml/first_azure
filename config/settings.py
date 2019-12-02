@@ -15,10 +15,15 @@ if os.getcwd() != cwd:
     config.__dict__ = {'_'.join(item.split('_')[1:]): value
                                 for item, value in os.environ.items()
                                 if item.split('_')[0] == 'APPSETTING'}
-    # Save dialogFlow creds form Azure ENV - keep out of github - link in .env
 
-    with open('dialogflow_creds.json', 'w') as f:
-        f.write(os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS'])
+    # Save dialogFlow creds form Azure ENV - keep out of github - link in .env
+    # try:
+    #     with open(os.path.join(os.getcwd(), 'dialogflow_creds.json'), 'w') as f:
+    #         f.write(os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS'])
+    #         logging.info(os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS'])
+    #         logging.info(f'created dialogflow creds file: {err}')
+    # except Exception as err:
+    #     logging.info(f'failed to create dialogflow creds file: {err}')
 
 else:
     # Local ENV variables set by export

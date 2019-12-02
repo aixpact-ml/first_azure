@@ -37,10 +37,12 @@ path = Path('./data')
 file = f'{path}/{st.selectbox("select file: ", os.listdir(path))}'
 st.markdown(file)
 
-with open(file, 'r') as f:
-    text = f.read()[:500] + '....'
 
-    st.write(text)
+# 'utf-8' codec can't decode byte 0xb5
+# with open(file, 'r') as f:
+#     text = f.read()[:500] + '....'
+
+#     st.write(text)
 
 
 # # Adds a checkbox to the sidebar
