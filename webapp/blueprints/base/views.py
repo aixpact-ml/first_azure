@@ -15,6 +15,7 @@ from werkzeug.utils import secure_filename
 # https://medium.com/zenofai/creating-chatbot-using-python-flask-d6947d8ef805
 import dialogflow
 import pusher
+from google.oauth2.service_account import Credentials
 
 from .forms import FileForm, UploadForm, ChatForm
 
@@ -30,15 +31,10 @@ from . import blueprint
 def dialogflow_client():
     """TODO"""
     # https://github.com/googleapis/dialogflow-python-client-v2/issues/71
-    from google.oauth2.service_account import Credentials
-
     project_id = os.getenv('APPSETTING_DIALOGFLOW_PROJECT_ID',
                             config.DIALOGFLOW_PROJECT_ID)
     app_creds_json = os.getenv('APPSETTING_GOOGLE_APPLICATION_CREDENTIALS',
                             json.dumps(config.GOOGLE_APPLICATION_CREDENTIALS))
-
-    logging.info(f'APP_CREDS: {app_creds_json}')
-    print(f'APP_CREDS: {app_creds_json}')
 
     credentials = Credentials.from_service_account_info(json.loads(app_creds_json))
     session_client = dialogflow.SessionsClient(credentials=credentials)
@@ -49,25 +45,9 @@ def dialogflow_client():
 
 def detect_intent_texts(text, language_code):
     """"""
-    # https://github.com/googleapis/dialogflow-python-client-v2/issues/71
-    # project_id = os.getenv('APPSETTING_DIALOGFLOW_PROJECT_ID',
-    #                         config.DIALOGFLOW_PROJECT_ID)
-    # app_creds_json = os.getenv('APPSETTING_GOOGLE_APPLICATION_CREDENTIALS',
-    #                         config.GOOGLE_APPLICATION_CREDENTIALS)
-
-    # from google.oauth2.service_account import Credentials
-    # credentials = Credentials.from_service_account_info(app_creds_json)
-    # session_client = dialogflow.SessionsClient(credentials=credentials)
-
-    # session_id = 'unique'
-    # # session_client = dialogflow.SessionsClient()
-    # session = session_client.session_path(project_id, session_id)
-
-
     if text:
         text_input = dialogflow.types.TextInput(
             text=text, language_code=language_code)
-
         query_input = dialogflow.types.QueryInput(text=text_input)
 
         # create and re-use session
@@ -78,7 +58,6 @@ def detect_intent_texts(text, language_code):
             session, session_client = dialogflow_client()
             response = session_client.detect_intent(
                 session=session, query_input=query_input)
-
         return response.query_result.fulfillment_text
 
 
@@ -157,9 +136,7 @@ def index():
                 return jsonify(status='failed', error=str(err))
         logging.info('DEBUG log', blob_uri)
         print('DEBUG print', blob_uri)
-
         return redirect(url_for('base_blueprint.thankyou', name=email.split('@')[0]))
-
     return render_template('base/upload.html', form=form, func=session.get('populate'))
 
 
@@ -213,9 +190,7 @@ def streamlit(dash):
                 file.save(file_dest)
             except Exception as err:
                 return jsonify(status='failed', error=str(err))
-
         return render_template('base/streamlit.html', form=form, iframe=iframe)
-
     return render_template('base/streamlit.html', form=form, iframe=iframe)
 
 
@@ -230,7 +205,6 @@ def webhook():
             }
     except Exception as err:
         return jsonify(status='fail', error=err)
-
     return jsonify(response)
 
 
@@ -240,7 +214,6 @@ def send_message():
     """Form is posted by dialogFlow.
 
     Disable csrf for this route."""
-
     message = request.form['message']
     fulfillment_text = detect_intent_texts(message, 'en')
     response_text = {"message": fulfillment_text}
