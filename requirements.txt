@@ -46,6 +46,7 @@ vega-datasets==0.7.0
 WeasyPrint
 
 #
+google-oauth==1.0.1
 pusher==2.1.4
 dialogflow==0.7.2
 # google-api-core==1.14.3

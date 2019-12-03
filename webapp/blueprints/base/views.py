@@ -27,36 +27,39 @@ from webapp.extensions import mail
 from . import blueprint
 
 
-def diagflow_client():
+def dialogflow_client():
     """TODO"""
-    return None
+    # https://github.com/googleapis/dialogflow-python-client-v2/issues/71
+    from google.oauth2.service_account import Credentials
+
+    project_id = os.getenv('APPSETTING_DIALOGFLOW_PROJECT_ID',
+                            config.DIALOGFLOW_PROJECT_ID)
+    app_creds_json = os.getenv('APPSETTING_GOOGLE_APPLICATION_CREDENTIALS',
+                            config.GOOGLE_APPLICATION_CREDENTIALS)
+
+    credentials = Credentials.from_service_account_info(app_creds_json)
+    session_client = dialogflow.SessionsClient(credentials=credentials)
+    session_id = 'unique'
+    session = session_client.session_path(project_id, session_id)
+    return session, session_client
 
 
 def detect_intent_texts(text, language_code):
     """"""
-    try:
-        # Load Azure ENV
-        logging.info(f'DEBUG azure: {type(config)}')
-        project_id = os.getenv('APPSETTING_DIALOGFLOW_PROJECT_ID')
-        # app_creds = os.getenv('APPSETTING_GOOGLE_APPLICATION_CREDENTIALS')  ###
-        # assert app_creds is not None
-    except:
-        # Load Local ENV.
-        logging.info(f'DEBUG local: {type(config)}')
-        project_id = config.get('DIALOGFLOW_PROJECT_ID')
-        # app_creds = config.get('GOOGLE_APPLICATION_CREDENTIALS') ###
+    # https://github.com/googleapis/dialogflow-python-client-v2/issues/71
+    # project_id = os.getenv('APPSETTING_DIALOGFLOW_PROJECT_ID',
+    #                         config.DIALOGFLOW_PROJECT_ID)
+    # app_creds_json = os.getenv('APPSETTING_GOOGLE_APPLICATION_CREDENTIALS',
+    #                         config.GOOGLE_APPLICATION_CREDENTIALS)
 
-    # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = json.dumps(app_creds)
-    # os.environ['DIALOGFLOW_PROJECT_ID'] = project_id
+    # from google.oauth2.service_account import Credentials
+    # credentials = Credentials.from_service_account_info(app_creds_json)
+    # session_client = dialogflow.SessionsClient(credentials=credentials)
 
-    session_id = 'unique'
-    session_client = dialogflow.SessionsClient()
-    # session_client = session_client.from_service_account_json(json.dumps(app_creds))  ###
-    session = session_client.session_path(project_id, session_id)
+    # session_id = 'unique'
+    # # session_client = dialogflow.SessionsClient()
+    # session = session_client.session_path(project_id, session_id)
 
-
-    logging.info(dir(dialogflow.SessionsClient))
-    logging.info(f'project_id: {project_id}, app_creds: {app_creds}')
 
     if text:
         text_input = dialogflow.types.TextInput(
@@ -64,8 +67,14 @@ def detect_intent_texts(text, language_code):
 
         query_input = dialogflow.types.QueryInput(text=text_input)
 
-        response = session_client.detect_intent(
-            session=session, query_input=query_input)
+        # create and re-use session
+        try:
+            response = session_client.detect_intent(
+                session=session, query_input=query_input)
+        except:
+            session, session_client = dialogflow_client()
+            response = session_client.detect_intent(
+                session=session, query_input=query_input)
 
         return response.query_result.fulfillment_text
 
@@ -234,6 +243,7 @@ def send_message():
 @blueprint.route('/chat', methods=['GET', 'POST'])
 def chat():
     """Chat runs by custom js script."""
+
     return render_template('base/dialogue.html')
 
 

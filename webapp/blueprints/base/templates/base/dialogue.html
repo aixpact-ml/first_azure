@@ -43,7 +43,8 @@
 
       <div class="modal-footer">
         <form id="target">
-          {{ form.hidden_tag() }}
+          {# https://nickjanetakis.com/blog/fix-missing-csrf-token-issues-with-flask #}
+          {# {{ form.hidden_tag() }} #}
            <input class="input col-md-8" type="text" value="" placeholder="Enter message..." id="input_message">
            <input type="submit" hidden>
         </form>
