@@ -35,9 +35,12 @@ def dialogflow_client():
     project_id = os.getenv('APPSETTING_DIALOGFLOW_PROJECT_ID',
                             config.DIALOGFLOW_PROJECT_ID)
     app_creds_json = os.getenv('APPSETTING_GOOGLE_APPLICATION_CREDENTIALS',
-                            config.GOOGLE_APPLICATION_CREDENTIALS)
+                            json.dumps(config.GOOGLE_APPLICATION_CREDENTIALS))
 
-    credentials = Credentials.from_service_account_info(app_creds_json)
+    logging.info(f'APP_CREDS: {app_creds_json}')
+    print(f'APP_CREDS: {app_creds_json}')
+
+    credentials = Credentials.from_service_account_info(json.loads(app_creds_json))
     session_client = dialogflow.SessionsClient(credentials=credentials)
     session_id = 'unique'
     session = session_client.session_path(project_id, session_id)
