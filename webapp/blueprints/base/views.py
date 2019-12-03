@@ -3,6 +3,7 @@ import logging
 import datetime
 import requests
 import os
+import json
 import uuid
 import mimetypes
 from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
@@ -26,12 +27,36 @@ from webapp.extensions import mail
 from . import blueprint
 
 
+def diagflow_client():
+    """TODO"""
+    return None
+
+
 def detect_intent_texts(text, language_code):
     """"""
-    project_id = os.getenv('DIALOGFLOW_PROJECT_ID')
+    try:
+        # Load Azure ENV
+        logging.info(f'DEBUG azure: {type(config)}')
+        project_id = os.getenv('APPSETTING_DIALOGFLOW_PROJECT_ID')
+        # app_creds = os.getenv('APPSETTING_GOOGLE_APPLICATION_CREDENTIALS')  ###
+        # assert app_creds is not None
+    except:
+        # Load Local ENV.
+        logging.info(f'DEBUG local: {type(config)}')
+        project_id = config.get('DIALOGFLOW_PROJECT_ID')
+        # app_creds = config.get('GOOGLE_APPLICATION_CREDENTIALS') ###
+
+    # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = json.dumps(app_creds)
+    # os.environ['DIALOGFLOW_PROJECT_ID'] = project_id
+
     session_id = 'unique'
     session_client = dialogflow.SessionsClient()
+    # session_client = session_client.from_service_account_json(json.dumps(app_creds))  ###
     session = session_client.session_path(project_id, session_id)
+
+
+    logging.info(dir(dialogflow.SessionsClient))
+    logging.info(f'project_id: {project_id}, app_creds: {app_creds}')
 
     if text:
         text_input = dialogflow.types.TextInput(

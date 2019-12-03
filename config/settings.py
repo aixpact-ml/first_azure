@@ -20,13 +20,17 @@ if os.getcwd() != cwd:
     os.environ['DIALOGFLOW_PROJECT_ID'] = os.environ['APPSETTING_DIALOGFLOW_PROJECT_ID']
 
     # Save dialogFlow creds form Azure ENV - keep out of github - link in .env
-    # try:
-    #     with open(os.path.join(os.getcwd(), 'dialogflow_creds.json'), 'w') as f:
-    #         f.write(os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS'])
-    #         logging.info(os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS'])
-    #         logging.info(f'created dialogflow creds file: {err}')
-    # except Exception as err:
-    #     logging.info(f'failed to create dialogflow creds file: {err}')
+    try:
+        file = os.environ['GOOGLE_CREDS_FILE']
+        path = os.path.join(os.getcwd(), file)
+        with open(path, 'w') as f:
+            f.write(os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS'])
+            os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = path
+            logging.info(os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS'])
+            logging.info(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+            logging.info(f'created dialogflow creds file: {err}')
+    except Exception as err:
+        logging.info(f'failed to create dialogflow creds file: {err}')
 
 else:
     # Local ENV variables set by export
@@ -35,8 +39,10 @@ else:
     config.__dict__ = {**{item['name']: item['value'] for item in az_settings},
                        **{'WTF_CSRF_CHECK_DEFAULT': False},
                        **{'DIALOGFLOW_PROJECT_ID': DIALOGFLOW_PROJECT_ID},
+                       **{'GOOGLE_APPLICATION_CREDENTIALS': GOOGLE_APPLICATION_CREDENTIALS}
                        }
 
+logging.info(f'DEBUG settings: {type(config)} {config}')
 
 def test():
     print(az_settings['MAIL_DEFAULT_SENDER'])
