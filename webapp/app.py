@@ -23,6 +23,7 @@ def create_app():
     config_app(app)
     register_blueprints(app)
     init_extensions(app)
+
     return app
 
 
@@ -48,7 +49,8 @@ def config_app(app):
 
     #
     # app.config['SERVER_NAME'] = '192.168.99.100:8000'
-    # app.config['WTF_CSRF_CHECK_DEFAULT'] = Falseport
+    # app.config['WTF_CSRF_CHECK_DEFAULT'] = False
+    app.config['WTF_CSRF_CHECK_DEFAULT'] = False  # mute csrf errors in Azure!
 
     # Sanity check config settings
     assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', f'Flask-Mail settings failed {os.getcwd()}'

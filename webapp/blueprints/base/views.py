@@ -23,7 +23,7 @@ from utils.functions import _log_msg, allowed_file, binary2csv, predict
 from utils.email import send_email, mail
 from utils.decorators import fire_and_forget
 
-from webapp.extensions import mail
+from webapp.extensions import mail, csrf
 from . import blueprint
 
 
@@ -232,12 +232,11 @@ def webhook():
 
 
 @blueprint.route('/send_message', methods=['POST'])
+@csrf.exempt
 def send_message():
-    """Form is posted by dialogFlow"""
+    """Form is posted by dialogFlow.
 
-    # TODO Set csrf token in hidden field - avoid error message
-    # csrf_token = eval(str(form.csrf_token).split('=')[-1][:-1])
-    # form.csrf_token.data = csrf_token
+    Disable csrf for this route."""
 
     message = request.form['message']
     fulfillment_text = detect_intent_texts(message, 'en')
@@ -246,17 +245,12 @@ def send_message():
 
 
 @blueprint.route('/chat', methods=['GET', 'POST'])
+@csrf.exempt
 def chat():
-    """Chat runs by custom js script."""
+    """Chat runs by custom js script.
 
-    # TODO Set csrf token in hidden field - avoid error message
-    form = ChatForm()  # no function, just to get csrf token
-    csrf_token = eval(str(form.csrf_token).split('=')[-1][:-1])
-    form.csrf_token.data = csrf_token
-    logging.info(csrf_token)
-
-    # <meta name="csrf-token" content="...tMJIEaqWsHCzU...">
-    return render_template('base/dialogue.html', form=form)
+    Disable csrf for this route."""
+    return render_template('base/dialogue.html')
 
 
 # @blueprint.route('/chat', methods=['GET', 'POST'])
@@ -275,4 +269,5 @@ def chat():
 
 #     #     return render_template('base/dialogue.html', form=form)
 #     # flash(message)
+# <meta name="csrf-token" content="...tMJIEaqWsHCzU...">
 #     return render_template('base/dialogue.html')

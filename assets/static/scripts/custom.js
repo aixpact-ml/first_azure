@@ -11,7 +11,6 @@ function submit_message(message) {
           `)
           // remove the loading indicator
           $( "#loading" ).remove();
-
         }
     }
 
