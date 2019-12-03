@@ -195,8 +195,9 @@ def streamlit(dash):
 
 
 @blueprint.route('/webhook', methods=['POST'])
+@csrf.exempt
 def webhook():
-    """"""
+    """Disable csrf for this route."""
     try:
         data = request.get_json()
         query_text = data['queryResult']['queryText']
