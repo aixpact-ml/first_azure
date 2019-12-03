@@ -45,7 +45,7 @@ def config_app(app):
     app.config['MAIL_USE_SSL'] = False
 
     # Mute csrf errors in Azure!
-    # app.config['WTF_CSRF_CHECK_DEFAULT'] = False
+    app.config['WTF_CSRF_CHECK_DEFAULT'] = False
 
     # Sanity check config settings
     assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', f'Flask-Mail settings failed {os.getcwd()}'
