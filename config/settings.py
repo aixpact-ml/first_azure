@@ -16,21 +16,21 @@ if os.getcwd() != cwd:
                                 for item, value in os.environ.items()
                                 if item.split('_')[0] == 'APPSETTING'}
 
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS']
-    os.environ['DIALOGFLOW_PROJECT_ID'] = os.environ['APPSETTING_DIALOGFLOW_PROJECT_ID']
+    # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS']
+    # os.environ['DIALOGFLOW_PROJECT_ID'] = os.environ['APPSETTING_DIALOGFLOW_PROJECT_ID']
 
-    # Save dialogFlow creds form Azure ENV - keep out of github - link in .env
-    try:
-        file = os.environ['GOOGLE_CREDS_FILE']
-        path = os.path.join(os.getcwd(), file)
-        with open(path, 'w') as f:
-            f.write(os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS'])
-            os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = path
-            logging.info(os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS'])
-            logging.info(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
-            logging.info(f'created dialogflow creds file: {err}')
-    except Exception as err:
-        logging.info(f'failed to create dialogflow creds file: {err}')
+    # # Save dialogFlow creds form Azure ENV - keep out of github - link in .env
+    # try:
+    #     file = os.environ['GOOGLE_CREDS_FILE']
+    #     path = os.path.join(os.getcwd(), file)
+    #     with open(path, 'w') as f:
+    #         f.write(os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS'])
+    #         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = path
+    #         logging.info(os.environ['APPSETTING_GOOGLE_APPLICATION_CREDENTIALS'])
+    #         logging.info(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+    #         logging.info(f'created dialogflow creds file: {err}')
+    # except Exception as err:
+    #     logging.info(f'failed to create dialogflow creds file: {err}')
 
 else:
     # Local ENV variables set by export

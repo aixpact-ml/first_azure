@@ -46,6 +46,7 @@ def config_app(app):
 
     # Mute csrf errors in Azure!
     app.config['WTF_CSRF_CHECK_DEFAULT'] = False
+    app.config['SECRET_KEY'] = config.SECRET_KEY
 
     # Sanity check config settings
     assert app.config['MAIL_DEFAULT_SENDER'] == 'frank@aixpact.com', f'Flask-Mail settings failed {os.getcwd()}'
