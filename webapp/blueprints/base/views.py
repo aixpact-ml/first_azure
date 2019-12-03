@@ -234,6 +234,11 @@ def webhook():
 @blueprint.route('/send_message', methods=['POST'])
 def send_message():
     """Form is posted by dialogFlow"""
+
+    # TODO Set csrf token in hidden field - avoid error message
+    # csrf_token = eval(str(form.csrf_token).split('=')[-1][:-1])
+    # form.csrf_token.data = csrf_token
+
     message = request.form['message']
     fulfillment_text = detect_intent_texts(message, 'en')
     response_text = {"message": fulfillment_text}
@@ -244,7 +249,14 @@ def send_message():
 def chat():
     """Chat runs by custom js script."""
 
-    return render_template('base/dialogue.html')
+    # TODO Set csrf token in hidden field - avoid error message
+    form = ChatForm()  # no function, just to get csrf token
+    csrf_token = eval(str(form.csrf_token).split('=')[-1][:-1])
+    form.csrf_token.data = csrf_token
+    logging.info(csrf_token)
+
+    # <meta name="csrf-token" content="...tMJIEaqWsHCzU...">
+    return render_template('base/dialogue.html', form=form)
 
 
 # @blueprint.route('/chat', methods=['GET', 'POST'])
