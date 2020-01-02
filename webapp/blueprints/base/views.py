@@ -53,11 +53,11 @@ def detect_intent_texts(text, language_code):
         # create and re-use session
         try:
             response = session_client.detect_intent(
-                session=session, query_input=query_input)
+                session=session, query_input=query_input, timeout=6)  ### timeout in seconds
         except:
             session, session_client = dialogflow_client()
             response = session_client.detect_intent(
-                session=session, query_input=query_input)
+                session=session, query_input=query_input, timeout=6)  ### timeout in seconds
         return response.query_result.fulfillment_text
     return 'no fulfillment text detected'
 
