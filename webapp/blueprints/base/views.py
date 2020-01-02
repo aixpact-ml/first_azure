@@ -33,7 +33,7 @@ def dialogflow_client():
     # https://github.com/googleapis/dialogflow-python-client-v2/issues/71
     project_id = os.getenv('APPSETTING_DIALOGFLOW_PROJECT_ID',
                             config.DIALOGFLOW_PROJECT_ID)
-    app_creds_json = os.getenv(json.dumps('APPSETTING_GOOGLE_APPLICATION_CREDENTIALS'),
+    app_creds_json = os.getenv('APPSETTING_GOOGLE_APPLICATION_CREDENTIALS',
                             json.dumps(config.GOOGLE_APPLICATION_CREDENTIALS))
 
     credentials = Credentials.from_service_account_info(json.loads(app_creds_json))
