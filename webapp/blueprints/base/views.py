@@ -33,7 +33,7 @@ def dialogflow_client():
     # https://github.com/googleapis/dialogflow-python-client-v2/issues/71
     project_id = os.getenv('APPSETTING_DIALOGFLOW_PROJECT_ID',
                             config.DIALOGFLOW_PROJECT_ID)
-    app_creds_json = os.getenv('APPSETTING_GOOGLE_APPLICATION_CREDENTIALS',
+    app_creds_json = os.getenv(json.dumps('APPSETTING_GOOGLE_APPLICATION_CREDENTIALS'),
                             json.dumps(config.GOOGLE_APPLICATION_CREDENTIALS))
 
     credentials = Credentials.from_service_account_info(json.loads(app_creds_json))
@@ -206,7 +206,11 @@ def webhook():
             "fulfillmentText": f'Default webhook fulfillment response on query: "{query_text}"'
             }
     except Exception as err:
-        return jsonify(status='fail', error=err)
+        response = {
+            "fulfillmentText": f'Default webhook fulfillment response on query: "{err}"'
+            }
+        return jsonify(response)
+        # return jsonify(status='fail', error=err)
     return jsonify(response)
 
 
@@ -218,6 +222,8 @@ def send_message():
     Disable csrf for this route."""
     message = request.form['message']
     fulfillment_text = detect_intent_texts(message, 'en')
+    # print(fulfillment_text)
+    # logging.info(fulfillment_text)
     response_text = {"message": fulfillment_text}
     return jsonify(response_text)
 
