@@ -8,7 +8,7 @@ from config.settings import config
 from utils.email import mail
 from .extensions import csrf  #, db, login_manager
 
-from dashboards import main
+# from dashboards import main
 # Azure configuration > general settings > Startup Command:
 # gunicorn --bind=0.0.0.0 --timeout 1200 webapp.app:create_app()
 # gunicorn --bind=0.0.0.0 --timeout 600 hello:app

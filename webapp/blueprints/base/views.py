@@ -59,6 +59,7 @@ def detect_intent_texts(text, language_code):
             response = session_client.detect_intent(
                 session=session, query_input=query_input)
         return response.query_result.fulfillment_text
+    return 'no fulfillment text detected'
 
 
 def handle_uploaded_file(file):
@@ -202,7 +203,7 @@ def webhook():
         data = request.get_json()
         query_text = data['queryResult']['queryText']
         response = {
-            "fulfillmentText": f'Default webhook fullfilment response on query: "{query_text}"'
+            "fulfillmentText": f'Default webhook fulfillment response on query: "{query_text}"'
             }
     except Exception as err:
         return jsonify(status='fail', error=err)
