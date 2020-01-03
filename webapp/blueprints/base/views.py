@@ -249,19 +249,20 @@ def webhook():
     """Disable csrf for this route.
 
     Just return message to test webhook return."""
-    try:
-        data = request.get_json()
-        query_text = data['queryResult']['queryText']
-        response = {
-            "fulfillmentText": f'Default webhook fulfillment response on query: "{query_text}"'
-            }
-    except Exception as err:
-        response = {
-            "fulfillmentText": f'Default webhook fulfillment response on query: "{err}"'
-            }
-        return jsonify(response)
-        # return jsonify(status='fail', error=err)
-    return jsonify(response)
+    return jsonify('wtf')
+    # try:
+    #     data = request.get_json()
+    #     query_text = data['queryResult']['queryText']
+    #     response = {
+    #         "fulfillmentText": f'Local webhook fulfillment response on query: "{query_text}"'
+    #         }
+    # except Exception as err:
+    #     response = {
+    #         "fulfillmentText": f'Default webhook fulfillment response on query: "{err}"'
+    #         }
+    #     return jsonify(response)
+    #     # return jsonify(status='fail', error=err)
+    # return jsonify(response)
 
 
 @blueprint.route('/send_message', methods=['POST'])
