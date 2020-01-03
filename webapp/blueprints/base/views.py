@@ -249,6 +249,9 @@ def webhook():
     """Disable csrf for this route.
 
     Just return message to test webhook return."""
+    logging.info(data['queryResult']['queryText'])
+    print(data['queryResult']['queryText'])
+
     response = {"fulfillmentText": 'default - nothing'}
     # try:
     #     data = request.get_json()
