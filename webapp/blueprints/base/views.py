@@ -6,6 +6,7 @@ import os
 import json
 import uuid
 import mimetypes
+import time
 from flask import (Flask, Blueprint, redirect, request, flash, url_for, jsonify,
                    render_template, session, current_app, make_response,
                    send_file, send_from_directory)
@@ -244,38 +245,15 @@ def streamlit(dash):
 
 
 @blueprint.route('/webhook', methods=['POST'])
-@csrf.exempt
+# @csrf.exempt
 def webhook():
-    """Disable csrf for this route.
+    """Disable csrf for this route?.
 
     Just return message to test webhook return."""
+    # time.sleep(4) # > 5 sec: "Webhook call failed. Error: DEADLINE_EXCEEDED."
     data = request.get_json(silent=True)
-    logging.info(data['queryResult']['queryText'])
-    print(data['queryResult']['queryText'])
-
-    response = {"fulfillmentText": 'default - nothing',
-                "fulfillmentMessages": [
-                            {
-                              "text": {
-                                "text": [
-                                  "default - nothing"
-                                ]
-                              }
-                            }
-  ],
-    }
-    # try:
-    #     data = request.get_json()
-    #     query_text = data['queryResult']['queryText']
-    #     response = {
-    #         "fulfillmentText": f'Local webhook fulfillment response on query: "{query_text}"'
-    #         }
-    # except Exception as err:
-    #     response = {
-    #         "fulfillmentText": f'Default webhook fulfillment response on query: "{err}"'
-    #         }
-    #     return jsonify(response)
-    #     # return jsonify(status='fail', error=err)
+    query = data.get('queryResult').get('queryText')
+    response = {"fulfillmentText": f"Query: {query}"}
     return jsonify(response)
 
 
