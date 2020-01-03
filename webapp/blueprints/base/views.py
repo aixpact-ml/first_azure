@@ -43,7 +43,7 @@ def dialogflow_client():
     return session, session_client
 
 
-def detect_intent_texts(text, language_code):
+def detect_intent_texts_(text, language_code):
     """"""
     if text:
         text_input = dialogflow.types.TextInput(
@@ -60,6 +60,23 @@ def detect_intent_texts(text, language_code):
                 session=session, query_input=query_input, timeout=6)  ### timeout in seconds
         return response.query_result.fulfillment_text
     return 'no fulfillment text detected'
+
+
+def detect_intent_texts(text, language_code):
+    """Create session client for each call."""
+    if not text:
+        return 'no fulfillment text detected'
+
+    text_input = dialogflow.types.TextInput(
+                 text=text,
+                 language_code=language_code)
+    query_input = dialogflow.types.QueryInput(text=text_input)
+
+    session, session_client = dialogflow_client()
+    response = session_client.detect_intent(
+        session=session, query_input=query_input, timeout=6)  ### timeout in seconds
+    return response.query_result.fulfillment_text
+
 
 
 def handle_uploaded_file(file):
@@ -198,7 +215,9 @@ def streamlit(dash):
 @blueprint.route('/webhook', methods=['POST'])
 @csrf.exempt
 def webhook():
-    """Disable csrf for this route."""
+    """Disable csrf for this route.
+
+    Just return message to test webhook return."""
     try:
         data = request.get_json()
         query_text = data['queryResult']['queryText']
