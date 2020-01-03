@@ -28,6 +28,39 @@ from webapp.extensions import mail, csrf
 from . import blueprint
 
 
+class Dialog():
+    """TODO"""
+    def __init__(self, session_id='unique', language_code='en'):
+        self.language_code = language_code
+        self.session_id = session_id
+        self.project_id = os.getenv('APPSETTING_DIALOGFLOW_PROJECT_ID',
+                                    config.DIALOGFLOW_PROJECT_ID)
+        self.app_creds_json = os.getenv('APPSETTING_GOOGLE_APPLICATION_CREDENTIALS',
+                                        json.dumps(config.GOOGLE_APPLICATION_CREDENTIALS))
+        self.creds = Credentials.from_service_account_info(json.loads(self.app_creds_json))
+        self.session_client = self._session_client()
+        self.session = self._session()
+
+    def _session_client(self, ):
+        return dialogflow.SessionsClient(credentials=self.creds)
+
+    def _session(self, ):
+        return self.session_client.session_path(self.project_id, self.session_id)
+
+    def _query_input(self, text):
+        text_input = dialogflow.types.TextInput(text=text, language_code=self.language_code)
+        return dialogflow.types.QueryInput(text=text_input)
+
+    def fulfillment(self, text=None):
+        if not text:
+            return 'no fulfillment text detected'
+        response = self._session_client().detect_intent(
+            session=self._session(), query_input=self._query_input(text))
+        return response.query_result.fulfillment_text
+
+
+
+
 def dialogflow_client():
     """TODO"""
     # https://github.com/googleapis/dialogflow-python-client-v2/issues/71
@@ -67,9 +100,7 @@ def detect_intent_texts(text, language_code):
     if not text:
         return 'no fulfillment text detected'
 
-    text_input = dialogflow.types.TextInput(
-                 text=text,
-                 language_code=language_code)
+    text_input = dialogflow.types.TextInput(text=text, language_code=language_code)
     query_input = dialogflow.types.QueryInput(text=text_input)
 
     session, session_client = dialogflow_client()
@@ -240,7 +271,10 @@ def send_message():
 
     Disable csrf for this route."""
     message = request.form['message']
-    fulfillment_text = detect_intent_texts(message, 'en')
+    # fulfillment_text = detect_intent_texts(message, 'en')  ### orig
+    dialog = Dialog()
+    fulfillment_text = dialog.fulfillment(message)
+
     # print(fulfillment_text)
     # logging.info(fulfillment_text)
     response_text = {"message": fulfillment_text}
